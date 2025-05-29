@@ -26,9 +26,8 @@ class JobCardTableViewCell: UITableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
         
-        // Configure card container with premium glass
-        cardContainer.applyPremiumGlass(intensity: 0.7, cornerRadius: 16)
-        cardContainer.addPremiumShadowGlow(color: .glassShadow)
+        // Configure card container with Phase 1 glass panel
+        cardContainer.applyGlassPanel(cornerRadius: 16)
         
         // Add shimmer effect on load
         cardContainer.addShimmerEffect()

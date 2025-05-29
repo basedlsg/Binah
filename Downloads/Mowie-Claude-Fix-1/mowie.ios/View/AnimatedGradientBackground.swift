@@ -28,10 +28,10 @@ class AnimatedGradientBackground: UIView {
         gradientLayer = CAGradientLayer()
         gradientLayer.frame = bounds
         gradientLayer.colors = [
-            UIColor.darkGreenGradientStart.cgColor,
-            UIColor.darkGreenGradientMid.cgColor,
-            UIColor.darkGreenGradientEnd.cgColor,
-            UIColor.darkGreenGradientMid.cgColor
+            UIColor.gradientDark.cgColor,  // #0F2818
+            UIColor.gradientMid.cgColor,   // #1A3A2A
+            UIColor.gradientEnd.cgColor,   // #0D2519
+            UIColor.gradientMid.cgColor    // #1A3A2A
         ]
         gradientLayer.locations = [0.0, 0.3, 0.7, 1.0]
         gradientLayer.startPoint = CGPoint(x: 0, y: 0)
@@ -48,10 +48,10 @@ class AnimatedGradientBackground: UIView {
         let colorAnimation = CABasicAnimation(keyPath: "colors")
         colorAnimation.fromValue = gradientLayer.colors
         colorAnimation.toValue = [
-            UIColor.darkGreenGradientEnd.cgColor,
-            UIColor.darkGreenGradientStart.cgColor,
-            UIColor.darkGreenGradientMid.cgColor,
-            UIColor.darkGreenGradientStart.cgColor
+            UIColor.gradientEnd.cgColor,    // #0D2519
+            UIColor.gradientDark.cgColor,   // #0F2818
+            UIColor.gradientMid.cgColor,    // #1A3A2A
+            UIColor.gradientDark.cgColor    // #0F2818
         ]
         colorAnimation.duration = 10.0
         colorAnimation.autoreverses = true
@@ -86,7 +86,7 @@ class AnimatedGradientBackground: UIView {
         cell.spinRange = 0.5
         cell.scale = 0.5
         cell.scaleRange = 0.3
-        cell.color = UIColor.primaryGreen.withAlphaComponent(0.1).cgColor
+        cell.color = UIColor.accentGreen.withAlphaComponent(0.1).cgColor
         cell.alphaSpeed = -0.05
         cell.contents = createGlowParticle().cgImage
         
@@ -102,8 +102,8 @@ class AnimatedGradientBackground: UIView {
         let gradient = CGGradient(
             colorsSpace: CGColorSpaceCreateDeviceRGB(),
             colors: [
-                UIColor.primaryGreen.withAlphaComponent(0.8).cgColor,
-                UIColor.primaryGreen.withAlphaComponent(0).cgColor
+                UIColor.accentGreen.withAlphaComponent(0.8).cgColor,
+                UIColor.accentGreen.withAlphaComponent(0).cgColor
             ] as CFArray,
             locations: [0, 1]
         )!

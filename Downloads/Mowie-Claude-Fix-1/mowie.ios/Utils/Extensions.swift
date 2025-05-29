@@ -21,21 +21,30 @@ extension UIColor {
     static let mainBlueTint = UIColor.rgb(red: 17, green: 154, blue: 237)
     static let mowieColor = UIColor.rgb(red: 00, green: 75, blue: 00)
     
-    // New glass effect colors - Lighter premium green gradient
-    static let darkGreenGradientStart = UIColor(red: 15/255, green: 40/255, blue: 24/255, alpha: 1.0)
-    static let darkGreenGradientMid = UIColor(red: 26/255, green: 58/255, blue: 42/255, alpha: 1.0)
-    static let darkGreenGradientEnd = UIColor(red: 13/255, green: 37/255, blue: 25/255, alpha: 1.0)
+    // PHASE 1: New Design System Colors
+    static let primaryDark = UIColor(red: 10/255, green: 31/255, blue: 18/255, alpha: 1.0) // #0A1F12
+    static let gradientDark = UIColor(red: 15/255, green: 40/255, blue: 24/255, alpha: 1.0) // #0F2818
+    static let gradientMid = UIColor(red: 26/255, green: 58/255, blue: 42/255, alpha: 1.0) // #1A3A2A
+    static let gradientEnd = UIColor(red: 13/255, green: 37/255, blue: 25/255, alpha: 1.0) // #0D2519
+    static let accentGreen = UIColor(red: 0/255, green: 230/255, blue: 118/255, alpha: 1.0) // #00E676
+    static let glassEffect = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.08) // rgba(255,255,255,0.08)
+    static let glassBorderNew = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.1) // rgba(255,255,255,0.1)
+    
+    // Legacy colors (keeping for backward compatibility)
+    static let darkGreenGradientStart = gradientDark
+    static let darkGreenGradientMid = gradientMid
+    static let darkGreenGradientEnd = gradientEnd
     static let glassDark = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
     static let glassLight = UIColor(red: 1, green: 1, blue: 1, alpha: 0.05)
     static let glassCard = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
     static let primaryGreen = UIColor(red: 0/255, green: 200/255, blue: 83/255, alpha: 1.0)
-    static let brightGreen = UIColor(red: 0/255, green: 230/255, blue: 118/255, alpha: 1.0)
-    static let glassBorder = UIColor(red: 1, green: 1, blue: 1, alpha: 0.08)
+    static let brightGreen = accentGreen
+    static let glassBorder = glassEffect
     static let iconTint = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
     
     // Enhanced Premium Glassmorphism Colors
     static let premiumGlassStart = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.02)
-    static let premiumGlassEnd = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.08)
+    static let premiumGlassEnd = glassEffect
     static let glassOverlay = UIColor(red: 0/255, green: 200/255, blue: 83/255, alpha: 0.03)
     static let glassShadow = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.25)
     static let glassHighlight = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.15)
@@ -229,9 +238,9 @@ extension UIView{
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = bounds
         gradientLayer.colors = [
-            UIColor.darkGreenGradientStart.cgColor,
-            UIColor.darkGreenGradientMid.cgColor,
-            UIColor.darkGreenGradientEnd.cgColor
+            UIColor.gradientDark.cgColor,  // #0F2818
+            UIColor.gradientMid.cgColor,   // #1A3A2A
+            UIColor.gradientEnd.cgColor    // #0D2519
         ]
         gradientLayer.locations = [0.0, 0.5, 1.0]
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.0)
@@ -607,6 +616,40 @@ extension UIView{
         
         layer.add(glowAnimation, forKey: "glowPulse")
         layer.add(colorAnimation, forKey: "colorPulse")
+    }
+    
+    // PHASE 1: Optimized Glass Panel Styling
+    func applyGlassPanel(cornerRadius: CGFloat = 24) {
+        // Clear any existing styling
+        backgroundColor = .clear
+        
+        // Performance-optimized blur effect
+        let blurEffect = UIBlurEffect(style: .systemUltraThinMaterialDark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurEffectView.alpha = 0.6 // Set to 0.6 for performance as specified
+        blurEffectView.layer.cornerRadius = cornerRadius
+        blurEffectView.clipsToBounds = true
+        
+        // Remove any existing blur views
+        subviews.forEach { if $0 is UIVisualEffectView { $0.removeFromSuperview() } }
+        insertSubview(blurEffectView, at: 0)
+        
+        // Apply border
+        layer.cornerRadius = cornerRadius
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.glassBorderNew.cgColor // rgba(255,255,255,0.1)
+        
+        // Add subtle background for better glass effect
+        let backgroundLayer = CALayer()
+        backgroundLayer.frame = bounds
+        backgroundLayer.backgroundColor = UIColor.glassEffect.cgColor // rgba(255,255,255,0.08)
+        backgroundLayer.cornerRadius = cornerRadius
+        layer.insertSublayer(backgroundLayer, at: 0)
+        
+        // Clip to bounds for clean corners
+        clipsToBounds = true
     }
     
     // Glass blur transition overlay

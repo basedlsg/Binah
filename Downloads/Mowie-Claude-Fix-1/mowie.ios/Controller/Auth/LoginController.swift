@@ -323,11 +323,10 @@ class LoginController: UIViewController, UITextFieldDelegate {
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
         
-        // Create form container with dark glass effect
+        // Create form container with Phase 1 glass panel
         let formContainer = UIView()
         formContainer.translatesAutoresizingMaskIntoConstraints = false
-        formContainer.applyDarkGlass()
-        formContainer.layer.cornerRadius = 20
+        formContainer.applyGlassPanel(cornerRadius: 24)
         view.addSubview(formContainer)
         
         // Update login button with primary green gradient

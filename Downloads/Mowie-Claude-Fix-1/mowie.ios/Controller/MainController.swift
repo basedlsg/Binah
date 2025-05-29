@@ -382,14 +382,9 @@ class MainController: UIViewController {
         
         // ---- SEARCH BAR BELOW NAV BAR ----
         searchContainer.translatesAutoresizingMaskIntoConstraints = false
-        searchContainer.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
-        searchContainer.layer.cornerRadius = 12
-        searchContainer.layer.borderColor = UIColor.glassBorder.cgColor
-        searchContainer.layer.borderWidth = 1
         
-        // Add premium glass effect to search container
-        searchContainer.applyPremiumGlass(intensity: 0.9, cornerRadius: 16)
-        searchContainer.addPremiumShadowGlow(color: .primaryGreen)
+        // Apply Phase 1 glass panel styling
+        searchContainer.applyGlassPanel(cornerRadius: 16)
         
         // Initial state for animation
         searchContainer.alpha = 0
@@ -445,10 +440,12 @@ class MainController: UIViewController {
         // ---- NEW JOB BUTTON FLOATING ----
         newJobButton.translatesAutoresizingMaskIntoConstraints = false
         newJobButton.setTitle("", for: .normal)
-        newJobButton.applyPremiumGlassButton(style: .primary)
+        newJobButton.backgroundColor = UIColor.accentGreen
         newJobButton.layer.cornerRadius = 28
-        newJobButton.addPremiumShadowGlow(color: .primaryGreen)
-        newJobButton.addFloatingAnimation(duration: 3.0, distance: 6)
+        newJobButton.layer.shadowColor = UIColor.accentGreen.cgColor
+        newJobButton.layer.shadowOpacity = 0.4
+        newJobButton.layer.shadowOffset = CGSize(width: 0, height: 4)
+        newJobButton.layer.shadowRadius = 12
         
         let plusIcon = UIImage(systemName: "plus")?.withRenderingMode(.alwaysTemplate)
         newJobButton.setImage(plusIcon, for: .normal)
