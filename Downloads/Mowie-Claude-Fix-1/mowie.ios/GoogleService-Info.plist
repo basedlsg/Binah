@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyALP8ENJ_i8Nk_A76uxMxYOSV-l7yFNe_k</string>
+	<key>GCM_SENDER_ID</key>
+	<string>632151172088</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.mowieinc.mowie-ios</string>
+	<key>PROJECT_ID</key>
+	<string>mowie-2598c</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mowie-2598c.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:632151172088:ios:8654e1c7ae856e22ebac0d</string>
+	<key>DATABASE_URL</key>
+	<string>https://mowie-2598c-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
