@@ -156,12 +156,17 @@ class SplashScreenController: UIViewController {
                 didFetchComplete = true
                 
                 if !self.didNavigate {
-                    print("✅ User data fetched - account type: \(user.accountType == .customer ? "customer" : "pro")")
-                    // Wait for video or minimum delay
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                        if !self.didNavigate {
-                            self.navigateToMainApp(user: user)
+                    if let user = user {
+                        print("✅ User data fetched - account type: \(user.accountType == .customer ? "customer" : "pro")")
+                        // Wait for video or minimum delay
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            if !self.didNavigate {
+                                self.navigateToMainApp(user: user)
+                            }
                         }
+                    } else {
+                        print("⚠️ User data was nil - showing login")
+                        self.showLoginController()
                     }
                 }
             }
