@@ -463,6 +463,9 @@ class MainController: UIViewController {
         
         newJobButton.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
         
+        // Add performance-aware press animation
+        newJobButton.addPerformanceAwarePressAnimation()
+        
         // Configure FAB animations
         newJobButton.addGentleGlowPulse()
         newJobButton.alpha = 0

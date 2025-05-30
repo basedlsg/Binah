@@ -170,6 +170,9 @@ class LoginController: UIViewController, UITextFieldDelegate {
         
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         
+        // Add performance-aware press animation
+        button.addPerformanceAwarePressAnimation()
+        
         return button
     }()
     
@@ -182,6 +185,9 @@ class LoginController: UIViewController, UITextFieldDelegate {
         button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
         button.setAttributedTitle(attributedTitle, for: .normal)
         
+        // Add performance-aware press animation
+        button.addPerformanceAwarePressAnimation()
+        
         return button
     }()
     
@@ -193,6 +199,9 @@ class LoginController: UIViewController, UITextFieldDelegate {
         attributedTitle.append(NSAttributedString(string: "Reset Password", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.accentGreen]))
         button.addTarget(self, action: #selector(handleForgotPassword), for: .touchUpInside)
         button.setAttributedTitle(attributedTitle, for: .normal)
+        
+        // Add performance-aware press animation
+        button.addPerformanceAwarePressAnimation()
         
         return button
     }()

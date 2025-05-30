@@ -816,6 +816,9 @@ extension UIButton {
         // Add touch feedback
         addTarget(self, action: #selector(buttonTouchDown), for: .touchDown)
         addTarget(self, action: #selector(buttonTouchUp), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+        
+        // Add performance-aware press animation
+        addPerformanceAwarePressAnimation()
     }
     
     func applyPremiumGlassButton(style: GlassButtonStyle = .primary) {
@@ -973,5 +976,52 @@ extension UIControl {
         UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.3, options: .curveEaseInOut, animations: {
             self.transform = .identity
         })
+    }
+    
+    /// Performance-aware press animation that respects device capabilities
+    func addPerformanceAwarePressAnimation() {
+        addTarget(self, action: #selector(performanceAwareTouchDown), for: .touchDown)
+        addTarget(self, action: #selector(performanceAwareTouchUp), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+    }
+    
+    @objc private func performanceAwareTouchDown() {
+        guard PerformanceManager.shared.shouldAnimate() else {
+            print("🎬 Skipping button press animation due to performance constraints")
+            return
+        }
+        
+        // Scale down to 0.95 on touch
+        PerformanceManager.shared.animateSpring(
+            duration: 0.15,
+            delay: 0,
+            damping: 0.8,
+            velocity: 0.5,
+            options: .curveEaseInOut,
+            animations: {
+                self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            },
+            completion: nil
+        )
+    }
+    
+    @objc private func performanceAwareTouchUp() {
+        guard PerformanceManager.shared.shouldAnimate() else {
+            // Ensure button returns to normal state even without animation
+            self.transform = .identity
+            return
+        }
+        
+        // Scale back to normal on release
+        PerformanceManager.shared.animateSpring(
+            duration: 0.2,
+            delay: 0,
+            damping: 0.7,
+            velocity: 0.3,
+            options: .curveEaseInOut,
+            animations: {
+                self.transform = .identity
+            },
+            completion: nil
+        )
     }
 }

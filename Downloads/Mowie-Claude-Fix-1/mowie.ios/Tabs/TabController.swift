@@ -558,6 +558,10 @@ class TabController: UITabBarController, UITabBarControllerDelegate {
         retryButton.titleLabel?.font = .boldSystemFont(ofSize: 16)
         retryButton.translatesAutoresizingMaskIntoConstraints = false
         retryButton.addTarget(self, action: #selector(retryButtonTapped), for: .touchUpInside)
+        
+        // Add performance-aware press animation
+        retryButton.addPerformanceAwarePressAnimation()
+        
         errorView.addSubview(retryButton)
         
         NSLayoutConstraint.activate([
