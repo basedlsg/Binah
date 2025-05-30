@@ -19,13 +19,40 @@ class LoginController: UIViewController, UITextFieldDelegate {
         return .lightContent
     }
     
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Mowie"
-        label.font = UIFont(name: "Avenir-Light", size:36)
-        label.textColor = UIColor(white: 1, alpha: 0.8)
+    private let logoContainer: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.layer.cornerRadius = 40 // 80x80 = 40 radius
+        container.clipsToBounds = true
         
-        return label
+        // Add gradient background
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [
+            UIColor.gradientDark.cgColor,
+            UIColor.gradientMid.cgColor,
+            UIColor.accentGreen.cgColor
+        ]
+        gradientLayer.locations = [0.0, 0.7, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
+        container.layer.addSublayer(gradientLayer)
+        
+        // Add logo text
+        let logoLabel = UILabel()
+        logoLabel.text = "M"
+        logoLabel.font = UIFont(name: "Avenir-Heavy", size: 32) ?? UIFont.boldSystemFont(ofSize: 32)
+        logoLabel.textColor = .white
+        logoLabel.textAlignment = .center
+        logoLabel.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(logoLabel)
+        
+        NSLayoutConstraint.activate([
+            logoLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            logoLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+        ])
+        
+        return container
     }()
     
     private lazy var emailContainerView: UIView = {
@@ -65,16 +92,21 @@ class LoginController: UIViewController, UITextFieldDelegate {
     private let emailTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Email"
-        tf.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.4)
+        tf.backgroundColor = UIColor.clear
         tf.textColor = .white
-        tf.tintColor = UIColor.primaryGreen
-        tf.layer.cornerRadius = 12
+        tf.tintColor = UIColor.accentGreen
+        tf.layer.cornerRadius = 16
+        tf.layer.borderWidth = 1
+        tf.layer.borderColor = UIColor.glassBorder.cgColor
         tf.font = UIFont.systemFont(ofSize: 16)
         tf.keyboardAppearance = .dark
         tf.attributedPlaceholder = NSAttributedString(
             string: "Email",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1.0, alpha: 0.4)]
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1.0, alpha: 0.5)]
         )
+        
+        // Add glass background
+        tf.backgroundColor = UIColor.glassEffect
         
         // Add padding
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: tf.frame.height))
@@ -89,18 +121,23 @@ class LoginController: UIViewController, UITextFieldDelegate {
     private let passwordTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Password"
-        tf.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.4)
+        tf.backgroundColor = UIColor.clear
         tf.textColor = .white
-        tf.tintColor = UIColor.primaryGreen
-        tf.layer.cornerRadius = 12
+        tf.tintColor = UIColor.accentGreen
+        tf.layer.cornerRadius = 16
+        tf.layer.borderWidth = 1
+        tf.layer.borderColor = UIColor.glassBorder.cgColor
         tf.font = UIFont.systemFont(ofSize: 16)
         tf.keyboardAppearance = .dark
         tf.isSecureTextEntry = true
         tf.attributedPlaceholder = NSAttributedString(
             string: "Password",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1.0, alpha: 0.4)]
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor(white: 1.0, alpha: 0.5)]
         )
         tf.passwordRules = UITextInputPasswordRules(descriptor: "required: upper; required: digit; max-consecutive: 2; minlength: 8;")
+        
+        // Add glass background
+        tf.backgroundColor = UIColor.glassEffect
         
         // Add padding
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: tf.frame.height))
@@ -112,10 +149,25 @@ class LoginController: UIViewController, UITextFieldDelegate {
         return tf
     }()
     
-    private let loginButton: AuthButton = {
-        let button = AuthButton(type: .system)
+    private let loginButton: UIButton = {
+        let button = UIButton(type: .system)
         button.setTitle("LOG IN", for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 16
+        button.clipsToBounds = true
+        
+        // Add gradient background
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [
+            UIColor.accentGreen.cgColor,
+            UIColor.accentGreen.withAlphaComponent(0.8).cgColor
+        ]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        button.layer.insertSublayer(gradientLayer, at: 0)
+        
         button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         
         return button
@@ -126,7 +178,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
         
         let attributedTitle = NSMutableAttributedString(string: "Don't have an account? ", attributes:
                                                             [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.white])
-        attributedTitle.append(NSAttributedString(string: "Sign Up", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.primaryGreen]))
+        attributedTitle.append(NSAttributedString(string: "Sign Up", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.accentGreen]))
         button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
         button.setAttributedTitle(attributedTitle, for: .normal)
         
@@ -138,7 +190,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
         
         let attributedTitle = NSMutableAttributedString(string: "Forgot Password? ", attributes:
                                                             [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.white])
-        attributedTitle.append(NSAttributedString(string: "Reset Password", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.primaryGreen]))
+        attributedTitle.append(NSAttributedString(string: "Reset Password", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 16), NSAttributedString.Key.foregroundColor: UIColor.accentGreen]))
         button.addTarget(self, action: #selector(handleForgotPassword), for: .touchUpInside)
         button.setAttributedTitle(attributedTitle, for: .normal)
         
@@ -173,9 +225,14 @@ class LoginController: UIViewController, UITextFieldDelegate {
         // Reapply gradient after layout changes
         view.applyDarkGreenGradient()
         
+        // Update logo gradient frame
+        if let logoGradientLayer = logoContainer.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
+            logoGradientLayer.frame = logoContainer.bounds
+        }
+        
         // Update button gradient frame
-        if let gradientLayer = loginButton.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
-            gradientLayer.frame = loginButton.bounds
+        if let buttonGradientLayer = loginButton.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
+            buttonGradientLayer.frame = loginButton.bounds
         }
     }
     
@@ -313,14 +370,13 @@ class LoginController: UIViewController, UITextFieldDelegate {
         // Apply dark green gradient to view background
         view.applyDarkGreenGradient()
         
-        // Update title label to white
-        titleLabel.textColor = .white
-        
-        view.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        // Add logo container
+        view.addSubview(logoContainer)
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            logoContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60),
+            logoContainer.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoContainer.widthAnchor.constraint(equalToConstant: 80),
+            logoContainer.heightAnchor.constraint(equalToConstant: 80)
         ])
         
         // Create form container with Phase 1 glass panel
@@ -329,8 +385,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
         formContainer.applyGlassPanel(cornerRadius: 24)
         view.addSubview(formContainer)
         
-        // Update login button with primary green gradient
-        loginButton.applyPrimaryGreenStyle()
+        // Login button gradient is handled in the button definition
         
         let stack = UIStackView(arrangedSubviews: [emailContainerView, passwordContainerView, loginButton])
         stack.axis = .vertical
@@ -342,7 +397,7 @@ class LoginController: UIViewController, UITextFieldDelegate {
         
         NSLayoutConstraint.activate([
             // Form container constraints
-            formContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 40),
+            formContainer.topAnchor.constraint(equalTo: logoContainer.bottomAnchor, constant: 40),
             formContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             formContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             formContainer.heightAnchor.constraint(equalToConstant: 240),
