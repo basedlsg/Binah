@@ -21,14 +21,14 @@ extension UIColor {
     static let mainBlueTint = UIColor.rgb(red: 17, green: 154, blue: 237)
     static let mowieColor = UIColor.rgb(red: 00, green: 75, blue: 00)
     
-    // PHASE 1: New Design System Colors
-    static let primaryDark = UIColor(red: 10/255, green: 31/255, blue: 18/255, alpha: 1.0) // #0A1F12
-    static let gradientDark = UIColor(red: 15/255, green: 40/255, blue: 24/255, alpha: 1.0) // #0F2818
-    static let gradientMid = UIColor(red: 26/255, green: 58/255, blue: 42/255, alpha: 1.0) // #1A3A2A
-    static let gradientEnd = UIColor(red: 13/255, green: 37/255, blue: 25/255, alpha: 1.0) // #0D2519
-    static let accentGreen = UIColor(red: 0/255, green: 230/255, blue: 118/255, alpha: 1.0) // #00E676
-    static let glassEffect = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.08) // rgba(255,255,255,0.08)
-    static let glassBorderNew = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.1) // rgba(255,255,255,0.1)
+    // PHASE 1: Base Layer Design System Colors
+    static let primaryDark = UIColor(red: 0x0A/255.0, green: 0x1F/255.0, blue: 0x12/255.0, alpha: 1.0) // #0A1F12
+    static let gradientDark = UIColor(red: 0x0F/255.0, green: 0x28/255.0, blue: 0x18/255.0, alpha: 1.0) // #0F2818
+    static let gradientMid = UIColor(red: 0x1A/255.0, green: 0x3A/255.0, blue: 0x2A/255.0, alpha: 1.0) // #1A3A2A
+    static let gradientEnd = UIColor(red: 0x0D/255.0, green: 0x25/255.0, blue: 0x19/255.0, alpha: 1.0) // #0D2519
+    static let accentGreen = UIColor(red: 0x00/255.0, green: 0xE6/255.0, blue: 0x76/255.0, alpha: 1.0) // #00E676
+    static let glassEffect = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.08) // rgba(255,255,255,0.08)
+    static let glassBorder = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.1) // rgba(255,255,255,0.1)
     
     // Legacy colors (keeping for backward compatibility)
     static let darkGreenGradientStart = gradientDark
@@ -37,9 +37,8 @@ extension UIColor {
     static let glassDark = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
     static let glassLight = UIColor(red: 1, green: 1, blue: 1, alpha: 0.05)
     static let glassCard = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
-    static let primaryGreen = UIColor(red: 0/255, green: 200/255, blue: 83/255, alpha: 1.0)
+    static let primaryGreen = accentGreen // Updated to use new accent green
     static let brightGreen = accentGreen
-    static let glassBorder = glassEffect
     static let iconTint = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
     
     // Enhanced Premium Glassmorphism Colors
@@ -639,7 +638,7 @@ extension UIView{
         // Apply border
         layer.cornerRadius = cornerRadius
         layer.borderWidth = 1
-        layer.borderColor = UIColor.glassBorderNew.cgColor // rgba(255,255,255,0.1)
+        layer.borderColor = UIColor.glassBorder.cgColor // rgba(255,255,255,0.1)
         
         // Add subtle background for better glass effect
         let backgroundLayer = CALayer()
