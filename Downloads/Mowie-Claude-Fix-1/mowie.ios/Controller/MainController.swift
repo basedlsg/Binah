@@ -415,12 +415,6 @@ class MainController: UIViewController {
         searchTextField.addTarget(self, action: #selector(searchFieldFocusChanged(_:)), for: .editingDidEnd)
         
         NSLayoutConstraint.activate([
-            // Blur effect constraints
-            searchBlurEffectView.topAnchor.constraint(equalTo: searchContainer.topAnchor),
-            searchBlurEffectView.leadingAnchor.constraint(equalTo: searchContainer.leadingAnchor),
-            searchBlurEffectView.trailingAnchor.constraint(equalTo: searchContainer.trailingAnchor),
-            searchBlurEffectView.bottomAnchor.constraint(equalTo: searchContainer.bottomAnchor),
-            
             searchContainer.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 16), // small margin
             searchContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             searchContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),

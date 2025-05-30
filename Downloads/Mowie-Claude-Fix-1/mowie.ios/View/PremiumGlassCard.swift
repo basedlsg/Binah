@@ -9,7 +9,7 @@ import UIKit
 
 class PremiumGlassCard: UIView {
     
-    private let contentView = UIView()
+    internal let contentView = UIView()
     private var glowColor: UIColor = .primaryGreen
     
     override init(frame: CGRect) {
