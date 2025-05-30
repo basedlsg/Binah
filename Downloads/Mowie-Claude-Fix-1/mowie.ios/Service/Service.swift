@@ -21,24 +21,102 @@ struct Service {
     func fetchUserData(uid: String, completion: @escaping(User?) -> Void) {
         print("🔍 Fetching user data for uid: \(uid)")
         
+        var hasCompleted = false
+        
+        // 10-second timeout to prevent hanging
+        DispatchQueue.main.asyncAfter(deadline: .now() + 10.0) {
+            if !hasCompleted {
+                hasCompleted = true
+                print("⚠️ fetchUserData timeout after 10 seconds - creating default user")
+                let defaultUser = self.createDefaultUser(uid: uid)
+                completion(defaultUser)
+            }
+        }
+        
         REF_USERS.child(uid).observeSingleEvent(of: .value) { (snapshot) in
+            guard !hasCompleted else { return }
+            hasCompleted = true
+            
             if snapshot.exists() {
                 guard let dictionary = snapshot.value as? [String: Any] else { 
-                    print("❌ Failed to parse user data dictionary")
-                    completion(nil)
+                    print("❌ Failed to parse user data dictionary - creating default user")
+                    let defaultUser = self.createDefaultUser(uid: uid)
+                    completion(defaultUser)
                     return 
                 }
                 let uid = snapshot.key
                 let user = User(uid: uid, dictionary: dictionary)
-                print("✅ Successfully fetched user data")
+                print("✅ Successfully fetched existing user data")
                 completion(user)
             } else {
-                print("❌ No user document found in Firebase")
-                completion(nil)
+                print("⚠️ No user document found in Firebase - creating default user")
+                let defaultUser = self.createDefaultUser(uid: uid)
+                // Optionally save the default user to Firebase
+                self.saveDefaultUserToFirebase(uid: uid, user: defaultUser)
+                completion(defaultUser)
             }
         } withCancel: { error in
-            print("❌ Firebase error fetching user data: \(error.localizedDescription)")
-            completion(nil)
+            guard !hasCompleted else { return }
+            hasCompleted = true
+            print("❌ Firebase error fetching user data: \(error.localizedDescription) - creating default user")
+            let defaultUser = self.createDefaultUser(uid: uid)
+            completion(defaultUser)
+        }
+    }
+    
+    // Create default user data when Firebase document doesn't exist
+    private func createDefaultUser(uid: String) -> User {
+        guard let currentUser = Auth.auth().currentUser else {
+            // Fallback if even Auth.auth().currentUser is nil
+            let fallbackData: [String: Any] = [
+                "firstname": "User",
+                "lastname": "",
+                "email": "user@example.com",
+                "phonenumber": "",
+                "customerid": "cust_\(uid.prefix(8))",
+                "profilephotourl": "",
+                "accountType": 0 // customer
+            ]
+            return User(uid: uid, dictionary: fallbackData)
+        }
+        
+        // Create user data from Firebase Auth info
+        let email = currentUser.email ?? "user@example.com"
+        let displayName = currentUser.displayName ?? "User"
+        let nameParts = displayName.components(separatedBy: " ")
+        
+        let defaultData: [String: Any] = [
+            "firstname": nameParts.first ?? "User",
+            "lastname": nameParts.count > 1 ? nameParts.dropFirst().joined(separator: " ") : "",
+            "email": email,
+            "phonenumber": currentUser.phoneNumber ?? "",
+            "customerid": "cust_\(uid.prefix(8))",
+            "profilephotourl": currentUser.photoURL?.absoluteString ?? "",
+            "accountType": 0 // default to customer
+        ]
+        
+        print("✅ Created default user data for \(email)")
+        return User(uid: uid, dictionary: defaultData)
+    }
+    
+    // Save default user to Firebase for future use
+    private func saveDefaultUserToFirebase(uid: String, user: User) {
+        let userData: [String: Any] = [
+            "firstname": user.firstname,
+            "lastname": user.lastname,
+            "email": user.email,
+            "phonenumber": user.phonenumber,
+            "customerid": user.customerid,
+            "profilephotourl": user.profilephotourl,
+            "accountType": user.accountType.rawValue
+        ]
+        
+        REF_USERS.child(uid).setValue(userData) { error, _ in
+            if let error = error {
+                print("⚠️ Failed to save default user to Firebase: \(error.localizedDescription)")
+            } else {
+                print("✅ Default user data saved to Firebase")
+            }
         }
     }
     

@@ -18,45 +18,84 @@ class TabController: UITabBarController, UITabBarControllerDelegate {
     }
     
     private var loadingIndicator: UIActivityIndicatorView!
+    private var loadingView: UIView!
+    private var errorView: UIView!
+    private var loadingLabel: UILabel!
+    private var errorLabel: UILabel!
+    private var retryButton: UIButton!
+    
     let hasAcceptedTerms = UserDefaults.standard.bool(forKey: "HasAcceptedTerms")
     
     var pro: Pro?
     
     var user: User? {
         didSet {
-            if user?.accountType == .customer {
-                print("Customer")
-                // Check if the user has accepted the terms
-                let customerview = ContainerController()
-                customerview.modalPresentationStyle = .fullScreen
-                self.present(customerview, animated: true, completion: nil)
+            // Hide loading UI when user data is received
+            DispatchQueue.main.async {
+                self.hideLoadingState()
             }
-            else if user?.accountType == .pro {
-                print("Pro")
-                guard let uid = Auth.auth().currentUser?.uid else { return }
+            
+            guard let user = user else {
+                // Handle nil user gracefully
+                print("⚠️ User is nil - showing error state")
+                DispatchQueue.main.async {
+                    self.showErrorState(message: "Unable to load user data. Please check your connection.")
+                }
+                return
+            }
+            
+            if user.accountType == .customer {
+                print("Customer user type")
+                DispatchQueue.main.async {
+                    // Check if the user has accepted the terms
+                    let customerview = ContainerController()
+                    customerview.modalPresentationStyle = .fullScreen
+                    self.present(customerview, animated: true, completion: nil)
+                }
+            }
+            else if user.accountType == .pro {
+                print("Pro user type")
+                guard let uid = Auth.auth().currentUser?.uid else { 
+                    DispatchQueue.main.async {
+                        self.showErrorState(message: "Authentication error. Please try logging in again.")
+                    }
+                    return 
+                }
                 
-                Service.shared.fetchPro(uid: uid) { pro in self.pro = pro
+                Service.shared.fetchPro(uid: uid) { [weak self] pro in
+                    guard let self = self else { return }
+                    self.pro = pro
                     print("Pro: \(pro)")
-                    if pro.businessName == "Need to Set" || pro.einNumber == "Need to Set" {
-                        print("Business Info")
-                        self.showPopUp()
+                    
+                    DispatchQueue.main.async {
+                        if pro.businessName == "Need to Set" || pro.einNumber == "Need to Set" {
+                            print("Business Info")
+                            self.showPopUp()
+                        }
+                        if pro.backgroundCheck != "true" {
+                            print("Background")
+                            let warningString = "Need to pass criminal backgroung check to be a pro on Mowie. Check your email to submit your test!"
+                            let warningViewController = DoNotPassController(warningString: warningString)
+                            let navigationController = UINavigationController(rootViewController: warningViewController)
+                            navigationController.modalPresentationStyle = .fullScreen
+                            self.present(navigationController, animated: true, completion: nil)
+                        }
+                        if pro.needOnboard != "false" {
+                            print("Onboard")
+                            let onBoardController = OnboardController(pro: pro)
+                            onBoardController.modalPresentationStyle = .fullScreen
+                            self.present(onBoardController, animated: true, completion: nil)
+                        }
+                        self.setupTabs()
                     }
-                    if pro.backgroundCheck != "true" {
-                        print("Background")
-                        let warningString = "Need to pass criminal backgroung check to be a pro on Mowie. Check your email to submit your test!"
-                        let warningViewController = DoNotPassController(warningString: warningString)
-                        let navigationController = UINavigationController(rootViewController: warningViewController)
-                        navigationController.modalPresentationStyle = .fullScreen
-                        self.present(navigationController, animated: true, completion: nil)
-
-                    }
-                    if pro.needOnboard != "false" {
-                        print("Onboard")
-                        let onBoardController = OnboardController(pro: pro)
-                        onBoardController.modalPresentationStyle = .fullScreen
-                        self.present(onBoardController, animated: true, completion: nil)
-                    }
-                    self.setupTabs()
+                }
+            } else {
+                // Unknown account type - default to customer
+                print("⚠️ Unknown account type, defaulting to customer")
+                DispatchQueue.main.async {
+                    let customerview = ContainerController()
+                    customerview.modalPresentationStyle = .fullScreen
+                    self.present(customerview, animated: true, completion: nil)
                 }
             }
         }
@@ -66,6 +105,10 @@ class TabController: UITabBarController, UITabBarControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Setup UI states
+        setupLoadingState()
+        setupErrorState()
         
         if UserDefaults.standard.object(forKey: "HasAcceptedTerms") == nil {
             // The key "HasAcceptedTerms" does not exist in UserDefaults
@@ -83,10 +126,18 @@ class TabController: UITabBarController, UITabBarControllerDelegate {
     }
     
     func fetchUserData() {
-        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        guard let currentUid = Auth.auth().currentUser?.uid else { 
+            showErrorState(message: "No authenticated user found. Please log in again.")
+            return 
+        }
         
-        Service.shared.fetchUserData(uid: currentUid) { user in
-            self.user = user
+        // Show loading state
+        showLoadingState()
+        
+        Service.shared.fetchUserData(uid: currentUid) { [weak self] user in
+            DispatchQueue.main.async {
+                self?.user = user
+            }
         }
     }
     
@@ -439,5 +490,124 @@ class TabController: UITabBarController, UITabBarControllerDelegate {
                 print("ACCOUNT tab was selected!")
             }
         }
+    }
+    
+    // MARK: - Loading and Error State Management
+    
+    private func setupLoadingState() {
+        // Create loading view
+        loadingView = UIView()
+        loadingView.backgroundColor = UIColor.primaryDark
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
+        loadingView.isHidden = true
+        view.addSubview(loadingView)
+        
+        // Create loading indicator
+        loadingIndicator = UIActivityIndicatorView(style: .large)
+        loadingIndicator.color = UIColor.accentGreen
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        loadingView.addSubview(loadingIndicator)
+        
+        // Create loading label
+        loadingLabel = UILabel()
+        loadingLabel.text = "Loading your data..."
+        loadingLabel.textColor = .white
+        loadingLabel.font = .systemFont(ofSize: 16)
+        loadingLabel.textAlignment = .center
+        loadingLabel.translatesAutoresizingMaskIntoConstraints = false
+        loadingView.addSubview(loadingLabel)
+        
+        NSLayoutConstraint.activate([
+            loadingView.topAnchor.constraint(equalTo: view.topAnchor),
+            loadingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            loadingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            loadingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            loadingIndicator.centerXAnchor.constraint(equalTo: loadingView.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: loadingView.centerYAnchor, constant: -20),
+            
+            loadingLabel.topAnchor.constraint(equalTo: loadingIndicator.bottomAnchor, constant: 16),
+            loadingLabel.centerXAnchor.constraint(equalTo: loadingView.centerXAnchor)
+        ])
+    }
+    
+    private func setupErrorState() {
+        // Create error view
+        errorView = UIView()
+        errorView.backgroundColor = UIColor.primaryDark
+        errorView.translatesAutoresizingMaskIntoConstraints = false
+        errorView.isHidden = true
+        view.addSubview(errorView)
+        
+        // Create error label
+        errorLabel = UILabel()
+        errorLabel.text = "Something went wrong"
+        errorLabel.textColor = .white
+        errorLabel.font = .systemFont(ofSize: 18, weight: .medium)
+        errorLabel.textAlignment = .center
+        errorLabel.numberOfLines = 0
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorView.addSubview(errorLabel)
+        
+        // Create retry button
+        retryButton = UIButton(type: .system)
+        retryButton.setTitle("Retry", for: .normal)
+        retryButton.setTitleColor(.white, for: .normal)
+        retryButton.backgroundColor = UIColor.accentGreen
+        retryButton.layer.cornerRadius = 8
+        retryButton.titleLabel?.font = .boldSystemFont(ofSize: 16)
+        retryButton.translatesAutoresizingMaskIntoConstraints = false
+        retryButton.addTarget(self, action: #selector(retryButtonTapped), for: .touchUpInside)
+        errorView.addSubview(retryButton)
+        
+        NSLayoutConstraint.activate([
+            errorView.topAnchor.constraint(equalTo: view.topAnchor),
+            errorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            errorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            errorView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            errorLabel.centerXAnchor.constraint(equalTo: errorView.centerXAnchor),
+            errorLabel.centerYAnchor.constraint(equalTo: errorView.centerYAnchor, constant: -30),
+            errorLabel.leadingAnchor.constraint(equalTo: errorView.leadingAnchor, constant: 20),
+            errorLabel.trailingAnchor.constraint(equalTo: errorView.trailingAnchor, constant: -20),
+            
+            retryButton.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: 24),
+            retryButton.centerXAnchor.constraint(equalTo: errorView.centerXAnchor),
+            retryButton.widthAnchor.constraint(equalToConstant: 120),
+            retryButton.heightAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+    
+    private func showLoadingState() {
+        loadingView.isHidden = false
+        errorView.isHidden = true
+        loadingIndicator.startAnimating()
+        loadingLabel.text = "Loading your data..."
+        print("📱 Showing loading state")
+    }
+    
+    private func hideLoadingState() {
+        loadingView.isHidden = true
+        loadingIndicator.stopAnimating()
+        print("📱 Hiding loading state")
+    }
+    
+    private func showErrorState(message: String) {
+        errorView.isHidden = false
+        loadingView.isHidden = true
+        loadingIndicator.stopAnimating()
+        errorLabel.text = message
+        print("📱 Showing error state: \(message)")
+    }
+    
+    @objc private func retryButtonTapped() {
+        print("📱 Retry button tapped")
+        hideErrorState()
+        fetchUserData()
+    }
+    
+    private func hideErrorState() {
+        errorView.isHidden = true
+        print("📱 Hiding error state")
     }
 }
