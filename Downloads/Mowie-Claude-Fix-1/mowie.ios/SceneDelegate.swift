@@ -12,17 +12,37 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        print("🟢 SceneDelegate: willConnectTo called")
+        
         // CRITICAL: Proper window initialization sequence
-        guard let windowScene = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { 
+            print("🔴 Failed to get windowScene")
+            return 
+        }
+        print("✅ Got windowScene successfully")
         
         // 1. Create window with windowScene
         window = UIWindow(windowScene: windowScene)
+        print("✅ Created UIWindow with windowScene")
         
         // 2. Set the root view controller FIRST
-        window?.rootViewController = SplashScreenController()
+        let splashController = SplashScreenController()
+        window?.rootViewController = splashController
+        print("✅ Set rootViewController to SplashScreenController")
         
         // 3. Make window key and visible LAST
         window?.makeKeyAndVisible()
+        print("✅ Called makeKeyAndVisible")
+        
+        // Verify window state
+        if let window = window {
+            print("✅ Window is created: \(window)")
+            print("✅ Window frame: \(window.frame)")
+            print("✅ Window isKeyWindow: \(window.isKeyWindow)")
+            print("✅ Window rootViewController: \(String(describing: window.rootViewController))")
+        } else {
+            print("🔴 Window is nil after setup")
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -33,6 +53,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
+        print("🟢 SceneDelegate: sceneDidBecomeActive")
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
     }
@@ -43,6 +64,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
+        print("🟢 SceneDelegate: sceneWillEnterForeground")
         // Called as the scene transitions from the background to the foreground.
         // Use this method to undo the changes made on entering the background.
     }
