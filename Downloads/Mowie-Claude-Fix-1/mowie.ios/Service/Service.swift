@@ -18,13 +18,27 @@ struct Service {
     
     static let shared = Service()
     
-    func fetchUserData(uid: String, completion: @escaping(User) -> Void) {
-        REF_USERS.child(uid).observe(.value) { (snapshot) in
-            guard let dictionary = snapshot.value as? [String: Any] else { return }
-            let uid = snapshot.key
-            let user = User(uid: uid, dictionary: dictionary)
-            
-            completion(user)
+    func fetchUserData(uid: String, completion: @escaping(User?) -> Void) {
+        print("🔍 Fetching user data for uid: \(uid)")
+        
+        REF_USERS.child(uid).observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.exists() {
+                guard let dictionary = snapshot.value as? [String: Any] else { 
+                    print("❌ Failed to parse user data dictionary")
+                    completion(nil)
+                    return 
+                }
+                let uid = snapshot.key
+                let user = User(uid: uid, dictionary: dictionary)
+                print("✅ Successfully fetched user data")
+                completion(user)
+            } else {
+                print("❌ No user document found in Firebase")
+                completion(nil)
+            }
+        } withCancel: { error in
+            print("❌ Firebase error fetching user data: \(error.localizedDescription)")
+            completion(nil)
         }
     }
     

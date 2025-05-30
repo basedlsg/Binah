@@ -128,7 +128,9 @@ class MainController: UIViewController {
         guard let currentUid = Auth.auth().currentUser?.uid else { return }
         
         Service.shared.fetchUserData(uid: currentUid) { user in
-            self.user = user
+            if let user = user {
+                self.user = user
+            }
         }
     }
     
