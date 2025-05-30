@@ -85,10 +85,8 @@ class MainController: UIViewController {
         print("In Main")
         configure()
         
-        // Apply animated gradient background
-        let animatedBackground = AnimatedGradientBackground(frame: view.bounds)
-        animatedBackground.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        view.insertSubview(animatedBackground, at: 0)
+        // Apply Phase 1 gradient background
+        view.applyDarkGreenGradient()
         
         fetchFirebaseData()
         
@@ -107,13 +105,13 @@ class MainController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Animate view elements with spring
-        UIView.animate(withDuration: 0.5, delay: 0.1, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: .curveEaseOut, animations: {
+        // Subtle animations for UI elements (max 0.3s duration)
+        UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseOut, animations: {
             self.searchContainer.alpha = 1
             self.searchContainer.transform = .identity
         })
         
-        UIView.animate(withDuration: 0.5, delay: 0.2, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.3, delay: 0.15, options: .curveEaseOut, animations: {
             self.newJobButton.alpha = 1
             self.newJobButton.transform = .identity
         })
@@ -168,8 +166,8 @@ class MainController: UIViewController {
                 // Update UI or perform other tasks with the fetched data
                 self.configureUI()
                 
-                // Animate table view in
-                UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: .curveEaseOut, animations: {
+                // Animate table view in (subtle animation - max 0.3s)
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
                     self.tableView.alpha = 1
                     self.tableView.transform = .identity
                 })
@@ -274,25 +272,39 @@ class MainController: UIViewController {
         addJobController?.delegate = self
         let actionSheet = UIAlertController(title: "What Service do you need?", message: nil, preferredStyle: .actionSheet)
         
-        // Add actions to the action sheet
-        let option1Action = UIAlertAction(title: "Dumpster Rental", style: .default) { _ in
+        // Simplified service options - only Lawn Mowing and Dumpster Rental
+        let lawnCareAction = UIAlertAction(title: "🌱 Lawn Mowing", style: .default) { _ in
+            print("Lawn Mowing selected")
+            // Add subtle animation before navigation
+            UIView.animate(withDuration: 0.2, animations: {
+                self.newJobButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            }) { _ in
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.newJobButton.transform = .identity
+                })
+            }
+            self.showJobActionSheet()
+        }
+        actionSheet.addAction(lawnCareAction)
+        
+        let dumpsterAction = UIAlertAction(title: "🗑️ Dumpster Rental", style: .default) { _ in
             print("Dumpster Rental selected")
+            // Add subtle animation before navigation
+            UIView.animate(withDuration: 0.2, animations: {
+                self.newJobButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            }) { _ in
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.newJobButton.transform = .identity
+                })
+            }
             let controller = DumpsterRequestController(user: self.user!)
-            
             let nav = UINavigationController(rootViewController: controller)
             self.present(nav, animated: true, completion: nil)
         }
-        actionSheet.addAction(option1Action)
-        
-        let option2Action = UIAlertAction(title: "Lawn Care", style: .default) { _ in
-            print("Lawn Care selected")
-            self.showJobActionSheet()
-        }
-        actionSheet.addAction(option2Action)
+        actionSheet.addAction(dumpsterAction)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
             print("Cancel selected")
-            // Add your logic for cancel action if needed
         }
         actionSheet.addAction(cancelAction)
         
@@ -348,15 +360,7 @@ class MainController: UIViewController {
         // Create a navigation item
         let navigationItem = UINavigationItem()
         
-        // Hamburger menu button (left side)
-        let hamburgerButton = UIBarButtonItem(
-            image: UIImage(systemName: "line.horizontal.3"),
-            style: .plain,
-            target: self,
-            action: #selector(hamburgerTapped)
-        )
-        hamburgerButton.tintColor = UIColor(white: 1, alpha: 0.8)
-        navigationItem.leftBarButtonItem = hamburgerButton
+        // No left bar button item - functionality moved to tab bar
         
         // Centered Mowie logo
         let logoImageView = UIImageView(image: UIImage(named: "mowietranssplash"))
@@ -401,7 +405,7 @@ class MainController: UIViewController {
         searchTextField.placeholder = "Search jobs..."
         searchTextField.borderStyle = .none
         searchTextField.textColor = .white
-        searchTextField.tintColor = UIColor.primaryGreen
+        searchTextField.tintColor = UIColor.accentGreen
         searchTextField.keyboardAppearance = .dark
         searchTextField.attributedPlaceholder = NSAttributedString(
             string: "Search jobs...",
@@ -467,10 +471,7 @@ class MainController: UIViewController {
     
     // MARK: - Selectors
     
-    @objc func hamburgerTapped() {
-        // Handle hamburger button tap
-        delegate?.handleMenuToggle()
-    }
+    // Hamburger functionality moved to tab bar
     
     @objc func searchTapped() {
         // Handle search button tap
@@ -493,11 +494,11 @@ class MainController: UIViewController {
     @objc func searchFieldFocusChanged(_ textField: UITextField) {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
             if textField.isFirstResponder {
-                self.searchContainer.layer.borderColor = UIColor.primaryGreen.cgColor
+                self.searchContainer.layer.borderColor = UIColor.accentGreen.cgColor
                 self.searchContainer.layer.borderWidth = 2.0
                 
                 // Add green glow
-                self.searchContainer.layer.shadowColor = UIColor.primaryGreen.cgColor
+                self.searchContainer.layer.shadowColor = UIColor.accentGreen.cgColor
                 self.searchContainer.layer.shadowOffset = CGSize(width: 0, height: 0)
                 self.searchContainer.layer.shadowRadius = 12
                 self.searchContainer.layer.shadowOpacity = 0.6
