@@ -9,10 +9,16 @@ import Foundation
 import UIKit
 import Firebase
 import FirebaseAuth
+import AVFoundation
 
 class LoginController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Properties
+    
+    // Video background properties
+    private var player: AVPlayer?
+    private var playerLayer: AVPlayerLayer?
+    private var videoOverlay: UIView?
     
     // Status bar style
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -207,6 +213,16 @@ class LoginController: UIViewController, UITextFieldDelegate {
     }()
     
     // MARK: - Lifecycle
+    
+    deinit {
+        // Clean up video player and observers
+        player?.pause()
+        player = nil
+        playerLayer?.removeFromSuperlayer()
+        playerLayer = nil
+        NotificationCenter.default.removeObserver(self)
+        print("🧹 LoginController cleaned up")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -231,8 +247,8 @@ class LoginController: UIViewController, UITextFieldDelegate {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        // Reapply gradient after layout changes
-        view.applyDarkGreenGradient()
+        // Update video layer frame
+        playerLayer?.frame = view.bounds
         
         // Update logo gradient frame
         if let logoGradientLayer = logoContainer.layer.sublayers?.first(where: { $0 is CAGradientLayer }) as? CAGradientLayer {
@@ -262,6 +278,16 @@ class LoginController: UIViewController, UITextFieldDelegate {
         
         // Stop logo animation to prevent memory leaks
         stopLogoFloatAnimation()
+        
+        // Pause video to save battery and memory
+        player?.pause()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Resume video when returning to screen
+        player?.play()
     }
     
     private func startLogoFloatAnimation() {
@@ -409,14 +435,87 @@ class LoginController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    // MARK: - Video Background Setup
+    
+    private func setupVideoBackground() {
+        guard let videoURL = Bundle.main.url(forResource: "mowieV01", withExtension: "mp4") else {
+            print("❌ Video file not found - using gradient background fallback")
+            view.applyDarkGreenGradient()
+            return
+        }
+        
+        print("✅ Setting up video background")
+        
+        // Create player
+        player = AVPlayer(url: videoURL)
+        player?.isMuted = true // Always muted for background video
+        
+        // Create player layer
+        playerLayer = AVPlayerLayer(player: player)
+        playerLayer?.frame = view.bounds
+        playerLayer?.videoGravity = .resizeAspectFill
+        
+        // Add to view at index 0 (background)
+        if let playerLayer = playerLayer {
+            view.layer.insertSublayer(playerLayer, at: 0)
+        }
+        
+        // Setup looping
+        setupVideoLooping()
+        
+        // Start playing
+        player?.play()
+        
+        print("🎬 Video background started")
+    }
+    
+    private func setupVideoLooping() {
+        // Add observer for end of video to loop seamlessly
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(playerDidFinishPlaying),
+            name: .AVPlayerItemDidPlayToEndTime,
+            object: player?.currentItem
+        )
+    }
+    
+    @objc private func playerDidFinishPlaying() {
+        // Seamlessly loop the video
+        player?.seek(to: .zero)
+        player?.play()
+        print("🔄 Video looped")
+    }
+    
+    private func setupVideoOverlay() {
+        // Create dark overlay for text readability
+        videoOverlay = UIView()
+        videoOverlay?.backgroundColor = UIColor.black.withAlphaComponent(0.8)
+        videoOverlay?.translatesAutoresizingMaskIntoConstraints = false
+        
+        if let overlay = videoOverlay {
+            view.addSubview(overlay)
+            NSLayoutConstraint.activate([
+                overlay.topAnchor.constraint(equalTo: view.topAnchor),
+                overlay.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                overlay.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                overlay.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
+        }
+        
+        print("🎨 Video overlay applied")
+    }
+    
     // MARK: - Helper Functions
     
     func configureUI() {
         
         configureNavigationBar()
         
-        // Apply dark green gradient to view background
-        view.applyDarkGreenGradient()
+        // Setup video background first
+        setupVideoBackground()
+        
+        // Apply dark overlay instead of gradient (video provides background)
+        setupVideoOverlay()
         
         // Add logo container
         view.addSubview(logoContainer)
