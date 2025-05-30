@@ -13,8 +13,12 @@ class ContainerController: UIViewController {
 
     // MARK: - Properties
     
+    // Flag to switch between old menu and new tab system
+    private let useTabBarInterface = true // Set to true to use new tabs, false for old menu
+    
     private let mainController = MainController()
     private var menuController: MenuController!
+    private var customerTabController: CustomerTabController!
     private var addJobController: AddJobController?
     private var isExpanded = false
     private let blackView = UIView()
@@ -25,8 +29,14 @@ class ContainerController: UIViewController {
     var user: User? {
         didSet {
             guard let user = user else { return }
-            mainController.user = user
-            configureMenuController(withUser: user)
+            
+            if useTabBarInterface {
+                configureTabInterface(withUser: user)
+            } else {
+                // Original menu system
+                mainController.user = user
+                configureMenuController(withUser: user)
+            }
         }
     }
     
@@ -80,8 +90,15 @@ class ContainerController: UIViewController {
     
     func configure() {
         view.backgroundColor = .clear
-        configureMainController()
-        fetchUserData()
+        
+        if useTabBarInterface {
+            // Tab interface will be configured when user is set
+            fetchUserData()
+        } else {
+            // Original menu system
+            configureMainController()
+            fetchUserData()
+        }
     }
     
     func configureMainController() {
@@ -101,6 +118,30 @@ class ContainerController: UIViewController {
         view.insertSubview(menuController.view, at: 0)
         menuController.delegate = self
         configureBlackView()
+    }
+    
+    func configureTabInterface(withUser user: User) {
+        print("📱 Configuring tab interface for customer user")
+        
+        // Create and configure CustomerTabController
+        customerTabController = CustomerTabController()
+        customerTabController.user = user
+        
+        // Add as child view controller
+        addChild(customerTabController)
+        customerTabController.didMove(toParent: self)
+        view.addSubview(customerTabController.view)
+        
+        // Make tab controller fill the entire view
+        customerTabController.view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            customerTabController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            customerTabController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            customerTabController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            customerTabController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
+        print("✅ Tab interface configured successfully")
     }
     
     func configureBlackView() {
