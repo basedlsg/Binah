@@ -152,27 +152,59 @@ class JobCardTableViewCell: UITableViewCell {
     }
     
     private func animatePress(isPressed: Bool) {
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
+        guard PerformanceManager.shared.shouldAnimate() else {
+            // Apply visual changes instantly without animation on low-performance devices
             if isPressed {
-                // Slight scale and translate up
                 self.cardContainer.transform = CGAffineTransform(scaleX: 1.02, y: 1.02).translatedBy(x: 0, y: -2)
                 self.cardContainer.layer.shadowOffset = CGSize(width: 0, height: 12)
                 self.cardContainer.layer.shadowOpacity = 0.45
                 self.cardContainer.layer.shadowRadius = 45
-                
-                // Enhance price glow on hover
                 self.priceLabel.layer.shadowOpacity = 0.8
                 self.priceLabel.layer.shadowRadius = 8
             } else {
                 self.cardContainer.transform = .identity
                 self.cardContainer.layer.shadowOffset = CGSize(width: 0, height: 8)
                 self.cardContainer.layer.shadowOpacity = 0.3
-                self.cardContainer.layer.shadowRadius = 32
-                
-                // Reset price glow
+                self.cardContainer.layer.shadowRadius = 25
                 self.priceLabel.layer.shadowOpacity = 0.5
-                self.priceLabel.layer.shadowRadius = 4
+                self.priceLabel.layer.shadowRadius = 5
             }
-        })
+            print("🎬 Applied card hover state instantly (performance mode)")
+            return
+        }
+        
+        print("🎬 Animating card hover: \\(isPressed ? "pressed" : "released")")
+        
+        // Performance-aware card hover animation
+        PerformanceManager.shared.animateSpring(
+            duration: 0.3,
+            delay: 0,
+            damping: 0.8,
+            velocity: 0.5,
+            options: .curveEaseInOut,
+            animations: {
+                if isPressed {
+                    // Slight scale and translate up
+                    self.cardContainer.transform = CGAffineTransform(scaleX: 1.02, y: 1.02).translatedBy(x: 0, y: -2)
+                    self.cardContainer.layer.shadowOffset = CGSize(width: 0, height: 12)
+                    self.cardContainer.layer.shadowOpacity = 0.45
+                    self.cardContainer.layer.shadowRadius = 45
+                    
+                    // Enhance price glow on hover
+                    self.priceLabel.layer.shadowOpacity = 0.8
+                    self.priceLabel.layer.shadowRadius = 8
+                } else {
+                    self.cardContainer.transform = .identity
+                    self.cardContainer.layer.shadowOffset = CGSize(width: 0, height: 8)
+                    self.cardContainer.layer.shadowOpacity = 0.3
+                    self.cardContainer.layer.shadowRadius = 25
+                    
+                    // Reset price glow
+                    self.priceLabel.layer.shadowOpacity = 0.5
+                    self.priceLabel.layer.shadowRadius = 5
+                }
+            },
+            completion: nil
+        )
     }
 }

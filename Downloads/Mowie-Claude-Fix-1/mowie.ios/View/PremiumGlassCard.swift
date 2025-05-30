@@ -59,13 +59,40 @@ class PremiumGlassCard: UIView {
         generator.prepare()
         generator.impactOccurred()
         
-        // Bounce animation
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.8, options: .curveEaseInOut, animations: {
-            self.transform = CGAffineTransform(scaleX: 1.02, y: 1.02)
-        }) { _ in
-            UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .curveEaseInOut, animations: {
-                self.transform = .identity
-            })
+        // Performance-aware bounce animation
+        animateCardPress()
+    }
+    
+    private func animateCardPress() {
+        guard PerformanceManager.shared.shouldAnimate() else {
+            print("🎬 Skipping glass card press animation due to performance constraints")
+            return
+        }
+        
+        print("🎬 Animating glass card press")
+        
+        // Bounce animation with performance considerations
+        PerformanceManager.shared.animateSpring(
+            duration: 0.3,
+            delay: 0,
+            damping: 0.5,
+            velocity: 0.8,
+            options: .curveEaseInOut,
+            animations: {
+                self.transform = CGAffineTransform(scaleX: 1.02, y: 1.02)
+            }
+        ) { _ in
+            PerformanceManager.shared.animateSpring(
+                duration: 0.2,
+                delay: 0,
+                damping: 0.8,
+                velocity: 0.3,
+                options: .curveEaseInOut,
+                animations: {
+                    self.transform = .identity
+                },
+                completion: nil
+            )
         }
     }
     
