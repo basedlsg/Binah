@@ -81,37 +81,145 @@ class CustomerTabController: UITabBarController {
     }
     
     private func configureTabBarAppearance() {
-        // Apply glass effect to tab bar (same as pro version)
+        // Apply premium glass effect to tab bar
         if let tabBar = self.tabBar as? UITabBar {
-            // Make tab bar transparent
+            // Make tab bar transparent for glass effect
             tabBar.isTranslucent = true
-            tabBar.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
+            tabBar.backgroundColor = .clear
             tabBar.backgroundImage = UIImage()
             tabBar.shadowImage = UIImage()
             
-            // Add blur effect
+            // Create glass container view
+            let glassContainer = UIView()
+            glassContainer.frame = tabBar.bounds
+            glassContainer.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            
+            // Add premium blur effect
             let blurEffect = UIBlurEffect(style: .dark)
             let blurEffectView = UIVisualEffectView(effect: blurEffect)
-            blurEffectView.frame = tabBar.bounds
+            blurEffectView.frame = glassContainer.bounds
             blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            blurEffectView.alpha = 0.9
+            blurEffectView.alpha = 0.95
             
-            // Insert blur view
-            tabBar.insertSubview(blurEffectView, at: 0)
+            // Add subtle gradient overlay
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.colors = [
+                UIColor.primaryDark.withAlphaComponent(0.3).cgColor,
+                UIColor.gradientMid.withAlphaComponent(0.2).cgColor
+            ]
+            gradientLayer.locations = [0.0, 1.0]
+            gradientLayer.startPoint = CGPoint(x: 0.5, y: 0)
+            gradientLayer.endPoint = CGPoint(x: 0.5, y: 1)
+            gradientLayer.frame = glassContainer.bounds
             
-            // Selected item color with glow (using existing color system)
+            // Add glass border
+            let borderLayer = CALayer()
+            borderLayer.frame = CGRect(x: 0, y: 0, width: glassContainer.bounds.width, height: 0.5)
+            borderLayer.backgroundColor = UIColor.glassBorder.cgColor
+            
+            // Assemble glass layers
+            glassContainer.layer.addSublayer(gradientLayer)
+            glassContainer.addSubview(blurEffectView)
+            glassContainer.layer.addSublayer(borderLayer)
+            
+            // Insert glass container
+            tabBar.insertSubview(glassContainer, at: 0)
+            
+            // Enhanced selected item styling
             tabBar.tintColor = UIColor.accentGreen
-            tabBar.unselectedItemTintColor = UIColor(white: 1.0, alpha: 0.5)
+            tabBar.unselectedItemTintColor = UIColor(white: 1.0, alpha: 0.6)
             
-            // Add shadow
-            tabBar.layer.shadowColor = UIColor.black.cgColor
-            tabBar.layer.shadowOpacity = 0.3
+            // Premium shadow with green glow
+            tabBar.layer.shadowColor = UIColor.accentGreen.cgColor
+            tabBar.layer.shadowOpacity = 0.15
             tabBar.layer.shadowOffset = CGSize(width: 0, height: -2)
-            tabBar.layer.shadowRadius = 4
+            tabBar.layer.shadowRadius = 8
             
-            // Configure item appearance
-            let tabBarItemAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 11, weight: .medium)]
-            UITabBarItem.appearance().setTitleTextAttributes(tabBarItemAttributes, for: .normal)
+            // Configure item appearance with custom fonts
+            let normalAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 11, weight: .medium),
+                .foregroundColor: UIColor(white: 1.0, alpha: 0.6)
+            ]
+            let selectedAttributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 11, weight: .semibold),
+                .foregroundColor: UIColor.accentGreen
+            ]
+            
+            UITabBarItem.appearance().setTitleTextAttributes(normalAttributes, for: .normal)
+            UITabBarItem.appearance().setTitleTextAttributes(selectedAttributes, for: .selected)
+            
+            // Add selection indicator animation
+            addSelectionIndicator()
+        }
+    }
+    
+    private var selectionIndicatorLayer: CALayer?
+    
+    private func addSelectionIndicator() {
+        // Create animated selection indicator
+        let indicator = CALayer()
+        indicator.backgroundColor = UIColor.accentGreen.cgColor
+        indicator.frame = CGRect(x: 0, y: 0, width: 50, height: 2)
+        indicator.cornerRadius = 1
+        
+        // Add glow effect
+        indicator.shadowColor = UIColor.accentGreen.cgColor
+        indicator.shadowOffset = CGSize(width: 0, height: 0)
+        indicator.shadowRadius = 6
+        indicator.shadowOpacity = 0.8
+        
+        tabBar.layer.addSublayer(indicator)
+        selectionIndicatorLayer = indicator
+        
+        // Position indicator under first tab
+        updateSelectionIndicator(selectedIndex: 0)
+    }
+    
+    private func updateSelectionIndicator(selectedIndex: Int) {
+        guard let indicator = selectionIndicatorLayer else { return }
+        
+        let tabWidth = tabBar.frame.width / CGFloat(tabBar.items?.count ?? 1)
+        let newX = (tabWidth * CGFloat(selectedIndex)) + (tabWidth / 2) - 25
+        
+        // Animate indicator movement
+        CATransaction.begin()
+        CATransaction.setAnimationDuration(0.3)
+        CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(name: .easeInEaseOut))
+        indicator.frame.origin.x = newX
+        CATransaction.commit()
+    }
+    
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        // Update selection indicator position
+        if let index = tabBar.items?.firstIndex(of: item) {
+            updateSelectionIndicator(selectedIndex: index)
+            
+            // Add haptic feedback
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.prepare()
+            generator.impactOccurred()
+            
+            // Add subtle scale animation to selected icon
+            animateTabSelection(at: index)
+        }
+    }
+    
+    private func animateTabSelection(at index: Int) {
+        guard let tabBarItems = tabBar.items else { return }
+        
+        // Get the view for the selected tab
+        let tabBarButtons = tabBar.subviews.filter { String(describing: type(of: $0)).contains("Button") }
+        guard index < tabBarButtons.count else { return }
+        
+        let selectedButton = tabBarButtons[index]
+        
+        // Perform scale animation
+        UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseOut, .allowUserInteraction], animations: {
+            selectedButton.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+        }) { _ in
+            UIView.animate(withDuration: 0.15, delay: 0, options: [.curveEaseIn, .allowUserInteraction], animations: {
+                selectedButton.transform = .identity
+            })
         }
     }
 }
