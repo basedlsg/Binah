@@ -243,6 +243,45 @@ class LoginController: UIViewController, UITextFieldDelegate {
         if let formContainer = view.subviews.first(where: { $0.layer.cornerRadius == 20 }) {
             formContainer.animateFromBottom(duration: 0.4, delay: 0.1, distance: 30)
         }
+        
+        // Add logo float animation with performance check
+        startLogoFloatAnimation()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Stop logo animation to prevent memory leaks
+        stopLogoFloatAnimation()
+    }
+    
+    private func startLogoFloatAnimation() {
+        guard PerformanceManager.shared.shouldAnimate() else {
+            print("🎬 Skipping logo float animation due to performance constraints")
+            return
+        }
+        
+        print("🎬 Starting logo float animation")
+        
+        // Gentle floating animation (3s duration, 5px movement)
+        PerformanceManager.shared.animateSpring(
+            duration: 3.0,
+            delay: 0.5,
+            damping: 0.9,
+            velocity: 0.2,
+            options: [.repeat, .autoreverse, .allowUserInteraction],
+            animations: {
+                self.logoContainer.transform = CGAffineTransform(translationX: 0, y: -5)
+            },
+            completion: nil
+        )
+    }
+    
+    private func stopLogoFloatAnimation() {
+        // Remove all animations from logo container
+        logoContainer.layer.removeAllAnimations()
+        logoContainer.transform = .identity
+        print("🎬 Stopped logo float animation")
     }
     
     func addDoneButtonTo(_ textField: UITextField) {
