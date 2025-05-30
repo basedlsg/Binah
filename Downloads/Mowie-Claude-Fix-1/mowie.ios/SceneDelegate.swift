@@ -27,6 +27,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         // 2. Set the root view controller FIRST
         let splashController = SplashScreenController()
+        
+        // TEMPORARY TEST: Uncomment to test with simple colored view
+        /* 
+        let testVC = UIViewController()
+        testVC.view.backgroundColor = UIColor.accentGreen
+        let label = UILabel()
+        label.text = "Mowie Test"
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 50, weight: .bold)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        testVC.view.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.centerXAnchor.constraint(equalTo: testVC.view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: testVC.view.centerYAnchor)
+        ])
+        window?.rootViewController = testVC
+        */
+        
         window?.rootViewController = splashController
         print("✅ Set rootViewController to SplashScreenController")
         
