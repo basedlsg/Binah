@@ -1,0 +1,46 @@
+{
+	"FileVersion": 3,
+	"Version": 2,
+	"VersionName": "2.0.0-Production",
+	"FriendlyName": "Quest Dev Copilot - AI Error Analysis",
+	"Description": "Production-ready AI-powered debugging assistant for Unreal Engine Quest VR development. Features advanced error analysis, security hardening, offline capabilities, and intelligent fix suggestions with modular architecture.",
+	"Category": "Developer Tools",
+	"CreatedBy": "Quest Dev Copilot Team",
+	"CreatedByURL": "https://github.com/quest-dev-copilot/unreal-plugin",
+	"DocsURL": "https://github.com/quest-dev-copilot/unreal-plugin/wiki",
+	"MarketplaceURL": "https://www.unrealengine.com/marketplace/quest-dev-copilot",
+	"SupportURL": "https://github.com/quest-dev-copilot/unreal-plugin/issues",
+	"EngineVersion": "5.0.0",
+	"EnabledByDefault": true,
+	"CanContainContent": false,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": true,
+	"RequiresBuildPlatform": false,
+	"Modules": [
+		{
+			"Name": "QuestCopilot",
+			"Type": "Editor",
+			"LoadingPhase": "Default",
+			"PlatformAllowList": [
+				"Win64",
+				"Mac",
+				"Linux"
+			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "EditorStyle",
+			"Enabled": true
+		},
+		{
+			"Name": "HTTP",
+			"Enabled": true
+		},
+		{
+			"Name": "Json",
+			"Enabled": true
+		}
+	]
+}
