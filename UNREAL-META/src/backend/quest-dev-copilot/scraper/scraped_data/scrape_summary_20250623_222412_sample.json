@@ -1,0 +1,17 @@
+{
+  "total_posts_collected": 5,
+  "posts_by_forum": {
+    "epic": 3,
+    "meta": 2
+  },
+  "posts_by_error_type": {
+    "black_screen": 1,
+    "plugin_conflict": 1,
+    "sdk_mismatch": 1,
+    "packaging_error": 1,
+    "other": 1
+  },
+  "posts_with_solutions": 0,
+  "scrape_date_utc": "2025-06-24T05:24:12.701246",
+  "data_type": "sample_unsolved_issues"
+}

@@ -1,0 +1,240 @@
+# Quest Dev Copilot - Python Project Configuration
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quest-dev-copilot"
+version = "1.0.0"
+description = "AI-powered debugging assistant for Unreal Engine Quest VR development"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Quest Dev Copilot Team", email = "team@quest-dev-copilot.com"}
+]
+maintainers = [
+    {name = "Quest Dev Copilot Team", email = "team@quest-dev-copilot.com"}
+]
+keywords = ["unreal-engine", "quest", "vr", "ai", "debugging", "copilot"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Debuggers",
+    "Topic :: Games/Entertainment",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "flask>=2.3.0",
+    "flask-cors>=4.0.0",
+    "requests>=2.31.0",
+    "aiohttp>=3.8.0",
+    "beautifulsoup4>=4.12.0",
+    "chromadb>=0.4.0",
+    "openai>=1.0.0",
+    "click>=8.1.0",
+    "rich>=13.0.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+    "structlog>=23.1.0",
+    "pandas>=2.0.0",
+    "numpy>=1.24.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-mock>=3.11.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.7.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+    "isort>=5.12.0",
+    "bandit>=1.7.5",
+    "safety>=2.3.0",
+    "pre-commit>=3.3.0",
+]
+docs = [
+    "sphinx>=7.1.0",
+    "sphinx-rtd-theme>=1.3.0",
+    "myst-parser>=2.0.0",
+]
+test = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-mock>=3.11.0",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.24.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/quest-dev-copilot/quest-dev-copilot"
+Documentation = "https://quest-dev-copilot.readthedocs.io"
+Repository = "https://github.com/quest-dev-copilot/quest-dev-copilot.git"
+"Bug Reports" = "https://github.com/quest-dev-copilot/quest-dev-copilot/issues"
+Changelog = "https://github.com/quest-dev-copilot/quest-dev-copilot/blob/main/CHANGELOG.md"
+
+[project.scripts]
+quest-fix = "cli.quest_fix:quest_fix"
+verify-rag = "verification_test:main"
+
+# Black configuration
+[tool.black]
+line-length = 88
+target-version = ['py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+  | htmlcov
+)/
+'''
+
+# isort configuration
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["backend", "rag", "llama", "crawler", "cli"]
+known_third_party = ["flask", "chromadb", "openai", "click", "rich"]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+# MyPy configuration
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "chromadb.*",
+    "beautifulsoup4.*",
+    "bs4.*",
+    "llama_api_client.*",
+]
+ignore_missing_imports = true
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["backend", "rag", "llama", "crawler"]
+omit = [
+    "*/tests/*",
+    "*/venv/*",
+    "*/__pycache__/*",
+    "*/migrations/*",
+    "setup.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+show_missing = true
+precision = 2
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# Bandit security configuration
+[tool.bandit]
+exclude_dirs = ["tests", "venv", ".venv"]
+skips = ["B101", "B601"]  # Skip assert_used and shell_injection for tests
+
+[tool.bandit.any_other_function_with_shell_equals_true]
+no_shell = [
+    "os.execv",
+    "os.execve",
+    "os.execvp",
+    "os.execvpe",
+    "os.execl",
+    "os.execle",
+    "os.execlp",
+    "os.execlpe",
+    "os.spawnv",
+    "os.spawnve",
+    "os.spawnl",
+    "os.spawnle",
+    "os.spawnlp",
+    "os.spawnlpe",
+    "os.spawnvp",
+    "os.spawnvpe",
+]
+
+# Pytest configuration (also in pytest.ini)
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+    "--tb=short",
+    "--cov=backend",
+    "--cov=rag", 
+    "--cov=llama",
+    "--cov=crawler",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+    "--cov-fail-under=80",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*", "*Tests"]
+python_functions = ["test_*"]
+markers = [
+    "slow: marks tests as slow",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "api: marks tests that require API access",
+    "expensive: marks tests that use expensive API calls",
+    "requires_backend: marks tests that require backend server",
+    "requires_db: marks tests that require database",
+]
+filterwarnings = [
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["quest_dev_copilot*"]
+exclude = ["tests*"]
+namespaces = false

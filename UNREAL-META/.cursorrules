@@ -1,0 +1,362 @@
+# Quest Dev Copilot - AI Coding Guidelines
+
+## Project Context
+You are working on Quest Dev Copilot, an AI-powered debugging assistant for Unreal Engine Quest VR development. This system combines RAG (Retrieval-Augmented Generation), Llama API integration, and Unreal Engine plugins to provide intelligent error analysis and fixes.
+
+## Core Technologies
+- **AI/ML**: Llama API (Scout/Maverick), ChromaDB, OpenAI Embeddings
+- **Backend**: Flask, asyncio/aiohttp, BeautifulSoup
+- **Frontend**: Unreal Engine Slate (C++), Rich CLI (Python)
+- **Data**: Forum scraping, vector embeddings, JSON processing
+
+## General Principles
+
+### Code Quality
+- Write production-ready, maintainable code
+- Prioritize readability and documentation
+- Use type hints in Python and proper C++ typing
+- Implement comprehensive error handling
+- Follow defensive programming practices
+
+### Performance
+- Optimize for cost-efficiency (Llama API tokens)
+- Implement caching where appropriate
+- Use async/await for I/O operations
+- Minimize memory usage in Unreal plugins
+- Profile and optimize hot paths
+
+### Security
+- Never expose API keys in code
+- Validate all inputs (logs, user data)
+- Sanitize scraped content before processing
+- Use secure HTTP connections
+- Implement rate limiting
+
+## Language-Specific Guidelines
+
+### Python (Backend, CLI, Data Pipeline)
+
+#### Code Style
+```python
+# Use type hints consistently
+from typing import Dict, List, Optional, Union
+import asyncio
+from dataclasses import dataclass
+
+@dataclass
+class ErrorClassification:
+    error_type: str
+    confidence: float
+    auto_fixable: bool
+    key_indicators: List[str]
+
+async def classify_error(log_content: str) -> ErrorClassification:
+    """Classify error with confidence score."""
+    pass
+```
+
+#### Error Handling
+- Use try/except blocks for all external API calls
+- Log errors with context using structured logging
+- Provide graceful degradation for AI service failures
+- Implement retry logic with exponential backoff
+
+#### AI Integration Best Practices
+- Always validate Llama API responses
+- Implement token counting and cost tracking
+- Use appropriate models based on complexity
+- Cache embeddings and repeated computations
+- Handle rate limits gracefully
+
+#### Example Pattern:
+```python
+async def safe_llama_call(prompt: str, max_retries: int = 3) -> Optional[str]:
+    for attempt in range(max_retries):
+        try:
+            response = await llama_client.generate(prompt)
+            track_usage(response.tokens, response.cost)
+            return response.content
+        except RateLimitError:
+            await asyncio.sleep(2 ** attempt)
+        except Exception as e:
+            logger.error(f"Llama API error (attempt {attempt+1}): {e}")
+    return None
+```
+
+### C++ (Unreal Engine Plugin)
+
+#### Code Style
+- Follow Unreal Engine coding standards
+- Use UCLASS, USTRUCT, UENUM macros appropriately
+- Implement proper memory management
+- Use TSharedPtr for widget references
+
+#### Slate UI Guidelines
+```cpp
+// Use descriptive widget names
+TSharedPtr<STextBlock> ErrorStatusText;
+TSharedPtr<SMultiLineEditableTextBox> LogContentDisplay;
+
+// Implement proper event handling
+FReply SQuestCopilotWidget::OnAnalyzeButtonClicked()
+{
+    if (bIsAnalyzing) return FReply::Handled();
+    
+    bIsAnalyzing = true;
+    UpdateUI();
+    SendAnalysisRequest();
+    
+    return FReply::Handled();
+}
+```
+
+#### HTTP Integration
+```cpp
+// Always check request validity
+void SQuestCopilotWidget::OnRequestComplete(
+    FHttpRequestPtr Request, 
+    FHttpResponsePtr Response, 
+    bool bWasSuccessful)
+{
+    if (!bWasSuccessful || !Response.IsValid())
+    {
+        HandleRequestFailure();
+        return;
+    }
+    
+    ProcessResponse(Response->GetContentAsString());
+}
+```
+
+### JavaScript/JSON (Configuration, Data)
+
+#### Configuration Files
+- Use clear, descriptive field names
+- Include validation schemas
+- Provide sensible defaults
+- Document all configuration options
+
+```json
+{
+  "llama_config": {
+    "classification_model": "Llama-4-Scout-17B-16E-Instruct-FP8",
+    "fix_generation_model": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+    "max_tokens_classification": 1000,
+    "max_tokens_fix": 2048,
+    "temperature": 0.2
+  }
+}
+```
+
+## Component-Specific Guidelines
+
+### Forum Scraping
+- Respect robots.txt and rate limits
+- Implement robust HTML parsing
+- Handle network timeouts gracefully
+- Store raw and processed data separately
+- Classify errors during scraping for better organization
+
+### RAG Implementation
+- Chunk documents intelligently (preserve error context)
+- Use consistent embedding models
+- Implement similarity score thresholds
+- Cache frequently accessed embeddings
+- Monitor vector database performance
+
+### Error Classification
+- Use structured output (JSON schema)
+- Implement confidence scoring
+- Handle edge cases (multiple error types)
+- Provide fallback classifications
+- Track classification accuracy
+
+### Auto-Fix Generation
+- Generate atomic, reversible fixes
+- Validate fix applicability before suggesting
+- Provide manual instructions alongside auto-fixes
+- Test fixes in isolated environments
+- Implement rollback mechanisms
+
+## API Design
+
+### REST Endpoints
+```python
+# Use consistent response formats
+@app.route('/analyze', methods=['POST'])
+def analyze_error():
+    try:
+        result = {
+            "classification": {...},
+            "fix": "...",
+            "auto_fix": {...},
+            "sources": [...],
+            "metrics": {...}
+        }
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+```
+
+### Error Responses
+- Use appropriate HTTP status codes
+- Provide detailed error messages
+- Include request ID for tracking
+- Log errors server-side
+
+## Testing Requirements
+
+### Unit Tests
+- Test all AI integration points with mocks
+- Validate error classification accuracy
+- Test auto-fix logic with sample configs
+- Mock external API calls
+
+### Integration Tests
+- Test end-to-end error analysis flow
+- Validate Unreal plugin communication
+- Test forum scraping with sample data
+- Verify vector database operations
+
+### Performance Tests
+- Benchmark token usage and costs
+- Test response times under load
+- Validate memory usage in UE plugin
+- Test concurrent request handling
+
+## Documentation Standards
+
+### Code Comments
+```python
+def chunk_documents(self, documents: List[Dict]) -> List[Dict]:
+    """
+    Smart chunking that preserves error context.
+    
+    Args:
+        documents: List of scraped forum posts with metadata
+        
+    Returns:
+        List of document chunks with preserved metadata
+        
+    Note:
+        Log snippets are kept intact to preserve error context.
+        Regular text uses overlapping chunks for better retrieval.
+    """
+```
+
+### API Documentation
+- Use OpenAPI/Swagger specifications
+- Provide request/response examples
+- Document error codes and messages
+- Include usage examples
+
+## Deployment Considerations
+
+### Environment Variables
+- Use .env files for development
+- Validate required environment variables on startup
+- Provide clear error messages for missing configs
+- Document all environment variables
+
+### Monitoring
+- Implement health check endpoints
+- Track AI usage and costs
+- Monitor error rates and response times
+- Log structured data for analysis
+
+### Cost Optimization
+- Implement token counting and budgets
+- Use appropriate model selection logic
+- Cache responses where appropriate
+- Implement usage analytics
+
+## Security Best Practices
+
+### API Security
+- Validate all inputs (XSS, injection protection)
+- Implement rate limiting per user/IP
+- Use HTTPS for all communications
+- Sanitize scraped content before storage
+
+### Data Privacy
+- Don't log sensitive information
+- Anonymize user data in analytics
+- Implement data retention policies
+- Secure API key storage
+
+## File Organization
+
+```
+quest-dev-copilot/
+├── backend/
+│   ├── app.py              # Main Flask application
+│   ├── routes/             # API route definitions
+│   ├── models/             # Data models and schemas
+│   └── utils/              # Helper functions
+├── rag/
+│   ├── vector_store.py     # ChromaDB interface
+│   ├── embeddings.py       # Embedding utilities
+│   └── retrieval.py        # Document retrieval logic
+├── llama/
+│   ├── client.py           # Main Llama API client
+│   ├── models.py           # Response models
+│   └── cost_tracker.py     # Usage analytics
+└── tests/
+    ├── unit/               # Unit tests
+    ├── integration/        # Integration tests
+    └── fixtures/           # Test data
+```
+
+## Common Patterns
+
+### Async Error Handling
+```python
+async def with_retry(func, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return await func()
+        except RetryableError as e:
+            if attempt == max_retries - 1:
+                raise
+            await asyncio.sleep(2 ** attempt)
+```
+
+### Config Management
+```python
+@dataclass
+class Config:
+    llama_api_key: str
+    openai_api_key: str
+    backend_url: str = "http://localhost:5000"
+    
+    @classmethod
+    def from_env(cls) -> 'Config':
+        return cls(
+            llama_api_key=os.getenv('LLAMA_API_KEY'),
+            openai_api_key=os.getenv('OPENAI_API_KEY'),
+            backend_url=os.getenv('BACKEND_URL', cls.backend_url)
+        )
+```
+
+### Structured Logging
+```python
+import structlog
+
+logger = structlog.get_logger()
+
+logger.info("Error classified", 
+           error_type="plugin_conflict",
+           confidence=0.95,
+           tokens_used=1200,
+           cost_usd=0.024)
+```
+
+## When in Doubt
+
+1. **Prioritize user experience** - Fast, accurate responses over complex features
+2. **Cost efficiency** - Always consider token usage and API costs
+3. **Error resilience** - Graceful degradation when services fail
+4. **Documentation** - If it's not obvious, document it
+5. **Testing** - If it touches AI or external APIs, test it thoroughly
+
+Remember: This is a hackathon project that should demonstrate production-ready architecture and implementation quality.

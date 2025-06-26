@@ -1,0 +1,70 @@
+{
+  "pipeline_completed": true,
+  "timestamp": "2025-06-25 15:09:59",
+  "dataset": "/Users/carlos/UNREAL-META/fine_tuned_models/comprehensive_training_data.jsonl",
+  "validation": {
+    "total_examples": 31,
+    "file_size_mb": 0.05739784240722656,
+    "errors": [],
+    "is_valid": true,
+    "sample_examples": [
+      {
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are a Quest VR debugging assistant specialized in Unreal Engine development. \n        Analyze error logs and provide detailed solutions with error classification, confidence scores, and actionable fixes."
+          },
+          {
+            "role": "user",
+            "content": "Title: Solved: Quest 3 and Unreal 5.2/5.3 - Setup - Meta Community Forums - 1096211\n\nPlatform: Quest VR / Unreal Engine\n\nDescription: Hello,I'm looking to setup everything to work on unreal5 for a VR/AR game.I just want to be able right now to launch the game in my Quest3 but I have an error when building/launching the appLogPlayLevel: Error: UAT: ERROR: Stage Failed. Missing receipt 'D:\\Unreal\\Project\\Starter_521\\Binaries\\Android\\Starter_521.target'. Check that this target has been built.Does anyone have any good step by step tutorial for the setup of android and everything, I think I did it properly but doesn't looks like it...\n\nError Logs:\nLogPlayLevel: Error: UAT: ERROR: Stage Failed. Missing receipt 'D:\\Unreal\\Project\\Starter_521\\Binaries\\Android\\Starter_521.target'. Check that this target has been built.\n\nPlease analyze this error and provide a solution with classification and confidence score."
+          },
+          {
+            "role": "assistant",
+            "content": "{\n  \"classification\": {\n    \"error_type\": \"other\",\n    \"confidence\": 0.7,\n    \"auto_fixable\": false,\n    \"key_indicators\": [\n      \"plugin\",\n      \"conflict\",\n      \"sdk\",\n      \"version\"\n    ]\n  },\n  \"solution\": \"This appears to be a other issue. Check the official documentation and community forums for similar cases.\",\n  \"auto_fix\": null,\n  \"sources\": [\n    \"https://communityforums.atmeta.com/t5/Quest-Development/Quest-3-and-Unreal-5-2-5-3-Setup/m-p/1096211#M7333\"\n  ],\n  \"metadata\": {\n    \"forum\": \"meta\",\n    \"upvotes\": 0,\n    \"solved\": false\n  }\n}"
+          }
+        ]
+      },
+      {
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are a Quest VR debugging assistant specialized in Unreal Engine development. \n        Analyze error logs and provide detailed solutions with error classification, confidence scores, and actionable fixes."
+          },
+          {
+            "role": "user",
+            "content": "Title: Solved: Unknown Cook Failure when launching on Quest 3 fro... - Meta Community Forums - 1106492\n\nPlatform: Quest VR / Unreal Engine\n\nDescription: I am trying to launch an Unreal project on Quest 3, but I always get the error PackagingResults: Error: Launch failed! Unknown Cook Failure. I have tried in two separate projects, one is empty and one made with the Unreal VR sample project. I am using Unreal 5.3.1, and I followed themeta quick start guideto make sure I have all the prerequisites. I haveuploaded my log file. Any help on this would be great.Solved!Go to Solution....\n\nError Logs:\nI am trying to launch an Unreal project on Quest 3, but I always get the error PackagingResults: Error: Launch failed! Unknown Cook Failure. I have tried in two separate projects, one is empty and one made with the Unreal VR sample project. I am using Unreal 5.3.1, and I followed the\nuploaded my log file\nThis new log shows this new information:\n(see C:\\Users\\foott\\AppData\\Roaming\\Unreal Engine\\AutomationTool\\Logs\\C+Program+Files+Epic+Games+UE_5.3\\Log.txt for full exception trace)\nUnauthorizedAccessException: Access to the path 'C:\\Program Files\\Epic Games\\UE_5.3\\Engine\\Programs\\AutomationTool\\Saved' is denied.\nWhat about this log? Anything useful?\nEngine\\AutomationTool\\Logs\\C+Program+Files+Epic+Games+UE_5.3\\Log.txt\nbut here is that log file\nThis new log shows this new information:\n(see C:\\Users\\foott\\AppData\\Roaming\\Unreal Engine\\AutomationTool\\Logs\\C+Program+Files+Epic+Games+UE_5.3\\Log.txt for full exception trace)\n\nPlease analyze this error and provide a solution with classification and confidence score."
+          },
+          {
+            "role": "assistant",
+            "content": "{\n  \"classification\": {\n    \"error_type\": \"packaging_error\",\n    \"confidence\": 0.7,\n    \"auto_fixable\": true,\n    \"key_indicators\": [\n      \"packaging\",\n      \"build failed\"\n    ]\n  },\n  \"solution\": \"This appears to be a packaging_error issue. Check the official documentation and community forums for similar cases.\",\n  \"auto_fix\": null,\n  \"sources\": [\n    \"https://communityforums.atmeta.com/t5/Unreal-Development/Unknown-Cook-Failure-when-launching-on-Quest-3-from-Unreal-5/m-p/1106492#M7754\"\n  ],\n  \"metadata\": {\n    \"forum\": \"meta\",\n    \"upvotes\": 0,\n    \"solved\": false\n  }\n}"
+          }
+        ]
+      },
+      {
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are a Quest VR debugging assistant specialized in Unreal Engine development. \n        Analyze error logs and provide detailed solutions with error classification, confidence scores, and actionable fixes."
+          },
+          {
+            "role": "user",
+            "content": "Title: Solved: Unreal Engine github version not compatible with M... - Meta Community Forums - 1203730\n\nPlatform: Quest VR / Unreal Engine\n\nDescription: Hello, I'm sure I've done something wrong or missed something, but I'm trying to get my entitlement check working and I'm having a heck of a time.A bit of background:I've downloaded and compiled the latest Unreal Engine github forkI've built my project and it works and everything is compiling and happyI made a Game Instance blueprintI've tried to drag out an Entitlement pin, and Unreal Engine finds nothing.When I download theMetaXRPlatform (Version 65.0)The Engine starts up with this error:The '...\n\nError Logs:\nThe Engine starts up with this error:\nand when I press Yes it gives me another error:\n11:43:08.287 2123 2570 E EntitlementCheckResultBuilder: com.oculus.horizon.service.ExternalPlatformLocal$PackageNotInLibraryException: Package com.epicgames.MyAppVR not in users library\nThis is the challenge when technologies and companies are moving at different rates.\n\nPlease analyze this error and provide a solution with classification and confidence score."
+          },
+          {
+            "role": "assistant",
+            "content": "{\n  \"classification\": {\n    \"error_type\": \"sdk_mismatch\",\n    \"confidence\": 0.7,\n    \"auto_fixable\": false,\n    \"key_indicators\": [\n      \"packaging\",\n      \"build failed\",\n      \"plugin\",\n      \"conflict\",\n      \"sdk\"\n    ]\n  },\n  \"solution\": \"This appears to be a sdk_mismatch issue. Check the official documentation and community forums for similar cases.\",\n  \"auto_fix\": null,\n  \"sources\": [\n    \"https://communityforums.atmeta.com/t5/Unreal-Development/Unreal-Engine-github-version-not-compatible-with-MetaXRPlatform/m-p/1203730#M8525\"\n  ],\n  \"metadata\": {\n    \"forum\": \"meta\",\n    \"upvotes\": 0,\n    \"solved\": false\n  }\n}"
+          }
+        ]
+      }
+    ]
+  },
+  "instructions": "/Users/carlos/UNREAL-META/fine_tuned_models/fine_tuning_instructions.json",
+  "integration_script": "/Users/carlos/UNREAL-META/fine_tuned_models/integrate_fine_tuned_model.py",
+  "next_steps": [
+    "1. Upload dataset to Llama API dashboard at https://llama.developer.meta.com/",
+    "2. Create fine-tuning job with provided configuration",
+    "3. Monitor training progress",
+    "4. Test fine-tuned model performance",
+    "5. Integrate with Quest Dev Copilot backend"
+  ]
+}

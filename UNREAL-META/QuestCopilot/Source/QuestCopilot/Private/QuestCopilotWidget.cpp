@@ -2,6 +2,7 @@
 #include "QuestCopilotWidget.h"
 #include "QuestCopilotModule.h"
 #include "QuestCopilotSettings.h"
+#include "QuestCopilotWidgetComponents.h"
 #include "QuestCopilotHttpManager.h"
 #include "Widgets/Layout/SBorder.h"
 #include "Widgets/Layout/SBox.h"

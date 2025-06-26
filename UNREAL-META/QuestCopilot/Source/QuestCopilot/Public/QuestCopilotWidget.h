@@ -141,22 +141,22 @@ private:
     
     // === UI WIDGETS ===
     
-    /** Status display */
+    /** Modular widget components */
+    TSharedPtr<class SQuestCopilotHeader> HeaderWidget;
+    TSharedPtr<class SQuestCopilotStatus> StatusWidget;
+    TSharedPtr<class SQuestCopilotScreenshot> ScreenshotWidget;
+    TSharedPtr<class SQuestCopilotLogInput> LogInputWidget;
+    TSharedPtr<class SQuestCopilotAnalyzeButton> AnalyzeButtonWidget;
+    TSharedPtr<class SQuestCopilotResults> ResultsWidget;
+    
+    /** Legacy status display (for compatibility) */
     TSharedPtr<STextBlock> StatusText;
-    
-    /** Log content input */
     TSharedPtr<SMultiLineEditableTextBox> LogContentBox;
-    
-    /** Results display */
     TSharedPtr<SScrollBox> ResultsScrollBox;
     TSharedPtr<STextBlock> ResultsText;
-    
-    /** Action buttons */
     TSharedPtr<SButton> AnalyzeButton;
     TSharedPtr<SButton> RefreshButton;
     TSharedPtr<SButton> ScreenshotButton;
-    
-    /** Screenshot widgets */
     TSharedPtr<STextBlock> ScreenshotStatusText;
     TSharedPtr<SEditableTextBox> ScreenshotDescriptionBox;
 };

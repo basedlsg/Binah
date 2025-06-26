@@ -1,0 +1,156 @@
+# Quest Dev Copilot - Development Tools Container
+# Contains all tools needed for development and testing
+
+FROM python:3.11-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    vim \
+    nano \
+    htop \
+    jq \
+    tree \
+    wget \
+    unzip \
+    docker.io \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js for documentation tools
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
+
+# Set working directory
+WORKDIR /workspace
+
+# Copy requirements and install Python packages
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Install development and testing tools
+RUN pip install --no-cache-dir \
+    pytest \
+    pytest-asyncio \
+    pytest-mock \
+    pytest-cov \
+    black \
+    flake8 \
+    mypy \
+    isort \
+    bandit \
+    safety \
+    pre-commit \
+    sphinx \
+    sphinx-rtd-theme \
+    jupyter \
+    ipython \
+    debugpy
+
+# Install documentation tools
+RUN npm install -g \
+    @mermaid-js/mermaid-cli \
+    markdownlint-cli \
+    markdown-toc
+
+# Install Unreal Engine tools (if available)
+# RUN wget -O ue-tools.zip "URL_TO_UE_TOOLS" && \
+#     unzip ue-tools.zip -d /opt/ue-tools && \
+#     rm ue-tools.zip
+
+# Create development user
+RUN groupadd -r developer && useradd -r -g developer -s /bin/bash developer
+
+# Create useful aliases and development setup
+RUN echo 'alias ll="ls -la"' >> /home/developer/.bashrc && \
+    echo 'alias pytest="python -m pytest"' >> /home/developer/.bashrc && \
+    echo 'alias black="python -m black"' >> /home/developer/.bashrc && \
+    echo 'alias flake8="python -m flake8"' >> /home/developer/.bashrc && \
+    echo 'alias mypy="python -m mypy"' >> /home/developer/.bashrc && \
+    echo 'export PYTHONPATH=/workspace' >> /home/developer/.bashrc
+
+# Set up git configuration template
+RUN git config --global init.defaultBranch main && \
+    git config --global pull.rebase false
+
+# Create useful development scripts
+RUN mkdir -p /usr/local/bin
+
+# Test runner script
+RUN cat > /usr/local/bin/run-tests << 'EOF'
+#!/bin/bash
+echo "🧪 Running Quest Dev Copilot test suite..."
+cd /workspace
+
+echo "📋 Running unit tests..."
+python -m pytest tests/unit/ -v --cov=backend --cov=rag --cov=llama
+
+echo "🔗 Running integration tests..."
+python -m pytest tests/integration/ -v
+
+echo "🔍 Running linting..."
+python -m flake8 backend/ rag/ llama/ crawler/
+
+echo "🎨 Checking code formatting..."
+python -m black --check backend/ rag/ llama/ crawler/
+
+echo "📊 Running type checking..."
+python -m mypy backend/ rag/ llama/
+
+echo "🔒 Running security checks..."
+python -m bandit -r backend/ rag/ llama/ crawler/
+
+echo "✅ All tests completed!"
+EOF
+
+# Code formatting script
+RUN cat > /usr/local/bin/format-code << 'EOF'
+#!/bin/bash
+echo "🎨 Formatting Quest Dev Copilot code..."
+cd /workspace
+
+echo "Formatting Python files..."
+python -m black backend/ rag/ llama/ crawler/ tests/
+
+echo "Sorting imports..."
+python -m isort backend/ rag/ llama/ crawler/ tests/
+
+echo "✅ Code formatting completed!"
+EOF
+
+# Documentation generation script
+RUN cat > /usr/local/bin/build-docs << 'EOF'
+#!/bin/bash
+echo "📚 Building Quest Dev Copilot documentation..."
+cd /workspace
+
+if [ -d "docs/_build" ]; then
+    rm -rf docs/_build
+fi
+
+echo "Building Sphinx documentation..."
+sphinx-build -b html docs/ docs/_build/
+
+echo "Generating mermaid diagrams..."
+find docs/ -name "*.md" -exec mmdc -i {} -o {}.png \; 2>/dev/null || true
+
+echo "✅ Documentation build completed!"
+echo "📖 Open docs/_build/index.html to view documentation"
+EOF
+
+# Make scripts executable
+RUN chmod +x /usr/local/bin/run-tests /usr/local/bin/format-code /usr/local/bin/build-docs
+
+# Set ownership
+RUN chown -R developer:developer /home/developer
+
+# Switch to development user
+USER developer
+
+# Set default working directory
+WORKDIR /workspace
+
+# Default command
+CMD ["/bin/bash"]

@@ -15,6 +15,9 @@
 #include "Serialization/JsonSerializer.h"
 #include "Serialization/JsonReader.h"
 #include "HAL/PlatformApplicationMisc.h"
+#include "Widgets/Input/SMultiLineEditableTextBox.h"
+#include "Widgets/Layout/SSeparator.h"
+#include "Widgets/Layout/SScrollBar.h"
 
 #define LOCTEXT_NAMESPACE "QuestCopilotWidgetComponents"
 
@@ -23,58 +26,40 @@
 
 void SQuestCopilotHeader::Construct(const FArguments& InArgs)
 {
-    OnRefreshLogs = InArgs._OnRefreshLogs;
-    IsRefreshEnabled = InArgs._IsRefreshEnabled;
-
     ChildSlot
     [
-        SNew(SBorder)
-        .BorderImage(FCoreStyle::Get().GetBrush("ToolPanel.GroupBorder"))
-        .Padding(FMargin(8.0f, 4.0f))
+        SNew(SVerticalBox)
+        + SVerticalBox::Slot()
+        .AutoHeight()
+        .Padding(10.0f, 5.0f)
         [
             SNew(SHorizontalBox)
-            
-            // Title
             + SHorizontalBox::Slot()
-            .HAlign(HAlign_Left)
-            .VAlign(VAlign_Center)
-            .AutoWidth()
-            [
-                SNew(STextBlock)
-                .Text(LOCTEXT("QuestCopilotTitle", "Quest Dev Copilot"))
-                .Font(FCoreStyle::GetDefaultFontStyle("Bold", 14))
-                .ColorAndOpacity(FLinearColor(0.9f, 0.9f, 0.9f))
-            ]
-            
-            // Spacer
-            + SHorizontalBox::Slot()
-            .HAlign(HAlign_Fill)
-            .VAlign(VAlign_Center)
             .FillWidth(1.0f)
             [
-                SNew(SBox)
-                .HeightOverride(1.0f)
+                SNew(STextBlock)
+                .Text(FText::FromString("Quest Dev Copilot"))
+                .Font(FCoreStyle::GetDefaultFontStyle("Bold", 18))
+                .ColorAndOpacity(FLinearColor(0.2f, 0.7f, 1.0f))
             ]
-            
-            // Refresh Button
             + SHorizontalBox::Slot()
-            .HAlign(HAlign_Right)
-            .VAlign(VAlign_Center)
             .AutoWidth()
+            .Padding(5.0f, 0.0f)
             [
-                SNew(SButton)
-                .Text(LOCTEXT("RefreshLogsButton", "Refresh Logs"))
-                .ToolTipText(LOCTEXT("RefreshLogsTooltip", "Refresh project logs from the current session"))
-                .IsEnabled(IsRefreshEnabled)
-                .OnClicked_Lambda([this]() -> FReply
-                {
-                    if (OnRefreshLogs.IsBound())
-                    {
-                        OnRefreshLogs.Execute();
-                    }
-                    return FReply::Handled();
-                })
+                SNew(STextBlock)
+                .Text(FText::FromString("v1.0"))
+                .Font(FCoreStyle::GetDefaultFontStyle("Regular", 10))
+                .ColorAndOpacity(FLinearColor(0.6f, 0.6f, 0.6f))
             ]
+        ]
+        + SVerticalBox::Slot()
+        .AutoHeight()
+        .Padding(10.0f, 0.0f, 10.0f, 5.0f)
+        [
+            SSeparator::New()
+            .Orientation(Orient_Horizontal)
+            .Thickness(1.0f)
+            .ColorAndOpacity(FLinearColor(0.3f, 0.3f, 0.3f))
         ]
     ];
 }
@@ -84,38 +69,41 @@ void SQuestCopilotHeader::Construct(const FArguments& InArgs)
 
 void SQuestCopilotStatus::Construct(const FArguments& InArgs)
 {
+    StatusText = SNew(STextBlock)
+        .Text(FText::FromString("Ready"))
+        .Font(FCoreStyle::GetDefaultFontStyle("Regular", 12))
+        .ColorAndOpacity(FLinearColor::Green);
+
     ChildSlot
     [
-        SNew(SBorder)
-        .BorderImage(FCoreStyle::Get().GetBrush("ToolPanel.GroupBorder"))
-        .Padding(FMargin(8.0f, 4.0f))
+        SNew(SBox)
+        .Padding(10.0f, 5.0f)
         [
-            SAssignNew(StatusTextWidget, STextBlock)
-            .Text(LOCTEXT("StatusReady", "Ready"))
-            .ColorAndOpacity(FLinearColor::Green)
-            .Justification(ETextJustify::Center)
+            SNew(SHorizontalBox)
+            + SHorizontalBox::Slot()
+            .AutoWidth()
+            .VAlign(VAlign_Center)
+            [
+                SNew(STextBlock)
+                .Text(FText::FromString("Status: "))
+                .Font(FCoreStyle::GetDefaultFontStyle("Bold", 12))
+            ]
+            + SHorizontalBox::Slot()
+            .FillWidth(1.0f)
+            .VAlign(VAlign_Center)
+            [
+                StatusText.ToSharedRef()
+            ]
         ]
     ];
 }
 
-void SQuestCopilotStatus::SetStatus(const FText& StatusText, const FLinearColor& Color)
+void SQuestCopilotStatus::UpdateStatus(const FText& NewStatus, const FLinearColor& Color)
 {
-    if (StatusTextWidget.IsValid())
+    if (StatusText.IsValid())
     {
-        StatusTextWidget->SetText(StatusText);
-        StatusTextWidget->SetColorAndOpacity(Color);
-    }
-}
-
-void SQuestCopilotStatus::SetAnalyzing(bool bIsAnalyzing)
-{
-    if (bIsAnalyzing)
-    {
-        SetStatus(LOCTEXT("StatusAnalyzing", "Analyzing..."), FLinearColor::Yellow);
-    }
-    else
-    {
-        SetStatus(LOCTEXT("StatusReady", "Ready"), FLinearColor::Green);
+        StatusText->SetText(NewStatus);
+        StatusText->SetColorAndOpacity(Color);
     }
 }
 
@@ -124,104 +112,91 @@ void SQuestCopilotStatus::SetAnalyzing(bool bIsAnalyzing)
 
 void SQuestCopilotScreenshot::Construct(const FArguments& InArgs)
 {
-    OnScreenshotClicked = InArgs._OnScreenshotClicked;
-    IsEnabled = InArgs._IsEnabled;
+    OnCaptureClicked = InArgs._OnCaptureClicked;
+    bHasScreenshot = false;
+
+    CaptureButton = SNew(SButton)
+        .Text(FText::FromString("Capture Screenshot"))
+        .OnClicked(this, &SQuestCopilotScreenshot::HandleCaptureClicked)
+        .HAlign(HAlign_Center);
+
+    StatusText = SNew(STextBlock)
+        .Text(FText::FromString("No screenshot captured"))
+        .Font(FCoreStyle::GetDefaultFontStyle("Regular", 10))
+        .ColorAndOpacity(FLinearColor(0.6f, 0.6f, 0.6f));
+
+    DescriptionBox = SNew(SEditableTextBox)
+        .HintText(FText::FromString("Optional: Describe what the screenshot shows..."))
+        .IsEnabled(false);
 
     ChildSlot
     [
-        SNew(SBorder)
-        .BorderImage(FCoreStyle::Get().GetBrush("ToolPanel.GroupBorder"))
-        .Padding(FMargin(8.0f, 4.0f))
+        SNew(SVerticalBox)
+        + SVerticalBox::Slot()
+        .AutoHeight()
+        .Padding(10.0f, 5.0f)
         [
-            SNew(SVerticalBox)
-            
-            // Screenshot Button and Status
-            + SVerticalBox::Slot()
-            .AutoHeight()
-            .Padding(0.0f, 2.0f)
-            [
-                SNew(SHorizontalBox)
-                
-                + SHorizontalBox::Slot()
-                .AutoWidth()
-                .VAlign(VAlign_Center)
-                [
-                    SNew(SButton)
-                    .Text(LOCTEXT("CaptureScreenshot", "Capture Screenshot"))
-                    .ToolTipText(LOCTEXT("CaptureScreenshotTooltip", "Capture a screenshot to help with visual debugging"))
-                    .IsEnabled(IsEnabled)
-                    .OnClicked_Lambda([this]() -> FReply
-                    {
-                        if (OnScreenshotClicked.IsBound())
-                        {
-                            OnScreenshotClicked.Execute();
-                        }
-                        return FReply::Handled();
-                    })
-                ]
-                
-                + SHorizontalBox::Slot()
-                .FillWidth(1.0f)
-                .VAlign(VAlign_Center)
-                .Padding(8.0f, 0.0f)
-                [
-                    SAssignNew(ScreenshotStatusText, STextBlock)
-                    .Text(LOCTEXT("NoScreenshot", "No screenshot captured"))
-                    .ColorAndOpacity(FLinearColor(0.6f, 0.6f, 0.6f))
-                ]
-            ]
-            
-            // Description Input
-            + SVerticalBox::Slot()
-            .AutoHeight()
-            .Padding(0.0f, 4.0f, 0.0f, 0.0f)
-            [
-                SNew(SVerticalBox)
-                
-                + SVerticalBox::Slot()
-                .AutoHeight()
-                [
-                    SNew(STextBlock)
-                    .Text(LOCTEXT("ScreenshotDescription", "Screenshot Description (Optional):"))
-                    .Font(FCoreStyle::GetDefaultFontStyle("Regular", 9))
-                ]
-                
-                + SVerticalBox::Slot()
-                .AutoHeight()
-                .Padding(0.0f, 2.0f, 0.0f, 0.0f)
-                [
-                    SAssignNew(DescriptionBox, SEditableTextBox)
-                    .HintText(LOCTEXT("ScreenshotDescriptionHint", "Describe what you see in the screenshot..."))
-                ]
-            ]
+            SNew(STextBlock)
+            .Text(FText::FromString("Screenshot"))
+            .Font(FCoreStyle::GetDefaultFontStyle("Bold", 12))
+        ]
+        + SVerticalBox::Slot()
+        .AutoHeight()
+        .Padding(10.0f, 5.0f)
+        [
+            CaptureButton.ToSharedRef()
+        ]
+        + SVerticalBox::Slot()
+        .AutoHeight()
+        .Padding(10.0f, 2.0f)
+        [
+            StatusText.ToSharedRef()
+        ]
+        + SVerticalBox::Slot()
+        .AutoHeight()
+        .Padding(10.0f, 5.0f)
+        [
+            DescriptionBox.ToSharedRef()
         ]
     ];
 }
 
-void SQuestCopilotScreenshot::SetScreenshotStatus(const FText& StatusText, const FLinearColor& Color)
+FReply SQuestCopilotScreenshot::HandleCaptureClicked()
 {
-    if (ScreenshotStatusText.IsValid())
+    if (OnCaptureClicked.IsBound())
     {
-        ScreenshotStatusText->SetText(StatusText);
-        ScreenshotStatusText->SetColorAndOpacity(Color);
+        return OnCaptureClicked.Execute();
+    }
+    return FReply::Handled();
+}
+
+void SQuestCopilotScreenshot::SetScreenshotCaptured(bool bCaptured)
+{
+    bHasScreenshot = bCaptured;
+    
+    if (StatusText.IsValid())
+    {
+        if (bCaptured)
+        {
+            StatusText->SetText(FText::FromString("Screenshot captured successfully"));
+            StatusText->SetColorAndOpacity(FLinearColor::Green);
+        }
+        else
+        {
+            StatusText->SetText(FText::FromString("No screenshot captured"));
+            StatusText->SetColorAndOpacity(FLinearColor(0.6f, 0.6f, 0.6f));
+        }
+    }
+
+    if (DescriptionBox.IsValid())
+    {
+        DescriptionBox->SetEnabled(bCaptured);
     }
 }
 
-FString SQuestCopilotScreenshot::GetScreenshotDescription() const
+FString SQuestCopilotScreenshot::GetDescription() const
 {
-    if (DescriptionBox.IsValid())
-    {
-        return DescriptionBox->GetText().ToString();
-    }
-    return FString();
-}
-
-void SQuestCopilotScreenshot::ClearDescription()
-{
-    if (DescriptionBox.IsValid())
-    {
-        DescriptionBox->SetText(FText::GetEmpty());
-    }
+    return DescriptionBox.IsValid() ? DescriptionBox->GetText().ToString() : FString();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -229,71 +204,76 @@ void SQuestCopilotScreenshot::ClearDescription()
 
 void SQuestCopilotLogInput::Construct(const FArguments& InArgs)
 {
+    OnTextChanged = InArgs._OnTextChanged;
+
+    LogInputBox = SNew(SMultiLineEditableTextBox)
+        .Text(FText::FromString(""))
+        .HintText(FText::FromString("Paste your Unreal Engine log content here..."))
+        .OnTextChanged(this, &SQuestCopilotLogInput::HandleTextChanged)
+        .Font(FCoreStyle::GetDefaultFontStyle("Mono", 10))
+        .IsReadOnly(false)
+        .AllowContextMenu(true)
+        .VScrollBar(SNew(SScrollBar))
+        .HScrollBar(SNew(SScrollBar));
+
+    StatsText = SNew(STextBlock)
+        .Text(FText::FromString("0 lines, 0 characters"))
+        .Font(FCoreStyle::GetDefaultFontStyle("Regular", 10))
+        .ColorAndOpacity(FLinearColor(0.6f, 0.6f, 0.6f));
+
     ChildSlot
     [
-        SNew(SBorder)
-        .BorderImage(FCoreStyle::Get().GetBrush("ToolPanel.GroupBorder"))
-        .Padding(FMargin(8.0f, 4.0f))
+        SNew(SVerticalBox)
+        + SVerticalBox::Slot()
+        .AutoHeight()
+        .Padding(10.0f, 5.0f)
         [
-            SNew(SVerticalBox)
-            
-            // Label
-            + SVerticalBox::Slot()
-            .AutoHeight()
-            .Padding(0.0f, 0.0f, 0.0f, 4.0f)
-            [
-                SNew(STextBlock)
-                .Text(LOCTEXT("LogContentLabel", "Log Content:"))
-                .Font(FCoreStyle::GetDefaultFontStyle("Bold", 10))
-            ]
-            
-            // Log Input Box
-            + SVerticalBox::Slot()
-            .FillHeight(1.0f)
-            [
-                SAssignNew(LogContentBox, SMultiLineEditableTextBox)
-                .HintText(LOCTEXT("LogContentHint", "Paste your error logs here or click 'Refresh Logs' to load automatically..."))
-                .AllowMultiLine(true)
-                .IsReadOnly(false)
-                .VScrollBarAlwaysVisible(true)
-                .Font(FCoreStyle::GetDefaultFontStyle("Mono", 9))
-            ]
+            SNew(STextBlock)
+            .Text(FText::FromString("Log Content"))
+            .Font(FCoreStyle::GetDefaultFontStyle("Bold", 12))
+        ]
+        + SVerticalBox::Slot()
+        .FillHeight(1.0f)
+        .Padding(10.0f, 5.0f)
+        [
+            LogInputBox.ToSharedRef()
+        ]
+        + SVerticalBox::Slot()
+        .AutoHeight()
+        .Padding(10.0f, 2.0f)
+        [
+            StatsText.ToSharedRef()
         ]
     ];
 }
 
-void SQuestCopilotLogInput::SetLogContent(const FString& LogContent)
+void SQuestCopilotLogInput::HandleTextChanged(const FText& Text)
 {
-    if (LogContentBox.IsValid())
+    // Update statistics
+    FString TextString = Text.ToString();
+    int32 LineCount = TextString.CountChar('\n') + (TextString.IsEmpty() ? 0 : 1);
+    int32 CharCount = TextString.Len();
+
+    StatsText->SetText(FText::FromString(FString::Printf(TEXT("%d lines, %d characters"), LineCount, CharCount)));
+
+    // Forward to parent callback
+    if (OnTextChanged.IsBound())
     {
-        LogContentBox->SetText(FText::FromString(LogContent));
+        OnTextChanged.Execute(Text);
     }
 }
 
-FString SQuestCopilotLogInput::GetLogContent() const
+FText SQuestCopilotLogInput::GetLogText() const
 {
-    if (LogContentBox.IsValid())
-    {
-        return LogContentBox->GetText().ToString();
-    }
-    return FString();
+    return LogInputBox.IsValid() ? LogInputBox->GetText() : FText::GetEmpty();
 }
 
-void SQuestCopilotLogInput::ClearLogContent()
+void SQuestCopilotLogInput::SetLogText(const FText& Text)
 {
-    if (LogContentBox.IsValid())
+    if (LogInputBox.IsValid())
     {
-        LogContentBox->SetText(FText::GetEmpty());
+        LogInputBox->SetText(Text);
     }
-}
-
-bool SQuestCopilotLogInput::IsEmpty() const
-{
-    if (LogContentBox.IsValid())
-    {
-        return LogContentBox->GetText().IsEmpty();
-    }
-    return true;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -301,44 +281,48 @@ bool SQuestCopilotLogInput::IsEmpty() const
 
 void SQuestCopilotAnalyzeButton::Construct(const FArguments& InArgs)
 {
-    OnAnalyzeClicked = InArgs._OnAnalyzeClicked;
-    IsEnabled = InArgs._IsEnabled;
-    IsAnalyzing = InArgs._IsAnalyzing;
+    OnClicked = InArgs._OnClicked;
+    bIsAnalyzing = false;
+
+    AnalyzeButton = SNew(SButton)
+        .Text(this, &SQuestCopilotAnalyzeButton::GetButtonText)
+        .IsEnabled(this, &SQuestCopilotAnalyzeButton::IsButtonEnabled)
+        .OnClicked(this, &SQuestCopilotAnalyzeButton::HandleButtonClicked)
+        .HAlign(HAlign_Center)
+        .VAlign(VAlign_Center);
 
     ChildSlot
     [
-        SNew(SBorder)
-        .BorderImage(FCoreStyle::Get().GetBrush("ToolPanel.GroupBorder"))
-        .Padding(FMargin(8.0f, 4.0f))
+        SNew(SBox)
+        .Padding(10.0f, 5.0f)
         [
-            SNew(SBox)
-            .HeightOverride(40.0f)
-            [
-                SNew(SButton)
-                .Text(this, &SQuestCopilotAnalyzeButton::GetButtonText)
-                .HAlign(HAlign_Center)
-                .VAlign(VAlign_Center)
-                .IsEnabled(IsEnabled)
-                .OnClicked_Lambda([this]() -> FReply
-                {
-                    if (OnAnalyzeClicked.IsBound())
-                    {
-                        OnAnalyzeClicked.Execute();
-                    }
-                    return FReply::Handled();
-                })
-            ]
+            AnalyzeButton.ToSharedRef()
         ]
     ];
 }
 
+FReply SQuestCopilotAnalyzeButton::HandleButtonClicked()
+{
+    if (OnClicked.IsBound())
+    {
+        return OnClicked.Execute();
+    }
+    return FReply::Handled();
+}
+
 FText SQuestCopilotAnalyzeButton::GetButtonText() const
 {
-    if (IsAnalyzing.Get())
-    {
-        return LOCTEXT("AnalyzingButton", "Analyzing...");
-    }
-    return LOCTEXT("AnalyzeButton", "Analyze Error");
+    return bIsAnalyzing ? FText::FromString("Analyzing...") : FText::FromString("Analyze Logs");
+}
+
+bool SQuestCopilotAnalyzeButton::IsButtonEnabled() const
+{
+    return !bIsAnalyzing;
+}
+
+void SQuestCopilotAnalyzeButton::SetAnalyzing(bool bAnalyzing)
+{
+    bIsAnalyzing = bAnalyzing;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -346,323 +330,77 @@ FText SQuestCopilotAnalyzeButton::GetButtonText() const
 
 void SQuestCopilotResults::Construct(const FArguments& InArgs)
 {
-    OnAutoFixClicked = InArgs._OnAutoFixClicked;
-    OnSourceClicked = InArgs._OnSourceClicked;
+    ResultsScrollBox = SNew(SScrollBox);
 
     ChildSlot
     [
-        SNew(SBorder)
-        .BorderImage(FCoreStyle::Get().GetBrush("ToolPanel.GroupBorder"))
-        .Padding(FMargin(8.0f, 4.0f))
+        SNew(SVerticalBox)
+        + SVerticalBox::Slot()
+        .AutoHeight()
+        .Padding(10.0f, 5.0f)
         [
-            SNew(SVerticalBox)
-            
-            // Results Header
-            + SVerticalBox::Slot()
-            .AutoHeight()
-            .Padding(0.0f, 0.0f, 0.0f, 8.0f)
+            SNew(STextBlock)
+            .Text(FText::FromString("Analysis Results"))
+            .Font(FCoreStyle::GetDefaultFontStyle("Bold", 12))
+        ]
+        + SVerticalBox::Slot()
+        .FillHeight(1.0f)
+        .Padding(10.0f, 5.0f)
+        [
+            SNew(SBox)
+            .MinDesiredHeight(200.0f)
             [
-                SNew(STextBlock)
-                .Text(LOCTEXT("AnalysisResults", "Analysis Results"))
-                .Font(FCoreStyle::GetDefaultFontStyle("Bold", 12))
-            ]
-            
-            // Results Content
-            + SVerticalBox::Slot()
-            .FillHeight(1.0f)
-            [
-                SAssignNew(ResultsScrollBox, SScrollBox)
-                .Orientation(Orient_Vertical)
-                [
-                    SAssignNew(ResultsContainer, SVerticalBox)
-                ]
+                ResultsScrollBox.ToSharedRef()
             ]
         ]
     ];
-
-    SetDefaultMessage();
 }
 
 void SQuestCopilotResults::DisplayResults(const FString& JsonResponse)
 {
-    if (!ResultsContainer.IsValid())
-    {
+    if (!ResultsScrollBox.IsValid())
         return;
-    }
 
-    // Clear existing results
-    ResultsContainer->ClearChildren();
+    // Clear previous results
+    ResultsScrollBox->ClearChildren();
 
-    // Parse JSON response
-    TSharedPtr<FJsonObject> JsonObject;
-    TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonResponse);
-    
-    if (!FJsonSerializer::Deserialize(Reader, JsonObject) || !JsonObject.IsValid())
-    {
-        // Show error message
-        ResultsContainer->AddSlot()
-        .AutoHeight()
-        .Padding(8.0f)
-        [
-            SNew(STextBlock)
-            .Text(LOCTEXT("JsonParseError", "Error: Could not parse analysis results"))
-            .ColorAndOpacity(FLinearColor::Red)
-        ];
-        return;
-    }
+    // Parse and display formatted results
+    TSharedPtr<SVerticalBox> ResultsContainer = SNew(SVerticalBox);
 
-    // Extract data
-    CurrentErrorType = JsonObject->GetStringField(TEXT("error_type"));
-    CurrentConfidence = JsonObject->GetNumberField(TEXT("confidence"));
-    CurrentSolution = JsonObject->GetStringField(TEXT("solution"));
-
-    // Display error type and confidence
+    // Add formatted analysis result
     ResultsContainer->AddSlot()
     .AutoHeight()
-    .Padding(4.0f)
+    .Padding(5.0f)
     [
-        SNew(SHorizontalBox)
-        
-        + SHorizontalBox::Slot()
-        .AutoWidth()
-        [
-            SNew(STextBlock)
-            .Text(LOCTEXT("ErrorType", "Error Type: "))
-            .Font(FCoreStyle::GetDefaultFontStyle("Bold", 10))
-        ]
-        
-        + SHorizontalBox::Slot()
-        .FillWidth(1.0f)
-        [
-            SNew(STextBlock)
-            .Text(FText::FromString(CurrentErrorType))
-            .ColorAndOpacity(FLinearColor(0.9f, 0.7f, 0.3f))
-        ]
-        
-        + SHorizontalBox::Slot()
-        .AutoWidth()
-        [
-            SNew(STextBlock)
-            .Text(FText::FromString(FString::Printf(TEXT("(%.1f%% confidence)"), CurrentConfidence * 100.0f)))
-            .ColorAndOpacity(FLinearColor(0.6f, 0.6f, 0.6f))
-            .Font(FCoreStyle::GetDefaultFontStyle("Italic", 9))
-        ]
+        SNew(STextBlock)
+        .Text(FText::FromString("Analysis Complete"))
+        .Font(FCoreStyle::GetDefaultFontStyle("Bold", 14))
+        .ColorAndOpacity(FLinearColor::Green)
     ];
 
-    // Display solution
-    if (!CurrentSolution.IsEmpty())
-    {
-        ResultsContainer->AddSlot()
-        .AutoHeight()
-        .Padding(4.0f, 8.0f, 4.0f, 4.0f)
-        [
-            SNew(SVerticalBox)
-            
-            + SVerticalBox::Slot()
-            .AutoHeight()
-            [
-                SNew(STextBlock)
-                .Text(LOCTEXT("Solution", "Solution:"))
-                .Font(FCoreStyle::GetDefaultFontStyle("Bold", 10))
-            ]
-            
-            + SVerticalBox::Slot()
-            .AutoHeight()
-            .Padding(0.0f, 2.0f, 0.0f, 0.0f)
-            [
-                SNew(STextBlock)
-                .Text(FText::FromString(CurrentSolution))
-                .AutoWrapText(true)
-                .ColorAndOpacity(FLinearColor(0.9f, 0.9f, 0.9f))
-            ]
-        ];
-    }
+    ResultsContainer->AddSlot()
+    .AutoHeight()
+    .Padding(5.0f, 10.0f)
+    [
+        SNew(SMultiLineEditableTextBox)
+        .Text(FText::FromString(JsonResponse))
+        .IsReadOnly(true)
+        .Font(FCoreStyle::GetDefaultFontStyle("Mono", 10))
+        .AllowContextMenu(true)
+    ];
 
-    // Display auto-fixes
-    const TArray<TSharedPtr<FJsonValue>>* AutoFixesArray;
-    if (JsonObject->TryGetArrayField(TEXT("auto_fixes"), AutoFixesArray))
-    {
-        if (AutoFixesArray->Num() > 0)
-        {
-            ResultsContainer->AddSlot()
-            .AutoHeight()
-            .Padding(4.0f, 8.0f, 4.0f, 4.0f)
-            [
-                SNew(STextBlock)
-                .Text(LOCTEXT("AutoFixes", "Auto-Fixes Available:"))
-                .Font(FCoreStyle::GetDefaultFontStyle("Bold", 10))
-            ];
-
-            for (int32 i = 0; i < AutoFixesArray->Num(); ++i)
-            {
-                FString FixDescription = (*AutoFixesArray)[i]->AsString();
-                CurrentAutoFixes.Add(FixDescription);
-                
-                ResultsContainer->AddSlot()
-                .AutoHeight()
-                .Padding(8.0f, 2.0f, 4.0f, 2.0f)
-                [
-                    CreateAutoFixWidget(FixDescription, i)
-                ];
-            }
-        }
-    }
-
-    // Display source references
-    const TArray<TSharedPtr<FJsonValue>>* SourcesArray;
-    if (JsonObject->TryGetArrayField(TEXT("sources"), SourcesArray))
-    {
-        if (SourcesArray->Num() > 0)
-        {
-            ResultsContainer->AddSlot()
-            .AutoHeight()
-            .Padding(4.0f, 8.0f, 4.0f, 4.0f)
-            [
-                SNew(STextBlock)
-                .Text(LOCTEXT("Sources", "Related Sources:"))
-                .Font(FCoreStyle::GetDefaultFontStyle("Bold", 10))
-            ];
-
-            for (const auto& SourceValue : *SourcesArray)
-            {
-                TSharedPtr<FJsonObject> SourceObj = SourceValue->AsObject();
-                if (SourceObj.IsValid())
-                {
-                    FString Title = SourceObj->GetStringField(TEXT("title"));
-                    FString Url = SourceObj->GetStringField(TEXT("url"));
-                    float Confidence = SourceObj->GetNumberField(TEXT("confidence"));
-                    
-                    ResultsContainer->AddSlot()
-                    .AutoHeight()
-                    .Padding(8.0f, 2.0f, 4.0f, 2.0f)
-                    [
-                        CreateSourceWidget(Title, Url, Confidence)
-                    ];
-                }
-            }
-        }
-    }
+    ResultsScrollBox->AddSlot()
+    [
+        ResultsContainer.ToSharedRef()
+    ];
 }
 
 void SQuestCopilotResults::ClearResults()
 {
-    if (ResultsContainer.IsValid())
+    if (ResultsScrollBox.IsValid())
     {
-        ResultsContainer->ClearChildren();
-        SetDefaultMessage();
+        ResultsScrollBox->ClearChildren();
     }
-    
-    CurrentErrorType.Empty();
-    CurrentConfidence = 0.0f;
-    CurrentSolution.Empty();
-    CurrentAutoFixes.Empty();
-}
-
-void SQuestCopilotResults::SetDefaultMessage()
-{
-    if (ResultsContainer.IsValid())
-    {
-        ResultsContainer->AddSlot()
-        .AutoHeight()
-        .Padding(8.0f)
-        [
-            SNew(STextBlock)
-            .Text(LOCTEXT("NoResults", "No analysis results yet. Click 'Analyze Error' to get started."))
-            .ColorAndOpacity(FLinearColor(0.6f, 0.6f, 0.6f))
-            .Justification(ETextJustify::Center)
-        ];
-    }
-}
-
-TSharedRef<SWidget> SQuestCopilotResults::CreateAutoFixWidget(const FString& FixDescription, int32 FixIndex)
-{
-    return SNew(SBorder)
-        .BorderImage(FCoreStyle::Get().GetBrush("ToolPanel.DarkGroupBorder"))
-        .Padding(FMargin(8.0f, 4.0f))
-        [
-            SNew(SHorizontalBox)
-            
-            + SHorizontalBox::Slot()
-            .FillWidth(1.0f)
-            .VAlign(VAlign_Center)
-            [
-                SNew(STextBlock)
-                .Text(FText::FromString(FixDescription))
-                .AutoWrapText(true)
-                .ColorAndOpacity(FLinearColor(0.8f, 0.9f, 0.8f))
-            ]
-            
-            + SHorizontalBox::Slot()
-            .AutoWidth()
-            .VAlign(VAlign_Center)
-            .Padding(8.0f, 0.0f, 0.0f, 0.0f)
-            [
-                SNew(SButton)
-                .Text(LOCTEXT("ApplyFix", "Apply"))
-                .ToolTipText(LOCTEXT("ApplyFixTooltip", "Apply this auto-fix to your project"))
-                .OnClicked_Lambda([this, FixIndex]() -> FReply
-                {
-                    if (OnAutoFixClicked.IsBound())
-                    {
-                        OnAutoFixClicked.Execute(FixIndex);
-                    }
-                    return FReply::Handled();
-                })
-            ]
-        ];
-}
-
-TSharedRef<SWidget> SQuestCopilotResults::CreateSourceWidget(const FString& SourceTitle, const FString& SourceUrl, float Confidence)
-{
-    return SNew(SBorder)
-        .BorderImage(FCoreStyle::Get().GetBrush("ToolPanel.DarkGroupBorder"))
-        .Padding(FMargin(8.0f, 4.0f))
-        [
-            SNew(SHorizontalBox)
-            
-            + SHorizontalBox::Slot()
-            .FillWidth(1.0f)
-            .VAlign(VAlign_Center)
-            [
-                SNew(SVerticalBox)
-                
-                + SVerticalBox::Slot()
-                .AutoHeight()
-                [
-                    SNew(STextBlock)
-                    .Text(FText::FromString(SourceTitle))
-                    .ColorAndOpacity(FLinearColor(0.7f, 0.8f, 1.0f))
-                    .Font(FCoreStyle::GetDefaultFontStyle("Bold", 9))
-                ]
-                
-                + SVerticalBox::Slot()
-                .AutoHeight()
-                [
-                    SNew(STextBlock)
-                    .Text(FText::FromString(FString::Printf(TEXT("Relevance: %.1f%%"), Confidence * 100.0f)))
-                    .ColorAndOpacity(FLinearColor(0.6f, 0.6f, 0.6f))
-                    .Font(FCoreStyle::GetDefaultFontStyle("Italic", 8))
-                ]
-            ]
-            
-            + SHorizontalBox::Slot()
-            .AutoWidth()
-            .VAlign(VAlign_Center)
-            .Padding(8.0f, 0.0f, 0.0f, 0.0f)
-            [
-                SNew(SButton)
-                .Text(LOCTEXT("OpenSource", "Open"))
-                .ToolTipText(LOCTEXT("OpenSourceTooltip", "Open this source in your browser"))
-                .OnClicked_Lambda([this, SourceUrl]() -> FReply
-                {
-                    if (OnSourceClicked.IsBound())
-                    {
-                        OnSourceClicked.Execute(SourceUrl);
-                    }
-                    return FReply::Handled();
-                })
-            ]
-        ];
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -687,7 +425,7 @@ TSharedRef<SQuestCopilotScreenshot> FQuestCopilotWidgetFactory::CreateScreenshot
     TAttribute<bool> IsEnabled)
 {
     return SNew(SQuestCopilotScreenshot)
-        .OnScreenshotClicked(OnScreenshotClicked)
+        .OnCaptureClicked(OnScreenshotClicked)
         .IsEnabled(IsEnabled);
 }
 
@@ -702,7 +440,7 @@ TSharedRef<SQuestCopilotAnalyzeButton> FQuestCopilotWidgetFactory::CreateAnalyze
     TAttribute<bool> IsAnalyzing)
 {
     return SNew(SQuestCopilotAnalyzeButton)
-        .OnAnalyzeClicked(OnAnalyzeClicked)
+        .OnClicked(OnAnalyzeClicked)
         .IsEnabled(IsEnabled)
         .IsAnalyzing(IsAnalyzing);
 }

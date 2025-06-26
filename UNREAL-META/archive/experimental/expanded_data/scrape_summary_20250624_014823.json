@@ -1,0 +1,18 @@
+{
+  "total_posts_collected": 25,
+  "posts_by_forum": {
+    "epic": 0,
+    "meta": 25,
+    "reddit": 0
+  },
+  "posts_by_error_type": {
+    "plugin_conflict": 1,
+    "sdk_mismatch": 1,
+    "black_screen": 1,
+    "packaging_error": 1,
+    "shader_compile": 0,
+    "other": 21
+  },
+  "posts_with_solutions": 0,
+  "scrape_date_utc": "2025-06-24T08:48:23.127150"
+}

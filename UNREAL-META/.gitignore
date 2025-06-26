@@ -1,0 +1,216 @@
+# Quest Dev Copilot - Git Ignore Rules
+
+# ======================
+# Environment & Secrets
+# ======================
+.env
+.env.local
+.env.production
+*.pem
+*.key
+config/secrets.json
+
+# ======================
+# Python
+# ======================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ======================
+# Virtual Environments
+# ======================
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ======================
+# IDE & Editors
+# ======================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ======================
+# Data & Databases
+# ======================
+data/
+*.db
+*.sqlite
+*.sqlite3
+chroma_db/
+scraped_content/
+embeddings/
+
+# ======================
+# Logs
+# ======================
+logs/
+*.log
+log_*.txt
+debug.log
+error.log
+
+# ======================
+# AI Model Caches
+# ======================
+.cache/
+model_cache/
+embedding_cache/
+llama_cache/
+
+# ======================
+# Temporary Files
+# ======================
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# ======================
+# Unreal Engine
+# ======================
+# Binaries
+Binaries/
+DerivedDataCache/
+
+# Intermediate files
+Intermediate/
+obj/
+
+# Cache files
+.vs/
+*.opensdf
+*.sdf
+*.sln
+*.suo
+*.xcodeproj
+*.xcworkspace
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# ======================
+# Documentation Build
+# ======================
+docs/_build/
+docs/build/
+site/
+
+# ======================
+# Testing
+# ======================
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# ======================
+# Package managers
+# ======================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ======================
+# OS Generated
+# ======================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ======================
+# Project Specific
+# ======================
+# Large sample files
+sample_logs/*.large.log
+sample_data/
+
+# API response caches
+api_cache/
+response_cache/
+
+# Cost tracking data (contains usage info)
+cost_tracking/
+usage_analytics/
+
+# Screenshots (may contain sensitive info)
+screenshots/
+error_screenshots/
+
+# Development notes
+dev_notes/
+personal_notes.md
+todo_private.md
+
+# ======================
+# Backup files
+# ======================
+*.bak
+*.backup
+*~.nib
+*.orig

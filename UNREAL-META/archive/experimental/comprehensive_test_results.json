@@ -1,0 +1,2346 @@
+[
+  {
+    "test_name": "VR Eye Buffer Allocation",
+    "log_content": "LogVulkanRHI: Error: Failed to allocate VR eye buffer of size 2048x2048",
+    "expected_error_type": "black_screen",
+    "description": "VR eye buffer allocation failure",
+    "success": true,
+    "error_classification": {
+      "error_type": "black_screen",
+      "confidence": 1.0,
+      "severity": "critical",
+      "description": "Black Screen detected with 2 indicators",
+      "indicators_found": [
+        "VR eye buffer",
+        "LogVulkanRHI"
+      ],
+      "solutions": [
+        {
+          "solution_id": "black_screen_001",
+          "error_type": "black_screen",
+          "title": "Fix VR Eye Render Target Memory Issues",
+          "description": "Black screen often caused by insufficient GPU memory for VR eye render targets. Reduce render target size and optimize memory usage.",
+          "steps": [
+            "Open Project Settings \u2192 Rendering",
+            "Set 'VR Pixel Density' to 1.0 or lower (try 0.8)",
+            "Disable 'Mobile HDR' if enabled",
+            "Set 'Mobile MSAA' to 'No MSAA' or '2x'",
+            "In VR settings, reduce eye texture resolution",
+            "Test with simplified materials/shaders",
+            "Monitor GPU memory usage in stat commands"
+          ],
+          "code_changes": null,
+          "config_changes": {
+            "DefaultEngine.ini": {
+              "[/Script/Engine.RendererSettings]": {
+                "vr.PixelDensity": "0.8",
+                "r.Mobile.DisableVertexFog": "True",
+                "r.MobileHDR": "False"
+              }
+            }
+          },
+          "verification_steps": [
+            "Check VR preview shows proper rendering",
+            "Verify no render target allocation errors",
+            "Test on Quest device - should show game view, not black screen",
+            "Monitor performance with stat GPU, stat Memory"
+          ],
+          "confidence": 0.89,
+          "source": "real_analysis"
+        },
+        {
+          "solution_id": "black_screen_002",
+          "error_type": "black_screen",
+          "title": "Fix Vulkan Renderer Issues for Quest",
+          "description": "Black screen may be caused by Vulkan renderer problems. Switch to appropriate renderer or fix Vulkan configuration.",
+          "steps": [
+            "Open Project Settings \u2192 Platforms \u2192 Android",
+            "Check 'Vulkan' support settings",
+            "Try disabling Vulkan if enabled (use OpenGL ES 3.1)",
+            "Or ensure Vulkan is properly configured for Quest",
+            "Update graphics drivers on development machine",
+            "Test with basic level/scene first"
+          ],
+          "code_changes": null,
+          "config_changes": {
+            "DefaultEngine.ini": {
+              "[/Script/AndroidRuntimeSettings.AndroidRuntimeSettings]": {
+                "bSupportsVulkan": "False",
+                "bSupportsOpenGLES31": "True"
+              }
+            }
+          },
+          "verification_steps": [
+            "Check renderer initialization logs",
+            "Verify no Vulkan-related errors",
+            "Test rendering in VR preview mode"
+          ],
+          "confidence": 0.82,
+          "source": "real_analysis"
+        }
+      ],
+      "context": {
+        "error_lines": [
+          {
+            "line_num": 1,
+            "content": "LogVulkanRHI: Error: Failed to allocate VR eye buffer of size 2048x2048"
+          }
+        ],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "LogVulkanRHI: Error: Failed to allocate VR eye buffer of size 2048x2048"
+          }
+        ],
+        "total_errors": 1,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 100.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 71,
+        "analysis_timestamp": "2025-06-24T01:52:43.214034",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "synthetic_black_screen_0_content_0",
+        "document": "From post titled 'Quest VR Eye Buffer Allocation Fix' (https://synthetic.example.com/black_screen):\n\n                SOLUTION: Fixed Quest black screen by reducing VR pixel density.\n                \n                Error was: LogVulkanRHI: Error: Failed to allocate VR eye buffer of size 2048x2048\n                \n                Steps that worked:\n                1. Open Project Settings \u2192 Rendering\n                2. Set VR Pixel Density to 0.8 (down from 1.0)\n                3. Disable Mobile HDR in rendering settings\n                4. Set Mobile MSAA to \"No MSAA\"\n                5. Clean and rebuild project\n                \n                This reduced GPU memory usage enough for Quest 2 to allocate the eye buffers properly.\n                ",
+        "metadata": {
+          "has_solution": true,
+          "title": "Quest VR Eye Buffer Allocation Fix",
+          "post_date": "2025-06-24T01:48:28.491288",
+          "error_type": "black_screen",
+          "source_url": "https://synthetic.example.com/black_screen",
+          "chunk_index": 0,
+          "forum": "synthetic",
+          "original_id": "synthetic_black_screen_0",
+          "chunk_type": "content"
+        },
+        "distance": 0.46669483184814453
+      },
+      {
+        "id": "synthetic_black_screen_0_solution_0",
+        "document": "SOLUTION for post titled 'Quest VR Eye Buffer Allocation Fix' from https://synthetic.example.com/black_screen:\n\n                SOLUTION: Fixed Quest black screen by reducing VR pixel density.\n                \n                Error was: LogVulkanRHI: Error: Failed to allocate VR eye buffer of size 2048x2048\n                \n                Steps that worked:\n                1. Open Project Settings \u2192 Rendering\n                2. Set VR Pixel Density to 0.8 (down from 1.0)\n                3. Disable Mobile HDR in rendering settings\n                4. Set Mobile MSAA to \"No MSAA\"\n                5. Clean and rebuild project\n                \n                This reduced GPU memory usage enough for Quest 2 to allocate the eye buffers properly.\n                ",
+        "metadata": {
+          "title": "Quest VR Eye Buffer Allocation Fix",
+          "forum": "synthetic",
+          "source_url": "https://synthetic.example.com/black_screen",
+          "error_type": "black_screen",
+          "post_date": "2025-06-24T01:48:28.491288",
+          "original_id": "synthetic_black_screen_0",
+          "chunk_type": "solution",
+          "has_solution": true
+        },
+        "distance": 0.48196375370025635
+      },
+      {
+        "id": "d46ac826a78dadc276967287a9f32a4c_content_0",
+        "document": "From post titled 'Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134' (https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244):\nI am updating an existing Quest game to use the latest Oculus integration etc. The game runs fine for a minute or so and then the visuals of the game freeze on one frame and the following is repeated on the log. It appears that the game is still running fine in the background because I can hear sounds that suggest that it is running fine, besides the visuals.\nWarn Adreno\n-\nGSL\n<\nlog_gpu_snapshot\n:\n471\n>\n:\npanel\n.\ngpuSnapshotPath is\nnot\nset\n.\nnot\ngenerating user snapshot\nWarn Adreno\n-\nGSL\n<\nioctl_kgsl_syncobj_create\n:\n5290\n>\n:\n(\n45\n,\n33\n,\n2329\n)\nfail\n22\nInvalid argument\nWarn Vulkan_Utils Vulkan error\n:\nvulkanLoader\n.\nvkQueueSubmit\n(\nVulkanContext\n.\nqueue\n,\n0\n,\nNULL\n,\nfenceToUse\n)\n:\n'VK_ERROR_INITIALIZATION_FAILED'\n(\n-\n3\n)\nat arvr\n/\nprojects\n/\nxrruntime\n/\nmobile\n/\nVrRuntime\n/\nClient\n/\nVrRunt",
+        "metadata": {
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244",
+          "original_id": "d46ac826a78dadc276967287a9f32a4c",
+          "forum": "meta",
+          "title": "Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134",
+          "error_type": "other",
+          "chunk_index": 0,
+          "chunk_type": "content",
+          "has_solution": false,
+          "post_date": "\u200e05-18-202310:41 AM"
+        },
+        "distance": 0.5744533538818359
+      },
+      {
+        "id": "d46ac826a78dadc276967287a9f32a4c_content_1",
+        "document": "ext\n.\nqueue\n,\n0\n,\nNULL\n,\nfenceToUse\n)\n:\n'VK_ERROR_INITIALIZATION_FAILED'\n(\n-\n3\n)\nat arvr\n/\nprojects\n/\nxrruntime\n/\nmobile\n/\nVrRuntime\n/\nClient\n/\nVrRuntimeClient\n/\nVrRuntimeClient\n.\ncpp\n:\n2625\nWarn Adreno\n-\nGSL\n<\nlog_gpu_snapshot\n:\n471\n>\n:\npanel\n.\ngpuSnapshotPath is\nnot\nset\n.\nnot\ngenerating user snapshot\nWarn Adreno\n-\nGSL\n<\nioctl_kgsl_syncobj_create\n:\n5290\n>\n:\n(\n45\n,\n33\n,\n2330\n)\nfail\n22\nInvalid argument\nWarn Vulkan_Utils Vulkan error\n:\nvulkanLoader\n.\nvkQueueSubmit\n(\nVulkanContext\n.\nqueue\n,\n0\n,\nNULL\n,\nfenceToUse\n)\n:\n'VK_ERROR_INITIALIZATION_FAILED'\n(\n-\n3\n)\nat arvr\n/\nprojects\n/\nxrruntime\n/\nmobile\n/\nVrRuntime\n/\nClient\n/\nVrRuntimeClient\n/\nVrRuntimeClient\n.\ncpp\n:\n2625\nWarn FenceChecker FenceChecker\n:\nwait timed out after\n100\nmsec\nWarn Adreno\n-\nGSL\n<\nlog_gpu_snapshot\n:\n471\n>\n:\npanel\n.\ngpuSnapshotP",
+        "metadata": {
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244",
+          "has_solution": false,
+          "error_type": "other",
+          "chunk_index": 1,
+          "original_id": "d46ac826a78dadc276967287a9f32a4c",
+          "title": "Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134",
+          "forum": "meta",
+          "chunk_type": "content",
+          "post_date": "\u200e05-18-202310:41 AM"
+        },
+        "distance": 0.6266711354255676
+      },
+      {
+        "id": "d46ac826a78dadc276967287a9f32a4c_content_8",
+        "document": "5\n:\n50\n:\n34.546\n8095\n8168\nWarn Adreno\n-\nGSL\n<\nlog_gpu_snapshot\n:\n471\n>\n:\npanel\n.\ngpuSnapshotPath is\nnot\nset\n.\nnot\ngenerating user snapshot\n2023\n-\n05\n-\n26\n15\n:\n50\n:\n34.547\n8095\n8168\nWarn Adreno\n-\nGSL\n<\nioctl_kgsl_syncobj_create\n:\n5290\n>\n:\n(\n44\n,\n24\n,\n1238\n)\nfail\n22\nInvalid argument\n2023\n-\n05\n-\n26\n15\n:\n50\n:\n34.547\n8095\n8168\nWarn Vulkan_Utils Vulkan error\n:\nvulkanLoader\n.\nvkQueueSubmit\n(\nVulkanContext\n.\nqueue\n,\n0\n,\nNULL\n,\nfenceUsed\n)\n:\n'VK_ERROR_INITIALIZATION_FAILED'\n(\n-\n3\n)\nat arvr\n/\nprojects\n/\nxrruntime\n/\nmobile\n/\nVrRuntime\n/\nClient\n/\nVrRuntimeClient\n/\nVrRuntimeClient\n.\ncpp\n:\n2603\n2023\n-\n05\n-\n26\n15\n:\n50\n:\n34.541\n0\n0\nError kgsl\n-\n3d0 dnobodyexplodes\n[\n8095\n]\n:\ngpu failed ctx\n36\nts\n1236\n.\n.\n.\n\n==========\nNext Post in Thread\n==========\n\nHi there, Allen. I think we're seeing the same issue. We",
+        "metadata": {
+          "original_id": "d46ac826a78dadc276967287a9f32a4c",
+          "error_type": "other",
+          "chunk_index": 8,
+          "title": "Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134",
+          "chunk_type": "content",
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244",
+          "forum": "meta",
+          "has_solution": false,
+          "post_date": "\u200e05-18-202310:41 AM"
+        },
+        "distance": 0.6378127932548523
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "Vulkan Render Pass Error",
+    "log_content": "LogVulkanRHI: Error: vkCreateRenderPass failed, VkResult=VK_ERROR_OUT_OF_DEVICE_MEMORY",
+    "expected_error_type": "black_screen",
+    "description": "Vulkan device memory exhaustion",
+    "success": true,
+    "error_classification": {
+      "error_type": "black_screen",
+      "confidence": 0.9333333333333333,
+      "severity": "critical",
+      "description": "Black Screen detected with 1 indicators",
+      "indicators_found": [
+        "vulkan"
+      ],
+      "solutions": [
+        {
+          "solution_id": "black_screen_001",
+          "error_type": "black_screen",
+          "title": "Fix VR Eye Render Target Memory Issues",
+          "description": "Black screen often caused by insufficient GPU memory for VR eye render targets. Reduce render target size and optimize memory usage.",
+          "steps": [
+            "Open Project Settings \u2192 Rendering",
+            "Set 'VR Pixel Density' to 1.0 or lower (try 0.8)",
+            "Disable 'Mobile HDR' if enabled",
+            "Set 'Mobile MSAA' to 'No MSAA' or '2x'",
+            "In VR settings, reduce eye texture resolution",
+            "Test with simplified materials/shaders",
+            "Monitor GPU memory usage in stat commands"
+          ],
+          "code_changes": null,
+          "config_changes": {
+            "DefaultEngine.ini": {
+              "[/Script/Engine.RendererSettings]": {
+                "vr.PixelDensity": "0.8",
+                "r.Mobile.DisableVertexFog": "True",
+                "r.MobileHDR": "False"
+              }
+            }
+          },
+          "verification_steps": [
+            "Check VR preview shows proper rendering",
+            "Verify no render target allocation errors",
+            "Test on Quest device - should show game view, not black screen",
+            "Monitor performance with stat GPU, stat Memory"
+          ],
+          "confidence": 0.89,
+          "source": "real_analysis"
+        },
+        {
+          "solution_id": "black_screen_002",
+          "error_type": "black_screen",
+          "title": "Fix Vulkan Renderer Issues for Quest",
+          "description": "Black screen may be caused by Vulkan renderer problems. Switch to appropriate renderer or fix Vulkan configuration.",
+          "steps": [
+            "Open Project Settings \u2192 Platforms \u2192 Android",
+            "Check 'Vulkan' support settings",
+            "Try disabling Vulkan if enabled (use OpenGL ES 3.1)",
+            "Or ensure Vulkan is properly configured for Quest",
+            "Update graphics drivers on development machine",
+            "Test with basic level/scene first"
+          ],
+          "code_changes": null,
+          "config_changes": {
+            "DefaultEngine.ini": {
+              "[/Script/AndroidRuntimeSettings.AndroidRuntimeSettings]": {
+                "bSupportsVulkan": "False",
+                "bSupportsOpenGLES31": "True"
+              }
+            }
+          },
+          "verification_steps": [
+            "Check renderer initialization logs",
+            "Verify no Vulkan-related errors",
+            "Test rendering in VR preview mode"
+          ],
+          "confidence": 0.82,
+          "source": "real_analysis"
+        }
+      ],
+      "context": {
+        "error_lines": [
+          {
+            "line_num": 1,
+            "content": "LogVulkanRHI: Error: vkCreateRenderPass failed, VkResult=VK_ERROR_OUT_OF_DEVICE_MEMORY"
+          }
+        ],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "LogVulkanRHI: Error: vkCreateRenderPass failed, VkResult=VK_ERROR_OUT_OF_DEVICE_MEMORY"
+          }
+        ],
+        "total_errors": 1,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 100.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 86,
+        "analysis_timestamp": "2025-06-24T01:52:44.074331",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "d46ac826a78dadc276967287a9f32a4c_content_0",
+        "document": "From post titled 'Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134' (https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244):\nI am updating an existing Quest game to use the latest Oculus integration etc. The game runs fine for a minute or so and then the visuals of the game freeze on one frame and the following is repeated on the log. It appears that the game is still running fine in the background because I can hear sounds that suggest that it is running fine, besides the visuals.\nWarn Adreno\n-\nGSL\n<\nlog_gpu_snapshot\n:\n471\n>\n:\npanel\n.\ngpuSnapshotPath is\nnot\nset\n.\nnot\ngenerating user snapshot\nWarn Adreno\n-\nGSL\n<\nioctl_kgsl_syncobj_create\n:\n5290\n>\n:\n(\n45\n,\n33\n,\n2329\n)\nfail\n22\nInvalid argument\nWarn Vulkan_Utils Vulkan error\n:\nvulkanLoader\n.\nvkQueueSubmit\n(\nVulkanContext\n.\nqueue\n,\n0\n,\nNULL\n,\nfenceToUse\n)\n:\n'VK_ERROR_INITIALIZATION_FAILED'\n(\n-\n3\n)\nat arvr\n/\nprojects\n/\nxrruntime\n/\nmobile\n/\nVrRuntime\n/\nClient\n/\nVrRunt",
+        "metadata": {
+          "original_id": "d46ac826a78dadc276967287a9f32a4c",
+          "chunk_type": "content",
+          "has_solution": false,
+          "error_type": "other",
+          "post_date": "\u200e05-18-202310:41 AM",
+          "chunk_index": 0,
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244",
+          "forum": "meta",
+          "title": "Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134"
+        },
+        "distance": 0.6190167665481567
+      },
+      {
+        "id": "synthetic_black_screen_0_content_0",
+        "document": "From post titled 'Quest VR Eye Buffer Allocation Fix' (https://synthetic.example.com/black_screen):\n\n                SOLUTION: Fixed Quest black screen by reducing VR pixel density.\n                \n                Error was: LogVulkanRHI: Error: Failed to allocate VR eye buffer of size 2048x2048\n                \n                Steps that worked:\n                1. Open Project Settings \u2192 Rendering\n                2. Set VR Pixel Density to 0.8 (down from 1.0)\n                3. Disable Mobile HDR in rendering settings\n                4. Set Mobile MSAA to \"No MSAA\"\n                5. Clean and rebuild project\n                \n                This reduced GPU memory usage enough for Quest 2 to allocate the eye buffers properly.\n                ",
+        "metadata": {
+          "chunk_type": "content",
+          "forum": "synthetic",
+          "title": "Quest VR Eye Buffer Allocation Fix",
+          "original_id": "synthetic_black_screen_0",
+          "error_type": "black_screen",
+          "has_solution": true,
+          "chunk_index": 0,
+          "source_url": "https://synthetic.example.com/black_screen",
+          "post_date": "2025-06-24T01:48:28.491288"
+        },
+        "distance": 0.6384377479553223
+      },
+      {
+        "id": "synthetic_black_screen_0_solution_0",
+        "document": "SOLUTION for post titled 'Quest VR Eye Buffer Allocation Fix' from https://synthetic.example.com/black_screen:\n\n                SOLUTION: Fixed Quest black screen by reducing VR pixel density.\n                \n                Error was: LogVulkanRHI: Error: Failed to allocate VR eye buffer of size 2048x2048\n                \n                Steps that worked:\n                1. Open Project Settings \u2192 Rendering\n                2. Set VR Pixel Density to 0.8 (down from 1.0)\n                3. Disable Mobile HDR in rendering settings\n                4. Set Mobile MSAA to \"No MSAA\"\n                5. Clean and rebuild project\n                \n                This reduced GPU memory usage enough for Quest 2 to allocate the eye buffers properly.\n                ",
+        "metadata": {
+          "post_date": "2025-06-24T01:48:28.491288",
+          "chunk_type": "solution",
+          "source_url": "https://synthetic.example.com/black_screen",
+          "forum": "synthetic",
+          "original_id": "synthetic_black_screen_0",
+          "has_solution": true,
+          "title": "Quest VR Eye Buffer Allocation Fix",
+          "error_type": "black_screen"
+        },
+        "distance": 0.6536141633987427
+      },
+      {
+        "id": "d46ac826a78dadc276967287a9f32a4c_content_8",
+        "document": "5\n:\n50\n:\n34.546\n8095\n8168\nWarn Adreno\n-\nGSL\n<\nlog_gpu_snapshot\n:\n471\n>\n:\npanel\n.\ngpuSnapshotPath is\nnot\nset\n.\nnot\ngenerating user snapshot\n2023\n-\n05\n-\n26\n15\n:\n50\n:\n34.547\n8095\n8168\nWarn Adreno\n-\nGSL\n<\nioctl_kgsl_syncobj_create\n:\n5290\n>\n:\n(\n44\n,\n24\n,\n1238\n)\nfail\n22\nInvalid argument\n2023\n-\n05\n-\n26\n15\n:\n50\n:\n34.547\n8095\n8168\nWarn Vulkan_Utils Vulkan error\n:\nvulkanLoader\n.\nvkQueueSubmit\n(\nVulkanContext\n.\nqueue\n,\n0\n,\nNULL\n,\nfenceUsed\n)\n:\n'VK_ERROR_INITIALIZATION_FAILED'\n(\n-\n3\n)\nat arvr\n/\nprojects\n/\nxrruntime\n/\nmobile\n/\nVrRuntime\n/\nClient\n/\nVrRuntimeClient\n/\nVrRuntimeClient\n.\ncpp\n:\n2603\n2023\n-\n05\n-\n26\n15\n:\n50\n:\n34.541\n0\n0\nError kgsl\n-\n3d0 dnobodyexplodes\n[\n8095\n]\n:\ngpu failed ctx\n36\nts\n1236\n.\n.\n.\n\n==========\nNext Post in Thread\n==========\n\nHi there, Allen. I think we're seeing the same issue. We",
+        "metadata": {
+          "forum": "meta",
+          "original_id": "d46ac826a78dadc276967287a9f32a4c",
+          "error_type": "other",
+          "chunk_index": 8,
+          "chunk_type": "content",
+          "title": "Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134",
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244",
+          "has_solution": false,
+          "post_date": "\u200e05-18-202310:41 AM"
+        },
+        "distance": 0.6588994264602661
+      },
+      {
+        "id": "d46ac826a78dadc276967287a9f32a4c_content_15",
+        "document": "ROR\n:\n[\nValidation\n,\n0\n]\n:\nValidation Error\n:\n[\nVUID\n-\nvkCmdClearAttachments\n-\nrect\n-02682\n]\nObject\n0\n:\nhandle\n=\n0xb4000078c9af0e20\n,\ntype\n=\nVK_OBJECT_TYPE_COMMAND_BUFFER\n;\n|\nMessageID\n=\n0xadbd476f\n|\nCmdClearAttachments\n(\n)\n:\npRects\n[\n1\n]\n.\nrect\n.\nextent\n.\nwidth is zero\n.\nThe Vulkan spec states\n:\nThe rect member of each element of pRects must have an extent\n.\nwidth greater than\n0\n(\nhttps\n:\n/\n/\nwww\n.\nkhronos\n.\norg\n/\nregistry\n/\nvulkan\n/\nspecs\n/\n1.3\n-\nextensions\n/\nhtml\n/\nvkspec\n.\nhtml#VUID\n-\nvkCmdClearAttachments\n-\nrect\n-02682\n)\nVULKAN\n:\nERROR\n:\n[\nValidation\n,\n0\n]\n:\nValidation Error\n:\n[\nVUID\n-\nVkImageViewCreateInfo\n-\nimage\n-01762\n]\nObject\n0\n:\nhandle\n=\n0x50c1c40000000176\n,\ntype\n=\nVK_OBJECT_TYPE_IMAGE\n;\n|\nMessageID\n=\n0x6516b437\n|\nvkCreateImageView\n(\n)\nformat VK_FORMAT_R8G8B8A8_UNORM differs fro",
+        "metadata": {
+          "forum": "meta",
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244",
+          "chunk_type": "content",
+          "chunk_index": 15,
+          "original_id": "d46ac826a78dadc276967287a9f32a4c",
+          "has_solution": false,
+          "post_date": "\u200e05-18-202310:41 AM",
+          "error_type": "other",
+          "title": "Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134"
+        },
+        "distance": 0.6634692549705505
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "OpenXR Session Error",
+    "log_content": "LogOpenXR: Error: xrCreateSession failed with XR_ERROR_GRAPHICS_DEVICE_INVALID",
+    "expected_error_type": "black_screen",
+    "description": "OpenXR graphics device validation failure",
+    "success": false,
+    "error_classification": {
+      "error_type": "vr",
+      "confidence": 1.0,
+      "severity": "critical",
+      "description": "Vr detected with 2 indicators",
+      "indicators_found": [
+        "xrCreateSession",
+        "XR_ERROR_GRAPHICS_DEVICE_INVALID"
+      ],
+      "solutions": [],
+      "context": {
+        "error_lines": [
+          {
+            "line_num": 1,
+            "content": "LogOpenXR: Error: xrCreateSession failed with XR_ERROR_GRAPHICS_DEVICE_INVALID"
+          }
+        ],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "LogOpenXR: Error: xrCreateSession failed with XR_ERROR_GRAPHICS_DEVICE_INVALID"
+          }
+        ],
+        "total_errors": 1,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 100.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 78,
+        "analysis_timestamp": "2025-06-24T01:52:44.855513",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_5",
+        "document": "ement.XRGeneralSettings:AttemptStartXRSDKOnBeforeSplashScreen () (at Library/PackageCache/com.unity.xr.management@4.0.1/Runtime/XRGeneralSettings.cs:158)\n\nUnity v2021.1.5f1, Oculus Utilities v1.51.0, OVRPlugin v1.51.1, SDK v1.60.0.\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1161)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nSystemHeadset Oculus_Link_Quest\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1166)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nTcpListener started. Local endpoint: 0.0.0.0:32419\nUnityEngine.Debug:LogFormat (string,object[])\nOVRNetwork/OVRNetworkTcpServer:StartListening (int) (at Assets/Oculus/VR/Scripts/",
+        "metadata": {
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "forum": "meta",
+          "chunk_type": "content",
+          "has_solution": false,
+          "chunk_index": 5,
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "error_type": "black_screen",
+          "post_date": "\u200e05-16-202101:27 AM"
+        },
+        "distance": 0.5583710074424744
+      },
+      {
+        "id": "d46ac826a78dadc276967287a9f32a4c_content_0",
+        "document": "From post titled 'Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134' (https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244):\nI am updating an existing Quest game to use the latest Oculus integration etc. The game runs fine for a minute or so and then the visuals of the game freeze on one frame and the following is repeated on the log. It appears that the game is still running fine in the background because I can hear sounds that suggest that it is running fine, besides the visuals.\nWarn Adreno\n-\nGSL\n<\nlog_gpu_snapshot\n:\n471\n>\n:\npanel\n.\ngpuSnapshotPath is\nnot\nset\n.\nnot\ngenerating user snapshot\nWarn Adreno\n-\nGSL\n<\nioctl_kgsl_syncobj_create\n:\n5290\n>\n:\n(\n45\n,\n33\n,\n2329\n)\nfail\n22\nInvalid argument\nWarn Vulkan_Utils Vulkan error\n:\nvulkanLoader\n.\nvkQueueSubmit\n(\nVulkanContext\n.\nqueue\n,\n0\n,\nNULL\n,\nfenceToUse\n)\n:\n'VK_ERROR_INITIALIZATION_FAILED'\n(\n-\n3\n)\nat arvr\n/\nprojects\n/\nxrruntime\n/\nmobile\n/\nVrRuntime\n/\nClient\n/\nVrRunt",
+        "metadata": {
+          "chunk_type": "content",
+          "has_solution": false,
+          "title": "Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134",
+          "forum": "meta",
+          "original_id": "d46ac826a78dadc276967287a9f32a4c",
+          "post_date": "\u200e05-18-202310:41 AM",
+          "error_type": "other",
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244",
+          "chunk_index": 0
+        },
+        "distance": 0.573384165763855
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_9",
+        "document": " () (at Library/PackageCache/com.unity.xr.oculus@1.9.0/Runtime/OculusLoader.cs:182)\nUnityEngine.XR.Management.XRGeneralSettings:AttemptStartXRSDKOnBeforeSplashScreen () (at Library/PackageCache/com.unity.xr.management@4.0.1/Runtime/XRGeneralSettings.cs:158)\n\nUnity v2021.1.5f1, Oculus Utilities v1.51.0, OVRPlugin v1.51.1, SDK v1.60.0.\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1161)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nSystemHeadset Oculus_Link_Quest\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1166)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nTcpListener started. Local endpoint: 0.0.0.0:32419\nUnityEngine.Debug:LogFo",
+        "metadata": {
+          "forum": "meta",
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "error_type": "black_screen",
+          "has_solution": false,
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "post_date": "\u200e05-16-202101:27 AM",
+          "chunk_type": "content",
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "chunk_index": 9
+        },
+        "distance": 0.5757901668548584
+      },
+      {
+        "id": "d46ac826a78dadc276967287a9f32a4c_content_4",
+        "document": "f1\nOculus XR Plugin 3.3.0\nOculus Integration 53.1 (1.85.0)\nDevice: Quest Pro\nSystem Version 50000390062500330\nVersion 53.0.0.147.132.475553041\nRuntime Version 53.0.0.147.132.475553298\nOS Version SQ3A.220605.009.A1\nPlease let me know if you have any information or if it might be a known issue with my software versions.\nSolved!\nGo to Solution.\n\n==========\nNext Post in Thread\n==========\n\nI don't know how to solve this issue proprly, but I have the same error. It never happens until I load into a specific scene that has some extra UI in it. I think the issue could be something to do with the always on top shader that I have for the UI. Or TextMeshPro maybe.\nI didn't really have time to figure it out, but I unticked \"Symmetric Projection (Vulkan)\" in Project Settings > XR Plug-in Management > O",
+        "metadata": {
+          "post_date": "\u200e05-18-202310:41 AM",
+          "title": "Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134",
+          "chunk_type": "content",
+          "chunk_index": 4,
+          "forum": "meta",
+          "has_solution": false,
+          "original_id": "d46ac826a78dadc276967287a9f32a4c",
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244",
+          "error_type": "other"
+        },
+        "distance": 0.5797178745269775
+      },
+      {
+        "id": "d46ac826a78dadc276967287a9f32a4c_content_1",
+        "document": "ext\n.\nqueue\n,\n0\n,\nNULL\n,\nfenceToUse\n)\n:\n'VK_ERROR_INITIALIZATION_FAILED'\n(\n-\n3\n)\nat arvr\n/\nprojects\n/\nxrruntime\n/\nmobile\n/\nVrRuntime\n/\nClient\n/\nVrRuntimeClient\n/\nVrRuntimeClient\n.\ncpp\n:\n2625\nWarn Adreno\n-\nGSL\n<\nlog_gpu_snapshot\n:\n471\n>\n:\npanel\n.\ngpuSnapshotPath is\nnot\nset\n.\nnot\ngenerating user snapshot\nWarn Adreno\n-\nGSL\n<\nioctl_kgsl_syncobj_create\n:\n5290\n>\n:\n(\n45\n,\n33\n,\n2330\n)\nfail\n22\nInvalid argument\nWarn Vulkan_Utils Vulkan error\n:\nvulkanLoader\n.\nvkQueueSubmit\n(\nVulkanContext\n.\nqueue\n,\n0\n,\nNULL\n,\nfenceToUse\n)\n:\n'VK_ERROR_INITIALIZATION_FAILED'\n(\n-\n3\n)\nat arvr\n/\nprojects\n/\nxrruntime\n/\nmobile\n/\nVrRuntime\n/\nClient\n/\nVrRuntimeClient\n/\nVrRuntimeClient\n.\ncpp\n:\n2625\nWarn FenceChecker FenceChecker\n:\nwait timed out after\n100\nmsec\nWarn Adreno\n-\nGSL\n<\nlog_gpu_snapshot\n:\n471\n>\n:\npanel\n.\ngpuSnapshotP",
+        "metadata": {
+          "error_type": "other",
+          "chunk_index": 1,
+          "title": "Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134",
+          "has_solution": false,
+          "chunk_type": "content",
+          "original_id": "d46ac826a78dadc276967287a9f32a4c",
+          "forum": "meta",
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244",
+          "post_date": "\u200e05-18-202310:41 AM"
+        },
+        "distance": 0.5857400894165039
+      }
+    ],
+    "retrieval_success": true,
+    "notes": [
+      "Expected black_screen, got vr"
+    ]
+  },
+  {
+    "test_name": "Android Packaging Failure",
+    "log_content": "UATHelper: Packaging (Android): BUILD FAILED: Task :app:packageDebug FAILED",
+    "expected_error_type": "packaging_error",
+    "description": "Android APK packaging failure",
+    "success": true,
+    "error_classification": {
+      "error_type": "packaging_error",
+      "confidence": 1.0,
+      "severity": "critical",
+      "description": "Packaging Error detected with 3 indicators",
+      "indicators_found": [
+        "BUILD FAILED",
+        "packageDebug",
+        "Task"
+      ],
+      "solutions": [
+        {
+          "solution_id": "packaging_error_001",
+          "error_type": "packaging_error",
+          "title": "Fix Common Android Packaging Errors",
+          "description": "Android packaging can fail due to misconfigured SDK paths, Gradle issues, or manifest errors.",
+          "steps": [
+            "Verify that the Android SDK and NDK paths are set correctly in Project Settings -> Platforms -> Android",
+            "Ensure you have the correct Java Development Kit (JDK) installed",
+            "Delete the Intermediate and Saved folders from your project directory",
+            "Try packaging a clean, empty project to isolate the issue",
+            "Check the AndroidManifest.xml for any errors"
+          ],
+          "code_changes": null,
+          "config_changes": null,
+          "verification_steps": [
+            "Verify that the project packages successfully for Android",
+            "Test the APK on a Quest device"
+          ],
+          "confidence": 0.9,
+          "source": "real_analysis"
+        }
+      ],
+      "context": {
+        "error_lines": [],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "UATHelper: Packaging (Android): BUILD FAILED: Task :app:packageDebug FAILED"
+          }
+        ],
+        "total_errors": 0,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 0.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 75,
+        "analysis_timestamp": "2025-06-24T01:52:45.556281",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "460eb97626cbfb785c32aad6328a9513_content_5",
+        "document": "in\\MSBuild.exe\nUATHelper: Packaging (Android (ASTC)): Executing commands...\nUATHelper: Packaging (Android (ASTC)): Installed Sdk validity:\nUATHelper: Packaging (Android (ASTC)): Android: (Status=Valid, MinAllowed_Sdk=r25b, MaxAllowed_Sdk=r26c, Current_Sdk=r25b, Allowed_AutoSdk=r25b, Current_AutoSdk=, Flags=\"InstalledSdk_ValidVersionExists, Support_FullSdk, Sdk_HasBestVersion\")\nUATHelper: Packaging (Android (ASTC)): Scanning for envvar changes...\nUATHelper: Packaging (Android (ASTC)): ... done!\nUATHelper: Packaging (Android (ASTC)): Cleaning Temp Paths...\nUATHelper: Packaging (Android (ASTC)): BUILD SUCCESSFUL\nUATHelper: Packaging (Android (ASTC)): Setting up ProjectParams for C:\\Users\\Ezcrane\\OneDrive\\Documentos\\Unreal Projects\\TecEstalberiana2\\TecEstalberiana2.uproject\nUATHelper: Packagin",
+        "metadata": {
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "error_type": "packaging_error",
+          "original_id": "460eb97626cbfb785c32aad6328a9513",
+          "chunk_type": "content",
+          "has_solution": false,
+          "post_date": "\u200e12-04-202406:49 PM",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86974404254&search-result-uid=1267528",
+          "chunk_index": 5,
+          "forum": "meta"
+        },
+        "distance": 0.5651865005493164
+      },
+      {
+        "id": "391230e8732b3d19b8bb788d6d9534b2_content_4",
+        "document": "oft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe\nUATHelper: Packaging (Android (ASTC)): Executing commands...\nUATHelper: Packaging (Android (ASTC)): Installed Sdk validity:\nUATHelper: Packaging (Android (ASTC)): Android: (Status=Valid, MinAllowed_Sdk=r25b, MaxAllowed_Sdk=r26c, Current_Sdk=r25b, Allowed_AutoSdk=r25b, Current_AutoSdk=, Flags=\"InstalledSdk_ValidVersionExists, Support_FullSdk, Sdk_HasBestVersion\")\nUATHelper: Packaging (Android (ASTC)): Scanning for envvar changes...\nUATHelper: Packaging (Android (ASTC)): ... done!\nUATHelper: Packaging (Android (ASTC)): Cleaning Temp Paths...\nUATHelper: Packaging (Android (ASTC)): BUILD SUCCESSFUL\nUATHelper: Packaging (Android (ASTC)): Setting up ProjectParams for C:\\Users\\Ezcrane\\OneDrive\\Documentos\\Unreal Projects\\TecEstalberiana2\\TecEstalberiana2.uproject\nUATHelper: Packaging (Android (ASTC)): ********** BUILD COMMAND STARTED **********\nUATHelper: Packaging (Android (ASTC)): Running: C:\\Program Files\\Epic Games\\UE_5.4\\Eng",
+        "metadata": {
+          "has_solution": false,
+          "original_id": "391230e8732b3d19b8bb788d6d9534b2",
+          "chunk_index": 4,
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86969299941&search-result-uid=1267528",
+          "forum": "meta",
+          "chunk_type": "content",
+          "error_type": "packaging_error",
+          "post_date": "\u200e12-04-202406:49 PM"
+        },
+        "distance": 0.5751093029975891
+      },
+      {
+        "id": "460eb97626cbfb785c32aad6328a9513_content_4",
+        "document": "alberiana2.uproject\" -unrealexe=\"C:\\Program Files\\Epic Games\\UE_5.4\n\\Engine\\Binaries\\Win64\\UnrealEditor-Cmd.exe\" -platform=Android -cookflavor=ASTC -installed -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/Quest2\" -clientconfig=Development -nocompile -nocompileuat\nUATHelper: Packaging (Android (ASTC)): Initializing script modules...\nUATHelper: Packaging (Android (ASTC)): Total script module initialization time: 0.20 s.\nUATHelper: Packaging (Android (ASTC)): Using C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe\nUATHelper: Packaging (Android (ASTC)): Executing commands...\nUATHelper: Packaging (Android (ASTC)): Installed Sdk validity:\nUATHelper: ",
+        "metadata": {
+          "chunk_index": 4,
+          "error_type": "packaging_error",
+          "post_date": "\u200e12-04-202406:49 PM",
+          "chunk_type": "content",
+          "original_id": "460eb97626cbfb785c32aad6328a9513",
+          "forum": "meta",
+          "has_solution": false,
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86974404254&search-result-uid=1267528"
+        },
+        "distance": 0.5823456048965454
+      },
+      {
+        "id": "391230e8732b3d19b8bb788d6d9534b2_content_3",
+        "document": "ecEstalberiana2/TecEstalberiana2.uproject\" BuildCookRun -nop4 -utf8output -nocompileeditor -skipbuildeditor -cook -project=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/TecEstalberiana2.uproject\" -unrealexe=\"C:\\Program Files\\Epic Games\\UE_5.4\n\\Engine\\Binaries\\Win64\\UnrealEditor-Cmd.exe\" -platform=Android -cookflavor=ASTC -installed -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/Quest2\" -clientconfig=Development -nocompile -nocompileuat\nUATHelper: Packaging (Android (ASTC)): Initializing script modules...\nUATHelper: Packaging (Android (ASTC)): Total script module initialization time: 0.20 s.\nUATHelper: Packaging (Android (ASTC)): Using C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe\nUATHelper: Packaging (Android (ASTC)): Executing commands...\nUATHelper: Packaging (Android (ASTC)): Installed Sdk validity:\nUATHelper: ",
+        "metadata": {
+          "chunk_type": "content",
+          "original_id": "391230e8732b3d19b8bb788d6d9534b2",
+          "has_solution": false,
+          "error_type": "packaging_error",
+          "post_date": "\u200e12-04-202406:49 PM",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86969299941&search-result-uid=1267528",
+          "forum": "meta",
+          "chunk_index": 3,
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528"
+        },
+        "distance": 0.5885288715362549
+      },
+      {
+        "id": "391230e8732b3d19b8bb788d6d9534b2_content_5",
+        "document": "ana2\\TecEstalberiana2.uproject\nUATHelper: Packaging (Android (ASTC)): ********** BUILD COMMAND STARTED **********\nUATHelper: Packaging (Android (ASTC)): Running: C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Binaries\\ThirdParty\\DotNet\\6.0.302\\windows\\dotnet.exe \"C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Binaries\\DotNET\\UnrealBuildTool\\UnrealBuildTool.dll\" TecEstalberiana2 Android Development -Project=\"C:\\Users\\Ezcrane\\OneDrive\\Documentos\\Unreal Projects\\TecEstalberiana2\\TecEstalberiana2.uproject\" -Manifest=\"C:\\Users\\Ezcrane\\OneDrive\\Documentos\\Unreal Projects\\TecEstalberiana2\\Intermediate\\Build\\Manifest.xml\" -remoteini=\"C:\\Users\\Ezcrane\\OneDrive\\Documentos\\Unreal Projects\\TecEstalberiana2\" -skipdeploy -log\n=\"C:\\Users\\Ezcrane\\AppData\\Roaming\\Unreal Engine\\AutomationTool\\Logs\\C+Program+Files+Epic+Games+UE_5.4\\UBA-TecEstalberiana2-Android-Development.txt\"\nUATHelper: Packaging (Android (ASTC)): Log file: C:\\Users\\Ezcrane\\AppData\\Roaming\\Unreal Engine\\AutomationTool\\Logs\\C+Program+Files+Epic+Ga",
+        "metadata": {
+          "chunk_type": "content",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86969299941&search-result-uid=1267528",
+          "chunk_index": 5,
+          "original_id": "391230e8732b3d19b8bb788d6d9534b2",
+          "forum": "meta",
+          "has_solution": false,
+          "post_date": "\u200e12-04-202406:49 PM",
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "error_type": "packaging_error"
+        },
+        "distance": 0.5892084240913391
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "Gradle Build Error",
+    "log_content": "LogPlayLevel: CommandUtils.Run: ERROR: cmd.exe failed with args /c \"C:\\Android\\gradle\\bin\\gradle.bat\" assembleDebug --stacktrace",
+    "expected_error_type": "packaging_error",
+    "description": "Gradle assembly failure with stacktrace",
+    "success": true,
+    "error_classification": {
+      "error_type": "packaging_error",
+      "confidence": 0.9,
+      "severity": "high",
+      "description": "Packaging Error detected with 3 indicators",
+      "indicators_found": [
+        "CommandUtils",
+        "gradle",
+        "ERROR"
+      ],
+      "solutions": [
+        {
+          "solution_id": "packaging_error_001",
+          "error_type": "packaging_error",
+          "title": "Fix Common Android Packaging Errors",
+          "description": "Android packaging can fail due to misconfigured SDK paths, Gradle issues, or manifest errors.",
+          "steps": [
+            "Verify that the Android SDK and NDK paths are set correctly in Project Settings -> Platforms -> Android",
+            "Ensure you have the correct Java Development Kit (JDK) installed",
+            "Delete the Intermediate and Saved folders from your project directory",
+            "Try packaging a clean, empty project to isolate the issue",
+            "Check the AndroidManifest.xml for any errors"
+          ],
+          "code_changes": null,
+          "config_changes": null,
+          "verification_steps": [
+            "Verify that the project packages successfully for Android",
+            "Test the APK on a Quest device"
+          ],
+          "confidence": 0.9,
+          "source": "real_analysis"
+        }
+      ],
+      "context": {
+        "error_lines": [
+          {
+            "line_num": 1,
+            "content": "LogPlayLevel: CommandUtils.Run: ERROR: cmd.exe failed with args /c \"C:\\Android\\gradle\\bin\\gradle.bat\" assembleDebug --stacktrace"
+          }
+        ],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "LogPlayLevel: CommandUtils.Run: ERROR: cmd.exe failed with args /c \"C:\\Android\\gradle\\bin\\gradle.bat\" assembleDebug --stacktrace"
+          }
+        ],
+        "total_errors": 1,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 100.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 128,
+        "analysis_timestamp": "2025-06-24T01:52:46.393127",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "391230e8732b3d19b8bb788d6d9534b2_content_2",
+        "document": "=Android -cookflavor=ASTC -installed -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/Quest2\" -clientconfig=Development\" -nocompile -nocompileuat ]\nUATHelper: Packaging (Android (ASTC)): Running AutomationTool...\nUATHelper: Packaging (Android (ASTC)): Using bundled DotNet SDK version: 6.0.302\nUATHelper: Packaging (Android (ASTC)): Starting AutomationTool...\nUATHelper: Packaging (Android (ASTC)): Parsing command line: -ScriptsForProject=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/TecEstalberiana2.uproject\" Turnkey -command=VerifySdk -platform=Android -UpdateIfNeeded -EditorIO -EditorIOPort=53079 -project=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/TecEstalberiana2.uproject\" BuildCookRun -nop4 -utf8output -nocompileeditor -skipbuildeditor -cook -project=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/TecEst",
+        "metadata": {
+          "post_date": "\u200e12-04-202406:49 PM",
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "error_type": "packaging_error",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86969299941&search-result-uid=1267528",
+          "has_solution": false,
+          "chunk_index": 2,
+          "chunk_type": "content",
+          "forum": "meta",
+          "original_id": "391230e8732b3d19b8bb788d6d9534b2"
+        },
+        "distance": 0.5821094512939453
+      },
+      {
+        "id": "391230e8732b3d19b8bb788d6d9534b2_content_4",
+        "document": "oft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe\nUATHelper: Packaging (Android (ASTC)): Executing commands...\nUATHelper: Packaging (Android (ASTC)): Installed Sdk validity:\nUATHelper: Packaging (Android (ASTC)): Android: (Status=Valid, MinAllowed_Sdk=r25b, MaxAllowed_Sdk=r26c, Current_Sdk=r25b, Allowed_AutoSdk=r25b, Current_AutoSdk=, Flags=\"InstalledSdk_ValidVersionExists, Support_FullSdk, Sdk_HasBestVersion\")\nUATHelper: Packaging (Android (ASTC)): Scanning for envvar changes...\nUATHelper: Packaging (Android (ASTC)): ... done!\nUATHelper: Packaging (Android (ASTC)): Cleaning Temp Paths...\nUATHelper: Packaging (Android (ASTC)): BUILD SUCCESSFUL\nUATHelper: Packaging (Android (ASTC)): Setting up ProjectParams for C:\\Users\\Ezcrane\\OneDrive\\Documentos\\Unreal Projects\\TecEstalberiana2\\TecEstalberiana2.uproject\nUATHelper: Packaging (Android (ASTC)): ********** BUILD COMMAND STARTED **********\nUATHelper: Packaging (Android (ASTC)): Running: C:\\Program Files\\Epic Games\\UE_5.4\\Eng",
+        "metadata": {
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86969299941&search-result-uid=1267528",
+          "error_type": "packaging_error",
+          "forum": "meta",
+          "post_date": "\u200e12-04-202406:49 PM",
+          "chunk_index": 4,
+          "original_id": "391230e8732b3d19b8bb788d6d9534b2",
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "has_solution": false,
+          "chunk_type": "content"
+        },
+        "distance": 0.5894036889076233
+      },
+      {
+        "id": "460eb97626cbfb785c32aad6328a9513_content_5",
+        "document": "in\\MSBuild.exe\nUATHelper: Packaging (Android (ASTC)): Executing commands...\nUATHelper: Packaging (Android (ASTC)): Installed Sdk validity:\nUATHelper: Packaging (Android (ASTC)): Android: (Status=Valid, MinAllowed_Sdk=r25b, MaxAllowed_Sdk=r26c, Current_Sdk=r25b, Allowed_AutoSdk=r25b, Current_AutoSdk=, Flags=\"InstalledSdk_ValidVersionExists, Support_FullSdk, Sdk_HasBestVersion\")\nUATHelper: Packaging (Android (ASTC)): Scanning for envvar changes...\nUATHelper: Packaging (Android (ASTC)): ... done!\nUATHelper: Packaging (Android (ASTC)): Cleaning Temp Paths...\nUATHelper: Packaging (Android (ASTC)): BUILD SUCCESSFUL\nUATHelper: Packaging (Android (ASTC)): Setting up ProjectParams for C:\\Users\\Ezcrane\\OneDrive\\Documentos\\Unreal Projects\\TecEstalberiana2\\TecEstalberiana2.uproject\nUATHelper: Packagin",
+        "metadata": {
+          "original_id": "460eb97626cbfb785c32aad6328a9513",
+          "forum": "meta",
+          "chunk_index": 5,
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "post_date": "\u200e12-04-202406:49 PM",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86974404254&search-result-uid=1267528",
+          "has_solution": false,
+          "chunk_type": "content",
+          "error_type": "packaging_error"
+        },
+        "distance": 0.5926467180252075
+      },
+      {
+        "id": "391230e8732b3d19b8bb788d6d9534b2_content_3",
+        "document": "ecEstalberiana2/TecEstalberiana2.uproject\" BuildCookRun -nop4 -utf8output -nocompileeditor -skipbuildeditor -cook -project=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/TecEstalberiana2.uproject\" -unrealexe=\"C:\\Program Files\\Epic Games\\UE_5.4\n\\Engine\\Binaries\\Win64\\UnrealEditor-Cmd.exe\" -platform=Android -cookflavor=ASTC -installed -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/Quest2\" -clientconfig=Development -nocompile -nocompileuat\nUATHelper: Packaging (Android (ASTC)): Initializing script modules...\nUATHelper: Packaging (Android (ASTC)): Total script module initialization time: 0.20 s.\nUATHelper: Packaging (Android (ASTC)): Using C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe\nUATHelper: Packaging (Android (ASTC)): Executing commands...\nUATHelper: Packaging (Android (ASTC)): Installed Sdk validity:\nUATHelper: ",
+        "metadata": {
+          "forum": "meta",
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "post_date": "\u200e12-04-202406:49 PM",
+          "original_id": "391230e8732b3d19b8bb788d6d9534b2",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86969299941&search-result-uid=1267528",
+          "error_type": "packaging_error",
+          "chunk_type": "content",
+          "chunk_index": 3,
+          "has_solution": false
+        },
+        "distance": 0.6010590195655823
+      },
+      {
+        "id": "460eb97626cbfb785c32aad6328a9513_content_4",
+        "document": "alberiana2.uproject\" -unrealexe=\"C:\\Program Files\\Epic Games\\UE_5.4\n\\Engine\\Binaries\\Win64\\UnrealEditor-Cmd.exe\" -platform=Android -cookflavor=ASTC -installed -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/Quest2\" -clientconfig=Development -nocompile -nocompileuat\nUATHelper: Packaging (Android (ASTC)): Initializing script modules...\nUATHelper: Packaging (Android (ASTC)): Total script module initialization time: 0.20 s.\nUATHelper: Packaging (Android (ASTC)): Using C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe\nUATHelper: Packaging (Android (ASTC)): Executing commands...\nUATHelper: Packaging (Android (ASTC)): Installed Sdk validity:\nUATHelper: ",
+        "metadata": {
+          "has_solution": false,
+          "post_date": "\u200e12-04-202406:49 PM",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86974404254&search-result-uid=1267528",
+          "original_id": "460eb97626cbfb785c32aad6328a9513",
+          "chunk_index": 4,
+          "error_type": "packaging_error",
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "forum": "meta",
+          "chunk_type": "content"
+        },
+        "distance": 0.6110361814498901
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "APK Signing Error",
+    "log_content": "UATHelper: Packaging (Android): Error: Failed to sign APK: jarsigner error",
+    "expected_error_type": "packaging_error",
+    "description": "APK signing process failure",
+    "success": true,
+    "error_classification": {
+      "error_type": "packaging_error",
+      "confidence": 1.0,
+      "severity": "critical",
+      "description": "Packaging Error detected with 3 indicators",
+      "indicators_found": [
+        "sign APK",
+        "jarsigner",
+        "error"
+      ],
+      "solutions": [
+        {
+          "solution_id": "packaging_error_001",
+          "error_type": "packaging_error",
+          "title": "Fix Common Android Packaging Errors",
+          "description": "Android packaging can fail due to misconfigured SDK paths, Gradle issues, or manifest errors.",
+          "steps": [
+            "Verify that the Android SDK and NDK paths are set correctly in Project Settings -> Platforms -> Android",
+            "Ensure you have the correct Java Development Kit (JDK) installed",
+            "Delete the Intermediate and Saved folders from your project directory",
+            "Try packaging a clean, empty project to isolate the issue",
+            "Check the AndroidManifest.xml for any errors"
+          ],
+          "code_changes": null,
+          "config_changes": null,
+          "verification_steps": [
+            "Verify that the project packages successfully for Android",
+            "Test the APK on a Quest device"
+          ],
+          "confidence": 0.9,
+          "source": "real_analysis"
+        }
+      ],
+      "context": {
+        "error_lines": [
+          {
+            "line_num": 1,
+            "content": "UATHelper: Packaging (Android): Error: Failed to sign APK: jarsigner error"
+          }
+        ],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "UATHelper: Packaging (Android): Error: Failed to sign APK: jarsigner error"
+          }
+        ],
+        "total_errors": 1,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 100.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 74,
+        "analysis_timestamp": "2025-06-24T01:52:47.083185",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "460eb97626cbfb785c32aad6328a9513_content_5",
+        "document": "in\\MSBuild.exe\nUATHelper: Packaging (Android (ASTC)): Executing commands...\nUATHelper: Packaging (Android (ASTC)): Installed Sdk validity:\nUATHelper: Packaging (Android (ASTC)): Android: (Status=Valid, MinAllowed_Sdk=r25b, MaxAllowed_Sdk=r26c, Current_Sdk=r25b, Allowed_AutoSdk=r25b, Current_AutoSdk=, Flags=\"InstalledSdk_ValidVersionExists, Support_FullSdk, Sdk_HasBestVersion\")\nUATHelper: Packaging (Android (ASTC)): Scanning for envvar changes...\nUATHelper: Packaging (Android (ASTC)): ... done!\nUATHelper: Packaging (Android (ASTC)): Cleaning Temp Paths...\nUATHelper: Packaging (Android (ASTC)): BUILD SUCCESSFUL\nUATHelper: Packaging (Android (ASTC)): Setting up ProjectParams for C:\\Users\\Ezcrane\\OneDrive\\Documentos\\Unreal Projects\\TecEstalberiana2\\TecEstalberiana2.uproject\nUATHelper: Packagin",
+        "metadata": {
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "post_date": "\u200e12-04-202406:49 PM",
+          "chunk_type": "content",
+          "error_type": "packaging_error",
+          "chunk_index": 5,
+          "has_solution": false,
+          "original_id": "460eb97626cbfb785c32aad6328a9513",
+          "forum": "meta",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86974404254&search-result-uid=1267528"
+        },
+        "distance": 0.6373429894447327
+      },
+      {
+        "id": "391230e8732b3d19b8bb788d6d9534b2_content_2",
+        "document": "=Android -cookflavor=ASTC -installed -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/Quest2\" -clientconfig=Development\" -nocompile -nocompileuat ]\nUATHelper: Packaging (Android (ASTC)): Running AutomationTool...\nUATHelper: Packaging (Android (ASTC)): Using bundled DotNet SDK version: 6.0.302\nUATHelper: Packaging (Android (ASTC)): Starting AutomationTool...\nUATHelper: Packaging (Android (ASTC)): Parsing command line: -ScriptsForProject=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/TecEstalberiana2.uproject\" Turnkey -command=VerifySdk -platform=Android -UpdateIfNeeded -EditorIO -EditorIOPort=53079 -project=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/TecEstalberiana2.uproject\" BuildCookRun -nop4 -utf8output -nocompileeditor -skipbuildeditor -cook -project=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/TecEst",
+        "metadata": {
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86969299941&search-result-uid=1267528",
+          "error_type": "packaging_error",
+          "has_solution": false,
+          "original_id": "391230e8732b3d19b8bb788d6d9534b2",
+          "chunk_type": "content",
+          "post_date": "\u200e12-04-202406:49 PM",
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "forum": "meta",
+          "chunk_index": 2
+        },
+        "distance": 0.6443330645561218
+      },
+      {
+        "id": "391230e8732b3d19b8bb788d6d9534b2_content_4",
+        "document": "oft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe\nUATHelper: Packaging (Android (ASTC)): Executing commands...\nUATHelper: Packaging (Android (ASTC)): Installed Sdk validity:\nUATHelper: Packaging (Android (ASTC)): Android: (Status=Valid, MinAllowed_Sdk=r25b, MaxAllowed_Sdk=r26c, Current_Sdk=r25b, Allowed_AutoSdk=r25b, Current_AutoSdk=, Flags=\"InstalledSdk_ValidVersionExists, Support_FullSdk, Sdk_HasBestVersion\")\nUATHelper: Packaging (Android (ASTC)): Scanning for envvar changes...\nUATHelper: Packaging (Android (ASTC)): ... done!\nUATHelper: Packaging (Android (ASTC)): Cleaning Temp Paths...\nUATHelper: Packaging (Android (ASTC)): BUILD SUCCESSFUL\nUATHelper: Packaging (Android (ASTC)): Setting up ProjectParams for C:\\Users\\Ezcrane\\OneDrive\\Documentos\\Unreal Projects\\TecEstalberiana2\\TecEstalberiana2.uproject\nUATHelper: Packaging (Android (ASTC)): ********** BUILD COMMAND STARTED **********\nUATHelper: Packaging (Android (ASTC)): Running: C:\\Program Files\\Epic Games\\UE_5.4\\Eng",
+        "metadata": {
+          "post_date": "\u200e12-04-202406:49 PM",
+          "chunk_index": 4,
+          "error_type": "packaging_error",
+          "original_id": "391230e8732b3d19b8bb788d6d9534b2",
+          "forum": "meta",
+          "chunk_type": "content",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86969299941&search-result-uid=1267528",
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "has_solution": false
+        },
+        "distance": 0.6532451510429382
+      },
+      {
+        "id": "460eb97626cbfb785c32aad6328a9513_content_4",
+        "document": "alberiana2.uproject\" -unrealexe=\"C:\\Program Files\\Epic Games\\UE_5.4\n\\Engine\\Binaries\\Win64\\UnrealEditor-Cmd.exe\" -platform=Android -cookflavor=ASTC -installed -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory=\"C:/Users/Ezcrane/OneDrive/Documentos/Unreal Projects/TecEstalberiana2/Quest2\" -clientconfig=Development -nocompile -nocompileuat\nUATHelper: Packaging (Android (ASTC)): Initializing script modules...\nUATHelper: Packaging (Android (ASTC)): Total script module initialization time: 0.20 s.\nUATHelper: Packaging (Android (ASTC)): Using C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\MSBuild\\Current\\Bin\\MSBuild.exe\nUATHelper: Packaging (Android (ASTC)): Executing commands...\nUATHelper: Packaging (Android (ASTC)): Installed Sdk validity:\nUATHelper: ",
+        "metadata": {
+          "original_id": "460eb97626cbfb785c32aad6328a9513",
+          "error_type": "packaging_error",
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "chunk_index": 4,
+          "has_solution": false,
+          "chunk_type": "content",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86974404254&search-result-uid=1267528",
+          "forum": "meta",
+          "post_date": "\u200e12-04-202406:49 PM"
+        },
+        "distance": 0.6561355590820312
+      },
+      {
+        "id": "391230e8732b3d19b8bb788d6d9534b2_content_5",
+        "document": "ana2\\TecEstalberiana2.uproject\nUATHelper: Packaging (Android (ASTC)): ********** BUILD COMMAND STARTED **********\nUATHelper: Packaging (Android (ASTC)): Running: C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Binaries\\ThirdParty\\DotNet\\6.0.302\\windows\\dotnet.exe \"C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Binaries\\DotNET\\UnrealBuildTool\\UnrealBuildTool.dll\" TecEstalberiana2 Android Development -Project=\"C:\\Users\\Ezcrane\\OneDrive\\Documentos\\Unreal Projects\\TecEstalberiana2\\TecEstalberiana2.uproject\" -Manifest=\"C:\\Users\\Ezcrane\\OneDrive\\Documentos\\Unreal Projects\\TecEstalberiana2\\Intermediate\\Build\\Manifest.xml\" -remoteini=\"C:\\Users\\Ezcrane\\OneDrive\\Documentos\\Unreal Projects\\TecEstalberiana2\" -skipdeploy -log\n=\"C:\\Users\\Ezcrane\\AppData\\Roaming\\Unreal Engine\\AutomationTool\\Logs\\C+Program+Files+Epic+Games+UE_5.4\\UBA-TecEstalberiana2-Android-Development.txt\"\nUATHelper: Packaging (Android (ASTC)): Log file: C:\\Users\\Ezcrane\\AppData\\Roaming\\Unreal Engine\\AutomationTool\\Logs\\C+Program+Files+Epic+Ga",
+        "metadata": {
+          "original_id": "391230e8732b3d19b8bb788d6d9534b2",
+          "has_solution": false,
+          "forum": "meta",
+          "title": "Building errors for Quest 2 (APK package) - Meta Community Forums - 1267528",
+          "chunk_type": "content",
+          "error_type": "packaging_error",
+          "chunk_index": 5,
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Building-errors-for-Quest-2-APK-package/m-p/1267528?search-action-id=86969299941&search-result-uid=1267528",
+          "post_date": "\u200e12-04-202406:49 PM"
+        },
+        "distance": 0.6661734580993652
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "MetaXR Plugin Conflict",
+    "log_content": "LogPluginManager: Error: Plugin 'MetaXR' failed to load because module 'OculusXRHMD' could not be found",
+    "expected_error_type": "plugin_conflict",
+    "description": "MetaXR plugin module dependency missing",
+    "success": true,
+    "error_classification": {
+      "error_type": "plugin_conflict",
+      "confidence": 1.0,
+      "severity": "critical",
+      "description": "Plugin Conflict detected with 3 indicators",
+      "indicators_found": [
+        "MetaXR",
+        "failed to load",
+        "OculusXRHMD"
+      ],
+      "solutions": [
+        {
+          "solution_id": "plugin_conflict_001",
+          "error_type": "plugin_conflict",
+          "title": "Disable OpenXR Plugin for Quest Development",
+          "description": "Quest development requires MetaXR plugin only. OpenXR conflicts with MetaXR and must be disabled.",
+          "steps": [
+            "Open your Unreal Engine project",
+            "Go to Edit \u2192 Plugins",
+            "Search for 'OpenXR'",
+            "Uncheck/Disable the OpenXR plugin",
+            "Keep MetaXR plugin enabled",
+            "Restart Unreal Engine",
+            "Clean and rebuild your project"
+          ],
+          "code_changes": null,
+          "config_changes": {
+            "DefaultEngine.ini": {
+              "[Plugins]": {
+                "OpenXREnabled": "False",
+                "MetaXREnabled": "True"
+              }
+            }
+          },
+          "verification_steps": [
+            "Check that only MetaXR appears in enabled XR plugins",
+            "Verify no XR plugin conflict errors in output log",
+            "Test packaging for Android without errors"
+          ],
+          "confidence": 0.98,
+          "source": "real_analysis"
+        }
+      ],
+      "context": {
+        "error_lines": [
+          {
+            "line_num": 1,
+            "content": "LogPluginManager: Error: Plugin 'MetaXR' failed to load because module 'OculusXRHMD' could not be found"
+          }
+        ],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "LogPluginManager: Error: Plugin 'MetaXR' failed to load because module 'OculusXRHMD' could not be found"
+          }
+        ],
+        "total_errors": 1,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 100.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 103,
+        "analysis_timestamp": "2025-06-24T01:52:47.806883",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "synthetic_plugin_conflict_2_content_0",
+        "document": "From post titled 'MetaXR OpenXR Plugin Conflict Resolution' (https://synthetic.example.com/plugin_conflict):\n\n                SOLUTION: Resolved plugin conflict between MetaXR and OpenXR.\n                \n                Error: LogPluginManager: Error: Plugin 'MetaXR' failed to load because module 'OculusXRHMD' could not be found\n                \n                For Quest development, you MUST disable OpenXR plugin:\n                1. Go to Edit \u2192 Plugins\n                2. Search for \"OpenXR\" \n                3. Uncheck/Disable OpenXR plugin\n                4. Keep MetaXR plugin enabled\n                5. Restart Unreal Engine\n                6. Clean and rebuild project\n                \n                Only MetaXR should be active for Quest development.\n                ",
+        "metadata": {
+          "chunk_type": "content",
+          "forum": "synthetic",
+          "source_url": "https://synthetic.example.com/plugin_conflict",
+          "title": "MetaXR OpenXR Plugin Conflict Resolution",
+          "has_solution": true,
+          "original_id": "synthetic_plugin_conflict_2",
+          "chunk_index": 0,
+          "error_type": "plugin_conflict",
+          "post_date": "2025-06-24T01:48:28.491304"
+        },
+        "distance": 0.4120402932167053
+      },
+      {
+        "id": "synthetic_plugin_conflict_2_solution_0",
+        "document": "SOLUTION for post titled 'MetaXR OpenXR Plugin Conflict Resolution' from https://synthetic.example.com/plugin_conflict:\n\n                SOLUTION: Resolved plugin conflict between MetaXR and OpenXR.\n                \n                Error: LogPluginManager: Error: Plugin 'MetaXR' failed to load because module 'OculusXRHMD' could not be found\n                \n                For Quest development, you MUST disable OpenXR plugin:\n                1. Go to Edit \u2192 Plugins\n                2. Search for \"OpenXR\" \n                3. Uncheck/Disable OpenXR plugin\n                4. Keep MetaXR plugin enabled\n                5. Restart Unreal Engine\n                6. Clean and rebuild project\n                \n                Only MetaXR should be active for Quest development.\n                ",
+        "metadata": {
+          "error_type": "plugin_conflict",
+          "chunk_type": "solution",
+          "original_id": "synthetic_plugin_conflict_2",
+          "post_date": "2025-06-24T01:48:28.491304",
+          "has_solution": true,
+          "forum": "synthetic",
+          "title": "MetaXR OpenXR Plugin Conflict Resolution",
+          "source_url": "https://synthetic.example.com/plugin_conflict"
+        },
+        "distance": 0.4171769618988037
+      },
+      {
+        "id": "adf22edfe179179c67ecc28ab41f7547_content_0",
+        "document": "From post titled 'Solved: Oculus Integration Plugin v44 crashes unreal engin... - Meta Community Forums - 991873' (https://communityforums.atmeta.com/t5/Unreal-Development/Oculus-Integration-Plugin-v44-crashes-unreal-engine-5-0-3/m-p/991873#M7067):\nHello, I'm trying to install the Oculus integration plugin to the official release of Unreal Engine 5.0.3 downloaded from the Epic Games Store, but whenever I copy this plugin into the Plugins folder of either the Project or the UE5 installation folder I get the following error:\n\"Plugin 'OculusXR' failed to load because module 'OculusXRHMD' could not be loaded. There may be an operating system error or the module may not be properly set up.\"\nWhat causes this error? Is there a way to fix this error?\nSolved!\nGo to Solution.\n\n==========\nNext Post in Thread\n==========\n\nForgot to turn off the default Oculus VR Plugin before activating the Meta XR Plugin and that caused the crash, my bad\nView solution in original post\n\n==========\nNext Post in Thread\n==========\n\nForgot to turn off the default Ocu",
+        "metadata": {
+          "title": "Solved: Oculus Integration Plugin v44 crashes unreal engin... - Meta Community Forums - 991873",
+          "has_solution": false,
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Oculus-Integration-Plugin-v44-crashes-unreal-engine-5-0-3/m-p/991873#M7067",
+          "forum": "meta",
+          "original_id": "adf22edfe179179c67ecc28ab41f7547",
+          "error_type": "other",
+          "chunk_type": "content",
+          "post_date": "\u200e10-12-202201:32 PM",
+          "chunk_index": 0
+        },
+        "distance": 0.5100160241127014
+      },
+      {
+        "id": "adf22edfe179179c67ecc28ab41f7547_content_1",
+        "document": "Plugin and that caused the crash, my bad\nView solution in original post\n\n==========\nNext Post in Thread\n==========\n\nForgot to turn off the default Oculus VR Plugin before activating the Meta XR Plugin and that caused the crash, my bad",
+        "metadata": {
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Oculus-Integration-Plugin-v44-crashes-unreal-engine-5-0-3/m-p/991873#M7067",
+          "chunk_index": 1,
+          "has_solution": false,
+          "post_date": "\u200e10-12-202201:32 PM",
+          "error_type": "other",
+          "chunk_type": "content",
+          "forum": "meta",
+          "title": "Solved: Oculus Integration Plugin v44 crashes unreal engin... - Meta Community Forums - 991873",
+          "original_id": "adf22edfe179179c67ecc28ab41f7547"
+        },
+        "distance": 0.5216491222381592
+      },
+      {
+        "id": "7fceb89e2f176fc0bf7303156a84fb17_content_0",
+        "document": "From post titled 'MetaXR plugin v49 bugs with UE 5.1.1 from Epic and... - Meta Community Forums - 1034116' (https://communityforums.atmeta.com/t5/Unreal-Development/MetaXR-plugin-v49-bugs-with-UE-5-1-1-from-Epic-and-the-standard/m-p/1034116?search-action-id=86969205615&search-result-uid=1034116):\nI share these errors that I see have already happened to several people, including me:\nFirst error:\nIf you go to Project Settings - Plugins - MetaXR - General,\u00a0 and change the XR API from\n\u201dOculus OVRPlugin + OpenXR backend (current recomended)\u201d\nto\n\u201cEpic Native OpenXR with Oculus vendor extensions\u201d, after the forced restart generates this exception:\nUnhandled Exception: EXCEPTION_ACCESS_VIOLATION 0x0000000000000000\nUnrealEditor_OculusXREyeTracker\nUnrealEditor_Renderer\nUnrealEditor_Renderer\nUnrealEditor_Renderer\nUnrealEditor_Renderer\nUnrealEditor_Renderer\nUnrealEditor_Renderer\nUnrealEditor_Renderer\nUnrealEditor_Core\nUnrealEditor_Core\nUnrealEditor_RenderCore\nUnrealEditor_RenderCore\nUnrealEditor_Core\nUnrealEditor_Core\nkernel32\nntdll\nI see in Git that the change is to add the entry \"XrApi=NativeOpenXR\" to the {Project Path}\\Config \"DefaultEngine.ini\" file.\nSecond bug:\nWhen we create a Windows version (which worked native on Android and MetaXR Plugin in Quest 2) and run it in Quest 2 Link fr",
+        "metadata": {
+          "post_date": "\u200e03-06-202311:20 AM",
+          "chunk_index": 0,
+          "forum": "meta",
+          "error_type": "other",
+          "title": "MetaXR plugin v49 bugs with UE 5.1.1 from Epic and... - Meta Community Forums - 1034116",
+          "chunk_type": "content",
+          "original_id": "7fceb89e2f176fc0bf7303156a84fb17",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/MetaXR-plugin-v49-bugs-with-UE-5-1-1-from-Epic-and-the-standard/m-p/1034116?search-action-id=86969205615&search-result-uid=1034116",
+          "has_solution": false
+        },
+        "distance": 0.5721167922019958
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "OpenXR Plugin Version Mismatch",
+    "log_content": "LogOpenXRHMD: Error: OpenXR runtime version 1.0.25 is incompatible with plugin version 1.0.28",
+    "expected_error_type": "sdk_mismatch",
+    "description": "OpenXR runtime and plugin version incompatibility",
+    "success": true,
+    "error_classification": {
+      "error_type": "sdk_mismatch",
+      "confidence": 1.0,
+      "severity": "critical",
+      "description": "Sdk Mismatch detected with 4 indicators",
+      "indicators_found": [
+        "OpenXR",
+        "runtime version",
+        "incompatible",
+        "plugin version"
+      ],
+      "solutions": [
+        {
+          "solution_id": "sdk_mismatch_001",
+          "error_type": "sdk_mismatch",
+          "title": "Set Target SDK Version to 32 for Quest Compatibility",
+          "description": "Quest development requires Android Target SDK version 32. SDK 33+ introduces breaking changes for VR applications.",
+          "steps": [
+            "Open Project Settings in Unreal Engine",
+            "Navigate to Platforms \u2192 Android",
+            "Find 'APK Packaging' section",
+            "Set 'Target SDK Version' to 32",
+            "Set 'Minimum SDK Version' to 23",
+            "Save project settings",
+            "Clean and rebuild project"
+          ],
+          "code_changes": null,
+          "config_changes": {
+            "DefaultEngine.ini": {
+              "[/Script/AndroidRuntimeSettings.AndroidRuntimeSettings]": {
+                "TargetSDKVersion": "32",
+                "MinSDKVersion": "23",
+                "BuildToolsVersion": "32.0.0"
+              }
+            }
+          },
+          "verification_steps": [
+            "Check Project Settings shows Target SDK = 32",
+            "Verify no SDK version warnings in packaging log",
+            "Test APK installation on Quest device"
+          ],
+          "confidence": 0.96,
+          "source": "real_analysis"
+        }
+      ],
+      "context": {
+        "error_lines": [
+          {
+            "line_num": 1,
+            "content": "LogOpenXRHMD: Error: OpenXR runtime version 1.0.25 is incompatible with plugin version 1.0.28"
+          }
+        ],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "LogOpenXRHMD: Error: OpenXR runtime version 1.0.25 is incompatible with plugin version 1.0.28"
+          }
+        ],
+        "total_errors": 1,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 100.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 93,
+        "analysis_timestamp": "2025-06-24T01:52:48.516487",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "45c9fd7e3d1c4b2a05cd785be2c26269_content_14",
+        "document": "2 (the one installed by MRTK3) to 1.10.0.\nSo i've tried running the app on quest\nwithout\nmagicleap sdk but\nwith openxr plugin 1.10.0\ninstead of 1.8.2, and : it crashes.\nSo the issue comes from MRTK3 + openXR version with meta support i guess ?\nMy question is (i'm working on magileap and MRTK side but i'll consider every parallel lead), is there a known issue between MetaXR SDK and unity OpenXR Plugin 1.10 ?\nthanks\n\n==========\nNext Post in Thread\n==========\n\nUpdate : forcing OpenXR plugin to v.1.11.0 (package manager didn't notify me about an update being available) seems to have solved the issue, wether it's using Vulkan or OpenGL",
+        "metadata": {
+          "source_url": "https://communityforums.atmeta.com/t5/OpenXR-Development/Unity-OpenXR-crash-when-magicleap-unity-sdk-package/m-p/1214304#M837",
+          "post_date": "\u200e07-05-202402:19 AM",
+          "chunk_index": 14,
+          "forum": "meta",
+          "title": "Solved: [Unity] OpenXR crash when magicleap unity sdk pack... - Meta Community Forums - 1214304",
+          "error_type": "other",
+          "has_solution": false,
+          "original_id": "45c9fd7e3d1c4b2a05cd785be2c26269",
+          "chunk_type": "content"
+        },
+        "distance": 0.5890185832977295
+      },
+      {
+        "id": "synthetic_plugin_conflict_2_content_0",
+        "document": "From post titled 'MetaXR OpenXR Plugin Conflict Resolution' (https://synthetic.example.com/plugin_conflict):\n\n                SOLUTION: Resolved plugin conflict between MetaXR and OpenXR.\n                \n                Error: LogPluginManager: Error: Plugin 'MetaXR' failed to load because module 'OculusXRHMD' could not be found\n                \n                For Quest development, you MUST disable OpenXR plugin:\n                1. Go to Edit \u2192 Plugins\n                2. Search for \"OpenXR\" \n                3. Uncheck/Disable OpenXR plugin\n                4. Keep MetaXR plugin enabled\n                5. Restart Unreal Engine\n                6. Clean and rebuild project\n                \n                Only MetaXR should be active for Quest development.\n                ",
+        "metadata": {
+          "chunk_type": "content",
+          "title": "MetaXR OpenXR Plugin Conflict Resolution",
+          "original_id": "synthetic_plugin_conflict_2",
+          "has_solution": true,
+          "error_type": "plugin_conflict",
+          "post_date": "2025-06-24T01:48:28.491304",
+          "forum": "synthetic",
+          "source_url": "https://synthetic.example.com/plugin_conflict",
+          "chunk_index": 0
+        },
+        "distance": 0.5908015370368958
+      },
+      {
+        "id": "synthetic_plugin_conflict_2_solution_0",
+        "document": "SOLUTION for post titled 'MetaXR OpenXR Plugin Conflict Resolution' from https://synthetic.example.com/plugin_conflict:\n\n                SOLUTION: Resolved plugin conflict between MetaXR and OpenXR.\n                \n                Error: LogPluginManager: Error: Plugin 'MetaXR' failed to load because module 'OculusXRHMD' could not be found\n                \n                For Quest development, you MUST disable OpenXR plugin:\n                1. Go to Edit \u2192 Plugins\n                2. Search for \"OpenXR\" \n                3. Uncheck/Disable OpenXR plugin\n                4. Keep MetaXR plugin enabled\n                5. Restart Unreal Engine\n                6. Clean and rebuild project\n                \n                Only MetaXR should be active for Quest development.\n                ",
+        "metadata": {
+          "post_date": "2025-06-24T01:48:28.491304",
+          "source_url": "https://synthetic.example.com/plugin_conflict",
+          "forum": "synthetic",
+          "chunk_type": "solution",
+          "original_id": "synthetic_plugin_conflict_2",
+          "error_type": "plugin_conflict",
+          "has_solution": true,
+          "title": "MetaXR OpenXR Plugin Conflict Resolution"
+        },
+        "distance": 0.6005904674530029
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_5",
+        "document": "ement.XRGeneralSettings:AttemptStartXRSDKOnBeforeSplashScreen () (at Library/PackageCache/com.unity.xr.management@4.0.1/Runtime/XRGeneralSettings.cs:158)\n\nUnity v2021.1.5f1, Oculus Utilities v1.51.0, OVRPlugin v1.51.1, SDK v1.60.0.\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1161)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nSystemHeadset Oculus_Link_Quest\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1166)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nTcpListener started. Local endpoint: 0.0.0.0:32419\nUnityEngine.Debug:LogFormat (string,object[])\nOVRNetwork/OVRNetworkTcpServer:StartListening (int) (at Assets/Oculus/VR/Scripts/",
+        "metadata": {
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "error_type": "black_screen",
+          "has_solution": false,
+          "forum": "meta",
+          "chunk_index": 5,
+          "chunk_type": "content",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "post_date": "\u200e05-16-202101:27 AM"
+        },
+        "distance": 0.6073945760726929
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_9",
+        "document": " () (at Library/PackageCache/com.unity.xr.oculus@1.9.0/Runtime/OculusLoader.cs:182)\nUnityEngine.XR.Management.XRGeneralSettings:AttemptStartXRSDKOnBeforeSplashScreen () (at Library/PackageCache/com.unity.xr.management@4.0.1/Runtime/XRGeneralSettings.cs:158)\n\nUnity v2021.1.5f1, Oculus Utilities v1.51.0, OVRPlugin v1.51.1, SDK v1.60.0.\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1161)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nSystemHeadset Oculus_Link_Quest\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1166)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nTcpListener started. Local endpoint: 0.0.0.0:32419\nUnityEngine.Debug:LogFo",
+        "metadata": {
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "forum": "meta",
+          "chunk_index": 9,
+          "chunk_type": "content",
+          "has_solution": false,
+          "post_date": "\u200e05-16-202101:27 AM",
+          "error_type": "black_screen",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440"
+        },
+        "distance": 0.6082043647766113
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "Multiple XR Plugins",
+    "log_content": "LogXRSystem: Warning: Multiple XR plugins detected: OculusXR, OpenXR. This may cause conflicts.",
+    "expected_error_type": "plugin_conflict",
+    "description": "Multiple XR systems causing conflicts",
+    "success": true,
+    "error_classification": {
+      "error_type": "plugin_conflict",
+      "confidence": 1.0,
+      "severity": "critical",
+      "description": "Plugin Conflict detected with 4 indicators",
+      "indicators_found": [
+        "Multiple XR plugins",
+        "conflicts",
+        "OpenXR",
+        "OculusXR"
+      ],
+      "solutions": [
+        {
+          "solution_id": "plugin_conflict_001",
+          "error_type": "plugin_conflict",
+          "title": "Disable OpenXR Plugin for Quest Development",
+          "description": "Quest development requires MetaXR plugin only. OpenXR conflicts with MetaXR and must be disabled.",
+          "steps": [
+            "Open your Unreal Engine project",
+            "Go to Edit \u2192 Plugins",
+            "Search for 'OpenXR'",
+            "Uncheck/Disable the OpenXR plugin",
+            "Keep MetaXR plugin enabled",
+            "Restart Unreal Engine",
+            "Clean and rebuild your project"
+          ],
+          "code_changes": null,
+          "config_changes": {
+            "DefaultEngine.ini": {
+              "[Plugins]": {
+                "OpenXREnabled": "False",
+                "MetaXREnabled": "True"
+              }
+            }
+          },
+          "verification_steps": [
+            "Check that only MetaXR appears in enabled XR plugins",
+            "Verify no XR plugin conflict errors in output log",
+            "Test packaging for Android without errors"
+          ],
+          "confidence": 0.98,
+          "source": "real_analysis"
+        }
+      ],
+      "context": {
+        "error_lines": [],
+        "warning_lines": [
+          {
+            "line_num": 1,
+            "content": "LogXRSystem: Warning: Multiple XR plugins detected: OculusXR, OpenXR. This may cause conflicts."
+          }
+        ],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "LogXRSystem: Warning: Multiple XR plugins detected: OculusXR, OpenXR. This may cause conflicts."
+          }
+        ],
+        "total_errors": 0,
+        "total_warnings": 1,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 0.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 95,
+        "analysis_timestamp": "2025-06-24T01:52:49.213550",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "synthetic_plugin_conflict_2_content_0",
+        "document": "From post titled 'MetaXR OpenXR Plugin Conflict Resolution' (https://synthetic.example.com/plugin_conflict):\n\n                SOLUTION: Resolved plugin conflict between MetaXR and OpenXR.\n                \n                Error: LogPluginManager: Error: Plugin 'MetaXR' failed to load because module 'OculusXRHMD' could not be found\n                \n                For Quest development, you MUST disable OpenXR plugin:\n                1. Go to Edit \u2192 Plugins\n                2. Search for \"OpenXR\" \n                3. Uncheck/Disable OpenXR plugin\n                4. Keep MetaXR plugin enabled\n                5. Restart Unreal Engine\n                6. Clean and rebuild project\n                \n                Only MetaXR should be active for Quest development.\n                ",
+        "metadata": {
+          "chunk_index": 0,
+          "has_solution": true,
+          "error_type": "plugin_conflict",
+          "post_date": "2025-06-24T01:48:28.491304",
+          "chunk_type": "content",
+          "forum": "synthetic",
+          "title": "MetaXR OpenXR Plugin Conflict Resolution",
+          "source_url": "https://synthetic.example.com/plugin_conflict",
+          "original_id": "synthetic_plugin_conflict_2"
+        },
+        "distance": 0.5176583528518677
+      },
+      {
+        "id": "synthetic_plugin_conflict_2_solution_0",
+        "document": "SOLUTION for post titled 'MetaXR OpenXR Plugin Conflict Resolution' from https://synthetic.example.com/plugin_conflict:\n\n                SOLUTION: Resolved plugin conflict between MetaXR and OpenXR.\n                \n                Error: LogPluginManager: Error: Plugin 'MetaXR' failed to load because module 'OculusXRHMD' could not be found\n                \n                For Quest development, you MUST disable OpenXR plugin:\n                1. Go to Edit \u2192 Plugins\n                2. Search for \"OpenXR\" \n                3. Uncheck/Disable OpenXR plugin\n                4. Keep MetaXR plugin enabled\n                5. Restart Unreal Engine\n                6. Clean and rebuild project\n                \n                Only MetaXR should be active for Quest development.\n                ",
+        "metadata": {
+          "chunk_type": "solution",
+          "has_solution": true,
+          "forum": "synthetic",
+          "title": "MetaXR OpenXR Plugin Conflict Resolution",
+          "source_url": "https://synthetic.example.com/plugin_conflict",
+          "post_date": "2025-06-24T01:48:28.491304",
+          "error_type": "plugin_conflict",
+          "original_id": "synthetic_plugin_conflict_2"
+        },
+        "distance": 0.5248711109161377
+      },
+      {
+        "id": "d46ac826a78dadc276967287a9f32a4c_content_4",
+        "document": "f1\nOculus XR Plugin 3.3.0\nOculus Integration 53.1 (1.85.0)\nDevice: Quest Pro\nSystem Version 50000390062500330\nVersion 53.0.0.147.132.475553041\nRuntime Version 53.0.0.147.132.475553298\nOS Version SQ3A.220605.009.A1\nPlease let me know if you have any information or if it might be a known issue with my software versions.\nSolved!\nGo to Solution.\n\n==========\nNext Post in Thread\n==========\n\nI don't know how to solve this issue proprly, but I have the same error. It never happens until I load into a specific scene that has some extra UI in it. I think the issue could be something to do with the always on top shader that I have for the UI. Or TextMeshPro maybe.\nI didn't really have time to figure it out, but I unticked \"Symmetric Projection (Vulkan)\" in Project Settings > XR Plug-in Management > O",
+        "metadata": {
+          "forum": "meta",
+          "post_date": "\u200e05-18-202310:41 AM",
+          "title": "Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134",
+          "chunk_index": 4,
+          "chunk_type": "content",
+          "error_type": "other",
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244",
+          "has_solution": false,
+          "original_id": "d46ac826a78dadc276967287a9f32a4c"
+        },
+        "distance": 0.5896490812301636
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_5",
+        "document": "ement.XRGeneralSettings:AttemptStartXRSDKOnBeforeSplashScreen () (at Library/PackageCache/com.unity.xr.management@4.0.1/Runtime/XRGeneralSettings.cs:158)\n\nUnity v2021.1.5f1, Oculus Utilities v1.51.0, OVRPlugin v1.51.1, SDK v1.60.0.\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1161)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nSystemHeadset Oculus_Link_Quest\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1166)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nTcpListener started. Local endpoint: 0.0.0.0:32419\nUnityEngine.Debug:LogFormat (string,object[])\nOVRNetwork/OVRNetworkTcpServer:StartListening (int) (at Assets/Oculus/VR/Scripts/",
+        "metadata": {
+          "chunk_index": 5,
+          "error_type": "black_screen",
+          "chunk_type": "content",
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "post_date": "\u200e05-16-202101:27 AM",
+          "forum": "meta",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "has_solution": false
+        },
+        "distance": 0.5937621593475342
+      },
+      {
+        "id": "adf22edfe179179c67ecc28ab41f7547_content_1",
+        "document": "Plugin and that caused the crash, my bad\nView solution in original post\n\n==========\nNext Post in Thread\n==========\n\nForgot to turn off the default Oculus VR Plugin before activating the Meta XR Plugin and that caused the crash, my bad",
+        "metadata": {
+          "post_date": "\u200e10-12-202201:32 PM",
+          "has_solution": false,
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Oculus-Integration-Plugin-v44-crashes-unreal-engine-5-0-3/m-p/991873#M7067",
+          "error_type": "other",
+          "forum": "meta",
+          "chunk_index": 1,
+          "original_id": "adf22edfe179179c67ecc28ab41f7547",
+          "title": "Solved: Oculus Integration Plugin v44 crashes unreal engin... - Meta Community Forums - 991873",
+          "chunk_type": "content"
+        },
+        "distance": 0.5950084924697876
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "Mobile Shader Compile Error",
+    "log_content": "LogShaderCompilers: Error: Failed to compile shader for platform Android_VULKAN: Syntax error at line 45",
+    "expected_error_type": "shader_compile",
+    "description": "Mobile Vulkan shader compilation syntax error",
+    "success": true,
+    "error_classification": {
+      "error_type": "shader_compile",
+      "confidence": 1.0,
+      "severity": "high",
+      "description": "Shader Compile detected with 3 indicators",
+      "indicators_found": [
+        "compile shader",
+        "Android_VULKAN",
+        "Syntax error"
+      ],
+      "solutions": [
+        {
+          "solution_id": "shader_compile_001",
+          "error_type": "shader_compile",
+          "title": "Fix Shader Compilation Errors",
+          "description": "Shader compilation errors are often caused by syntax errors in material graphs or HLSL code.",
+          "steps": [
+            "Open the material or shader asset that is causing the error",
+            "Look for disconnected pins or incorrect node setups in the material graph",
+            "If using custom HLSL, check for syntax errors like undeclared variables",
+            "Ensure all shader inputs and outputs are correctly configured",
+            "Recompile the shader after making changes"
+          ],
+          "code_changes": null,
+          "config_changes": null,
+          "verification_steps": [
+            "Verify that the material compiles without errors",
+            "Check that the material appears correctly on objects in the scene"
+          ],
+          "confidence": 0.85,
+          "source": "real_analysis"
+        }
+      ],
+      "context": {
+        "error_lines": [
+          {
+            "line_num": 1,
+            "content": "LogShaderCompilers: Error: Failed to compile shader for platform Android_VULKAN: Syntax error at line 45"
+          }
+        ],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "LogShaderCompilers: Error: Failed to compile shader for platform Android_VULKAN: Syntax error at line 45"
+          }
+        ],
+        "total_errors": 1,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 100.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 104,
+        "analysis_timestamp": "2025-06-24T01:52:49.946731",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "synthetic_shader_compile_1_content_0",
+        "document": "From post titled 'Android Vulkan Shader Compilation Fix' (https://synthetic.example.com/shader_compile):\n\n                SOLUTION: Fixed shader compilation errors for Quest Android build.\n                \n                Error: LogShaderCompilers: Error: Failed to compile shader for platform Android_VULKAN: Syntax error at line 45\n                \n                The issue was using desktop-only shader features in mobile shaders.\n                \n                Fix:\n                1. Check your custom materials for desktop-only nodes\n                2. Replace complex math nodes with mobile-friendly alternatives\n                3. Avoid using Texture2DArray on mobile\n                4. Use \"Mobile/Unlit\" or \"Mobile/Lit\" material templates\n                5. Test shaders in Mobile Preview mode\n                ",
+        "metadata": {
+          "forum": "synthetic",
+          "source_url": "https://synthetic.example.com/shader_compile",
+          "post_date": "2025-06-24T01:48:28.491298",
+          "chunk_index": 0,
+          "original_id": "synthetic_shader_compile_1",
+          "error_type": "shader_compile",
+          "title": "Android Vulkan Shader Compilation Fix",
+          "has_solution": true,
+          "chunk_type": "content"
+        },
+        "distance": 0.42189693450927734
+      },
+      {
+        "id": "synthetic_shader_compile_1_solution_0",
+        "document": "SOLUTION for post titled 'Android Vulkan Shader Compilation Fix' from https://synthetic.example.com/shader_compile:\n\n                SOLUTION: Fixed shader compilation errors for Quest Android build.\n                \n                Error: LogShaderCompilers: Error: Failed to compile shader for platform Android_VULKAN: Syntax error at line 45\n                \n                The issue was using desktop-only shader features in mobile shaders.\n                \n                Fix:\n                1. Check your custom materials for desktop-only nodes\n                2. Replace complex math nodes with mobile-friendly alternatives\n                3. Avoid using Texture2DArray on mobile\n                4. Use \"Mobile/Unlit\" or \"Mobile/Lit\" material templates\n                5. Test shaders in Mobile Preview mode\n                ",
+        "metadata": {
+          "original_id": "synthetic_shader_compile_1",
+          "chunk_type": "solution",
+          "has_solution": true,
+          "post_date": "2025-06-24T01:48:28.491298",
+          "title": "Android Vulkan Shader Compilation Fix",
+          "forum": "synthetic",
+          "error_type": "shader_compile",
+          "source_url": "https://synthetic.example.com/shader_compile"
+        },
+        "distance": 0.44408708810806274
+      },
+      {
+        "id": "ca2f843d2df150a567fbfa9b44f1d413_content_1",
+        "document": "rror: [File:./Runtime/Engine/Private/ShaderCompiler/ShaderCompiler.cpp] [Line: 7173]\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: Missing global shader FHardOcclusionsPS's permutation 0, Please make sure cooking was successful.\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: [Callstack] 0x00000077C56AFCD0 libUnreal.so(0x0000000013608CD0)!VerifyGlobalShaders(EShaderPlatform, ITargetPlatform const*, bool, TArray<FShaderType const*, TSizedDefaultAllocator<32> > const*, TArray<FShaderPipelineType const*, TSizedDefaultAllocator<32> > const*) []\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: [Callstack] 0x00000077C56B285C libUnreal.so(0x000000001360B85C)!CompileGlobalShaderMap(EShaderPlatform, ITargetPlatform const*, bool) []\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: [Callstack] 0x0000",
+        "metadata": {
+          "title": "Game crashes on startup - Unreal 5.2.1 - Meta Community Forums - 1102086",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Game-crashes-on-startup-Unreal-5-2-1/m-p/1102086?search-action-id=86974266429&search-result-uid=1102086",
+          "error_type": "other",
+          "chunk_index": 1,
+          "original_id": "ca2f843d2df150a567fbfa9b44f1d413",
+          "has_solution": false,
+          "chunk_type": "content",
+          "forum": "meta",
+          "post_date": "\u200e11-08-202305:58 PM"
+        },
+        "distance": 0.553292989730835
+      },
+      {
+        "id": "ca2f843d2df150a567fbfa9b44f1d413_content_2",
+        "document": "01360B85C)!CompileGlobalShaderMap(EShaderPlatform, ITargetPlatform const*, bool) []\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: [Callstack] 0x00000077BD1589DC libUnreal.so(0x000000000B0B19DC)!FEngineLoop::PreInitPreStartupScreen(char16_t const*) []\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: [Callstack] 0x00000077BD141B08 libUnreal.so(0x000000000B09AB08)!AndroidMain(android_app*) []\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: [Callstack] 0x00000077BD1504B8 libUnreal.so(0x000000000B0A94B8)!android_main() []\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: [Callstack] 0x00000077BD1862B8 libUnreal.so(0x000000000B0DF2B8)![Unknown]() []\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: [Callstack] 0x00000078E2B371DC libc.so(0x00000000000DF1DC)![Unknown]() []\n[2023.11.08-22.11.57:818][ ",
+        "metadata": {
+          "title": "Game crashes on startup - Unreal 5.2.1 - Meta Community Forums - 1102086",
+          "forum": "meta",
+          "original_id": "ca2f843d2df150a567fbfa9b44f1d413",
+          "chunk_index": 2,
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Game-crashes-on-startup-Unreal-5-2-1/m-p/1102086?search-action-id=86974266429&search-result-uid=1102086",
+          "has_solution": false,
+          "chunk_type": "content",
+          "post_date": "\u200e11-08-202305:58 PM",
+          "error_type": "other"
+        },
+        "distance": 0.6352850794792175
+      },
+      {
+        "id": "ca2f843d2df150a567fbfa9b44f1d413_content_0",
+        "document": "From post titled 'Game crashes on startup - Unreal 5.2.1 - Meta Community Forums - 1102086' (https://communityforums.atmeta.com/t5/Unreal-Development/Game-crashes-on-startup-Unreal-5-2-1/m-p/1102086?search-action-id=86974266429&search-result-uid=1102086):\nHello, I've been trying to get this working for a while now but haven't gotten it to. This happens no matter which project template I use. This time I made a VR project and then just added meta XR and made all the changes in settings that are needed. then when building everything seems fine until I try to open the app up on my quest 2 where it just fades the screen to black and then immediately puts me back in my home environment. I get this in the logs when it crashes.\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: === Critical error: ===\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error:\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: Fatal error: [File:./Runtime/Engine/Private/ShaderCompiler/ShaderCompiler.cpp] [Line: 7173]\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: Missing global sh",
+        "metadata": {
+          "has_solution": false,
+          "error_type": "other",
+          "chunk_index": 0,
+          "original_id": "ca2f843d2df150a567fbfa9b44f1d413",
+          "post_date": "\u200e11-08-202305:58 PM",
+          "title": "Game crashes on startup - Unreal 5.2.1 - Meta Community Forums - 1102086",
+          "chunk_type": "content",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Game-crashes-on-startup-Unreal-5-2-1/m-p/1102086?search-action-id=86974266429&search-result-uid=1102086",
+          "forum": "meta"
+        },
+        "distance": 0.6447016596794128
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "HLSL Compilation Failure",
+    "log_content": "LogD3D11ShaderCompiler: Error: HLSL compilation failed: undeclared identifier 'SV_Position'",
+    "expected_error_type": "shader_compile",
+    "description": "HLSL shader semantic identifier error",
+    "success": true,
+    "error_classification": {
+      "error_type": "shader_compile",
+      "confidence": 1.0,
+      "severity": "high",
+      "description": "Shader Compile detected with 3 indicators",
+      "indicators_found": [
+        "HLSL compilation",
+        "failed",
+        "undeclared identifier"
+      ],
+      "solutions": [
+        {
+          "solution_id": "shader_compile_001",
+          "error_type": "shader_compile",
+          "title": "Fix Shader Compilation Errors",
+          "description": "Shader compilation errors are often caused by syntax errors in material graphs or HLSL code.",
+          "steps": [
+            "Open the material or shader asset that is causing the error",
+            "Look for disconnected pins or incorrect node setups in the material graph",
+            "If using custom HLSL, check for syntax errors like undeclared variables",
+            "Ensure all shader inputs and outputs are correctly configured",
+            "Recompile the shader after making changes"
+          ],
+          "code_changes": null,
+          "config_changes": null,
+          "verification_steps": [
+            "Verify that the material compiles without errors",
+            "Check that the material appears correctly on objects in the scene"
+          ],
+          "confidence": 0.85,
+          "source": "real_analysis"
+        }
+      ],
+      "context": {
+        "error_lines": [
+          {
+            "line_num": 1,
+            "content": "LogD3D11ShaderCompiler: Error: HLSL compilation failed: undeclared identifier 'SV_Position'"
+          }
+        ],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "LogD3D11ShaderCompiler: Error: HLSL compilation failed: undeclared identifier 'SV_Position'"
+          }
+        ],
+        "total_errors": 1,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 100.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 91,
+        "analysis_timestamp": "2025-06-24T01:52:50.636789",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "ca2f843d2df150a567fbfa9b44f1d413_content_1",
+        "document": "rror: [File:./Runtime/Engine/Private/ShaderCompiler/ShaderCompiler.cpp] [Line: 7173]\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: Missing global shader FHardOcclusionsPS's permutation 0, Please make sure cooking was successful.\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: [Callstack] 0x00000077C56AFCD0 libUnreal.so(0x0000000013608CD0)!VerifyGlobalShaders(EShaderPlatform, ITargetPlatform const*, bool, TArray<FShaderType const*, TSizedDefaultAllocator<32> > const*, TArray<FShaderPipelineType const*, TSizedDefaultAllocator<32> > const*) []\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: [Callstack] 0x00000077C56B285C libUnreal.so(0x000000001360B85C)!CompileGlobalShaderMap(EShaderPlatform, ITargetPlatform const*, bool) []\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: [Callstack] 0x0000",
+        "metadata": {
+          "error_type": "other",
+          "original_id": "ca2f843d2df150a567fbfa9b44f1d413",
+          "chunk_index": 1,
+          "has_solution": false,
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Game-crashes-on-startup-Unreal-5-2-1/m-p/1102086?search-action-id=86974266429&search-result-uid=1102086",
+          "post_date": "\u200e11-08-202305:58 PM",
+          "forum": "meta",
+          "chunk_type": "content",
+          "title": "Game crashes on startup - Unreal 5.2.1 - Meta Community Forums - 1102086"
+        },
+        "distance": 0.66733717918396
+      },
+      {
+        "id": "8068b5935f778b1bc52077e06db1c87e_content_3",
+        "document": "File:Public/OculusXRInputFunctionLibrary.h\nLogClass: Error: EnumProperty FOculusXRCapsuleCollider::BoneId is not initialized properly. Module:OculusXRInput File:Public/OculusXRInputFunctionLibrary.h\nLogClass: Display: 2 Uninitialized script struct members found including 1 object properties\nLogClass: Warning: Property StructProperty FOculusXRSplashDesc::TexturePath defines MetaData key \"AllowedClasses\" which contains short type name \"Texture\". Suggested pathname: \"/Script/Engine.Texture\". Module:OculusXRHMD File:Public/OculusXRHMDTypes.h\nLogClass: Display: 1 short type names in reflected types' MetaData\nLogAutomationTest: Error: UObject.Class AttemptToFindUninitializedScriptStructMembers will be marked as failing due to errors being logged\nLogAutomationTest: Error: LogClass: ObjectProperty",
+        "metadata": {
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/MetaXR-plugin-v49-bugs-with-UE-5-1-1-from-Epic-and-the-standard/m-p/1034116?search-action-id=86974269953&search-result-uid=1034116",
+          "error_type": "other",
+          "post_date": "\u200e03-06-202311:20 AM",
+          "chunk_type": "content",
+          "forum": "meta",
+          "chunk_index": 3,
+          "has_solution": false,
+          "title": "MetaXR plugin v49 bugs with UE 5.1.1 from Epic and... - Meta Community Forums - 1034116",
+          "original_id": "8068b5935f778b1bc52077e06db1c87e"
+        },
+        "distance": 0.7247904539108276
+      },
+      {
+        "id": "7fceb89e2f176fc0bf7303156a84fb17_content_3",
+        "document": "ggested pathname: \"/Script/Engine.Texture\". Module:OculusXRHMD File:Public/OculusXRHMDTypes.h\nLogClass: Display: 1 short type names in reflected types' MetaData\nLogAutomationTest: Error: UObject.Class AttemptToFindUninitializedScriptStructMembers will be marked as failing due to errors being logged\nLogAutomationTest: Error: LogClass: ObjectProperty FOculusXRCapsuleCollider::Capsule is not initialized properly. Module:OculusXRInput File:Public/OculusXRInputFunctionLibrary.h\nLogAutomationTest: Error: LogClass: EnumProperty FOculusXRCapsuleCollider::BoneId is not initialized properly. Module:OculusXRInput File:Public/OculusXRInputFunctionLibrary.h\nLogAutomationTest: Warning: LogClass: Property StructProperty FOculusXRSplashDesc::TexturePath defines MetaData key \"AllowedClasses\" which contains short type name \"Texture\". Suggested pathname: \"/Script/Engine.Texture\". Module:OculusXRHMD File:Public/OculusXRHMDTypes.h\nLogEngine: Initializing Engine...\nLogOculusPluginWrapper: Warning: wrapper a",
+        "metadata": {
+          "chunk_type": "content",
+          "original_id": "7fceb89e2f176fc0bf7303156a84fb17",
+          "forum": "meta",
+          "error_type": "other",
+          "chunk_index": 3,
+          "title": "MetaXR plugin v49 bugs with UE 5.1.1 from Epic and... - Meta Community Forums - 1034116",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/MetaXR-plugin-v49-bugs-with-UE-5-1-1-from-Epic-and-the-standard/m-p/1034116?search-action-id=86969205615&search-result-uid=1034116",
+          "post_date": "\u200e03-06-202311:20 AM",
+          "has_solution": false
+        },
+        "distance": 0.749241054058075
+      },
+      {
+        "id": "synthetic_shader_compile_1_content_0",
+        "document": "From post titled 'Android Vulkan Shader Compilation Fix' (https://synthetic.example.com/shader_compile):\n\n                SOLUTION: Fixed shader compilation errors for Quest Android build.\n                \n                Error: LogShaderCompilers: Error: Failed to compile shader for platform Android_VULKAN: Syntax error at line 45\n                \n                The issue was using desktop-only shader features in mobile shaders.\n                \n                Fix:\n                1. Check your custom materials for desktop-only nodes\n                2. Replace complex math nodes with mobile-friendly alternatives\n                3. Avoid using Texture2DArray on mobile\n                4. Use \"Mobile/Unlit\" or \"Mobile/Lit\" material templates\n                5. Test shaders in Mobile Preview mode\n                ",
+        "metadata": {
+          "title": "Android Vulkan Shader Compilation Fix",
+          "post_date": "2025-06-24T01:48:28.491298",
+          "source_url": "https://synthetic.example.com/shader_compile",
+          "forum": "synthetic",
+          "has_solution": true,
+          "error_type": "shader_compile",
+          "chunk_type": "content",
+          "original_id": "synthetic_shader_compile_1",
+          "chunk_index": 0
+        },
+        "distance": 0.7607153654098511
+      },
+      {
+        "id": "ca2f843d2df150a567fbfa9b44f1d413_content_0",
+        "document": "From post titled 'Game crashes on startup - Unreal 5.2.1 - Meta Community Forums - 1102086' (https://communityforums.atmeta.com/t5/Unreal-Development/Game-crashes-on-startup-Unreal-5-2-1/m-p/1102086?search-action-id=86974266429&search-result-uid=1102086):\nHello, I've been trying to get this working for a while now but haven't gotten it to. This happens no matter which project template I use. This time I made a VR project and then just added meta XR and made all the changes in settings that are needed. then when building everything seems fine until I try to open the app up on my quest 2 where it just fades the screen to black and then immediately puts me back in my home environment. I get this in the logs when it crashes.\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: === Critical error: ===\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error:\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: Fatal error: [File:./Runtime/Engine/Private/ShaderCompiler/ShaderCompiler.cpp] [Line: 7173]\n[2023.11.08-22.11.57:818][ 0]LogAndroid: Error: Missing global sh",
+        "metadata": {
+          "error_type": "other",
+          "chunk_type": "content",
+          "title": "Game crashes on startup - Unreal 5.2.1 - Meta Community Forums - 1102086",
+          "forum": "meta",
+          "post_date": "\u200e11-08-202305:58 PM",
+          "has_solution": false,
+          "chunk_index": 0,
+          "original_id": "ca2f843d2df150a567fbfa9b44f1d413",
+          "source_url": "https://communityforums.atmeta.com/t5/Unreal-Development/Game-crashes-on-startup-Unreal-5-2-1/m-p/1102086?search-action-id=86974266429&search-result-uid=1102086"
+        },
+        "distance": 0.7667341232299805
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "Complex Crash Log",
+    "log_content": "LogCore: Fatal error!\nUnhandled Exception: EXCEPTION_ACCESS_VIOLATION reading address 0x00000000\nLogWindows: Error: === Critical error: ===\nFatal error!\nUnhandled Exception: EXCEPTION_ACCESS_VIOLATION reading address 0x00000000\n0x00007FF7A1234567 UnrealEngine!FVulkanDevice::CreateBuffer()\n0x00007FF7A1234568 UnrealEngine!FVulkanRHI::RHICreateVertexBuffer()",
+    "expected_error_type": null,
+    "description": "Complex crash with access violation and stack trace",
+    "success": true,
+    "error_classification": {
+      "error_type": "black_screen",
+      "confidence": 0.15,
+      "severity": "medium",
+      "indicators_found": [],
+      "key_log_lines": [
+        "0x00007FF7A1234567 UnrealEngine!FVulkanDevice::CreateBuffer()",
+        "0x00007FF7A1234568 UnrealEngine!FVulkanRHI::RHICreateVertexBuffer()"
+      ],
+      "solutions": [],
+      "analysis_method": "improved_keyword_analysis",
+      "recommendation": "Pattern-based analysis with improved keyword matching"
+    },
+    "retrieved_documents": [
+      {
+        "id": "45c9fd7e3d1c4b2a05cd785be2c26269_content_9",
+        "document": "000000072aed01982024/07/05 11:03:02.619 20896 20948 Error CRASH x16 0000007ec898ece8 x17 0000007ec897f29c x18 0000007cefaf6000 x19 b400007da4fc6bf82024/07/05 11:03:02.619 20896 20948 Error CRASH x20 b400007da4fc6c70 x21 b400007da4fc6c78 x22 b400007da4fc6c98 x23 b400007da4fc6c602024/07/05 11:03:02.619 20896 20948 Error CRASH x24 000000000000000f x25 b400007da52a3580 x26 0000007d001fbcc0 x27 0000007cf000018c2024/07/05 11:03:02.619 20896 20948 Error CRASH x28 0000007d001fbcc0 x29 0000007d001fb7f02024/07/05 11:03:02.619 20896 20948 Error CRASH lr 0000007d01354b1c sp 0000007d001fb1f0 pc 0000007d01354b28 pst 00000000800010002024/07/05 11:03:02.619 20896 20948 Error CRASH backtrace:2024/07/05 11:03:02.619 20896 20948 Error CRASH #00 pc 0000000000090b28 /data/app/~~51lQIrNgpQzy8v8KfiWnKw==///////////////////////////////////-nCU9YkFTsPz8zP23z2ePnQ==/lib/arm64/libUnityOpenXR.so (BuildId: 80e0b02d1d1625434890497e73eaaeb25b1fea15)2024/07/05 11:03:02.619 20896 20948 Error CRASH #01 pc 0000000000055",
+        "metadata": {
+          "has_solution": false,
+          "title": "Solved: [Unity] OpenXR crash when magicleap unity sdk pack... - Meta Community Forums - 1214304",
+          "chunk_index": 9,
+          "forum": "meta",
+          "post_date": "\u200e07-05-202402:19 AM",
+          "error_type": "other",
+          "original_id": "45c9fd7e3d1c4b2a05cd785be2c26269",
+          "source_url": "https://communityforums.atmeta.com/t5/OpenXR-Development/Unity-OpenXR-crash-when-magicleap-unity-sdk-package/m-p/1214304#M837",
+          "chunk_type": "content"
+        },
+        "distance": 0.6988697052001953
+      },
+      {
+        "id": "45c9fd7e3d1c4b2a05cd785be2c26269_content_3",
+        "document": "0007da4fc6c60\n2024/07/05 11:03:02.619 20896 20948 Error CRASH x24 000000000000000f x25 b400007da52a3580 x26 0000007d001fbcc0 x27 0000007cf000018c\n2024/07/05 11:03:02.619 20896 20948 Error CRASH x28 0000007d001fbcc0 x29 0000007d001fb7f0\n2024/07/05 11:03:02.619 20896 20948 Error CRASH lr 0000007d01354b1c sp 0000007d001fb1f0 pc 0000007d01354b28 pst 0000000080001000\n2024/07/05 11:03:02.619 20896 20948 Error CRASH backtrace:\n2024/07/05 11:03:02.619 20896 20948 Error CRASH #00 pc 0000000000090b28 /data/app/~~51lQIrNgpQzy8v8KfiWnKw==///////////////////////////////////-nCU9YkFTsPz8zP23z2ePnQ==/lib/arm64/libUnityOpenXR.so (BuildId: 80e0b02d1d1625434890497e73eaaeb25b1fea15)\n2024/07/05 11:03:02.619 20896 20948 Error CRASH #01 pc 000000000005564c /data/app/~~51lQIrNgpQzy8v8KfiWnKw==///////////////////////////////////-nCU9YkFTsPz8zP23z2ePnQ==/lib/arm64/libUnityOpenXR.so (BuildId: 80e0b02d1d1625434890497e73eaaeb25b1fea15)\n2024/07/05 11:03:02.619 20896 20948 Error CRASH #02 pc 00000000000581ac /data/",
+        "metadata": {
+          "title": "Solved: [Unity] OpenXR crash when magicleap unity sdk pack... - Meta Community Forums - 1214304",
+          "chunk_index": 3,
+          "has_solution": false,
+          "post_date": "\u200e07-05-202402:19 AM",
+          "chunk_type": "content",
+          "forum": "meta",
+          "error_type": "other",
+          "source_url": "https://communityforums.atmeta.com/t5/OpenXR-Development/Unity-OpenXR-crash-when-magicleap-unity-sdk-package/m-p/1214304#M837",
+          "original_id": "45c9fd7e3d1c4b2a05cd785be2c26269"
+        },
+        "distance": 0.7080410718917847
+      },
+      {
+        "id": "45c9fd7e3d1c4b2a05cd785be2c26269_content_7",
+        "document": "tal libc Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x1 in tid 20948 (Thread-2), pid 20896 (////////)2024/07/05 11:03:02.619 20896 20948 Error CRASH *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***2024/07/05 11:03:02.619 20896 20948 Error CRASH Version '2022.3.12f1 (4fe6e059c7ef)', Build type 'Release', Scripting Backend 'il2cpp', CPU 'arm64-v8a'2024/07/05 11:03:02.619 20896 20948 Error CRASH Build fingerprint: 'oculus/eureka/eureka:12/SQ3A.220605.009.A1/50105210073900510:user/release-keys'2024/07/05 11:03:02.619 20896 20948 Error CRASH Revision: '0'2024/07/05 11:03:02.619 20896 20948 Error CRASH ABI: 'arm64'2024/07/05 11:03:02.619 20896 20948 Error CRASH Timestamp: 2024-07-05 11:03:02.619833251+02002024/07/05 11:03:02.619 20896 20948 Error CRASH pid: 20896, tid: 20948, name: Thread-2 >>> /////////////////// <<<2024/07/05 11:03:02.619 20896 20948 Error CRASH uid: 104012024/07/05 11:03:02.619 20896 20948 Error CRASH signal 11 (SIGSEGV), code 1 (SEGV_MAPER",
+        "metadata": {
+          "title": "Solved: [Unity] OpenXR crash when magicleap unity sdk pack... - Meta Community Forums - 1214304",
+          "original_id": "45c9fd7e3d1c4b2a05cd785be2c26269",
+          "forum": "meta",
+          "chunk_index": 7,
+          "has_solution": false,
+          "source_url": "https://communityforums.atmeta.com/t5/OpenXR-Development/Unity-OpenXR-crash-when-magicleap-unity-sdk-package/m-p/1214304#M837",
+          "error_type": "other",
+          "post_date": "\u200e07-05-202402:19 AM",
+          "chunk_type": "content"
+        },
+        "distance": 0.7224212884902954
+      },
+      {
+        "id": "45c9fd7e3d1c4b2a05cd785be2c26269_content_10",
+        "document": "///////////////////////////-nCU9YkFTsPz8zP23z2ePnQ==/lib/arm64/libUnityOpenXR.so (BuildId: 80e0b02d1d1625434890497e73eaaeb25b1fea15)2024/07/05 11:03:02.619 20896 20948 Error CRASH #01 pc 000000000005564c /data/app/~~51lQIrNgpQzy8v8KfiWnKw==///////////////////////////////////-nCU9YkFTsPz8zP23z2ePnQ==/lib/arm64/libUnityOpenXR.so (BuildId: 80e0b02d1d1625434890497e73eaaeb25b1fea15)2024/07/05 11:03:02.619 20896 20948 Error CRASH #02 pc 00000000000581ac /data/app/~~51lQIrNgpQzy8v8KfiWnKw==///////////////////////////////////-nCU9YkFTsPz8zP23z2ePnQ==/lib/arm64/libUnityOpenXR.so (BuildId: 80e0b02d1d1625434890497e73eaaeb25b1fea15)2024/07/05 11:03:02.619 20896 20948 Error CRASH #03 pc 000000000098623c /data/app/~~51lQIrNgpQzy8v8KfiWnKw==///////////////////////////////////-nCU9YkFTsPz8zP23z2ePnQ==/lib/arm64/libunity.so (BuildId: 973973a0835afbe9)2024/07/05 11:03:02.619 20896 20948 Error CRASH #04 pc 0000000000abd590 /data/app/~~51lQIrNgpQzy8v8KfiWnKw==///////////////////////////////////-nCU9YkFTsP",
+        "metadata": {
+          "post_date": "\u200e07-05-202402:19 AM",
+          "has_solution": false,
+          "title": "Solved: [Unity] OpenXR crash when magicleap unity sdk pack... - Meta Community Forums - 1214304",
+          "error_type": "other",
+          "source_url": "https://communityforums.atmeta.com/t5/OpenXR-Development/Unity-OpenXR-crash-when-magicleap-unity-sdk-package/m-p/1214304#M837",
+          "forum": "meta",
+          "chunk_index": 10,
+          "original_id": "45c9fd7e3d1c4b2a05cd785be2c26269",
+          "chunk_type": "content"
+        },
+        "distance": 0.7247316837310791
+      },
+      {
+        "id": "45c9fd7e3d1c4b2a05cd785be2c26269_content_1",
+        "document": "rsion '2022.3.12f1 (4fe6e059c7ef)', Build type 'Release', Scripting Backend 'il2cpp', CPU 'arm64-v8a'\n2024/07/05 11:03:02.619 20896 20948 Error CRASH Build fingerprint: 'oculus/eureka/eureka:12/SQ3A.220605.009.A1/50105210073900510:user/release-keys'\n2024/07/05 11:03:02.619 20896 20948 Error CRASH Revision: '0'\n2024/07/05 11:03:02.619 20896 20948 Error CRASH ABI: 'arm64'\n2024/07/05 11:03:02.619 20896 20948 Error CRASH Timestamp: 2024-07-05 11:03:02.619833251+0200\n2024/07/05 11:03:02.619 20896 20948 Error CRASH pid: 20896, tid: 20948, name: Thread-2 >>> /////////////////// <<<\n2024/07/05 11:03:02.619 20896 20948 Error CRASH uid: 10401\n2024/07/05 11:03:02.619 20896 20948 Error CRASH signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr --------\n2024/07/05 11:03:02.619 20896 20948 Error CRASH Cause: null pointer dereference\n2024/07/05 11:03:02.619 20896 20948 Error CRASH x0 00000000fffffff4 x1 0000000000000000 x2 0000007e3a24a140 x3 0000007d0101f3f0\n2024/07/05 11:03:02.619 20896 20948 Erro",
+        "metadata": {
+          "title": "Solved: [Unity] OpenXR crash when magicleap unity sdk pack... - Meta Community Forums - 1214304",
+          "forum": "meta",
+          "post_date": "\u200e07-05-202402:19 AM",
+          "error_type": "other",
+          "chunk_type": "content",
+          "source_url": "https://communityforums.atmeta.com/t5/OpenXR-Development/Unity-OpenXR-crash-when-magicleap-unity-sdk-package/m-p/1214304#M837",
+          "chunk_index": 1,
+          "original_id": "45c9fd7e3d1c4b2a05cd785be2c26269",
+          "has_solution": false
+        },
+        "distance": 0.7258721590042114
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "Empty Log",
+    "log_content": "",
+    "expected_error_type": null,
+    "description": "Empty log content",
+    "success": false,
+    "error_classification": {
+      "error_type": "unknown",
+      "confidence": 0.3,
+      "severity": "medium",
+      "indicators_found": [],
+      "key_log_lines": [],
+      "solutions": [],
+      "analysis_method": "improved_keyword_analysis",
+      "recommendation": "Pattern-based analysis with improved keyword matching"
+    },
+    "retrieved_documents": [],
+    "retrieval_success": false,
+    "notes": [
+      "Error classification failed or returned 'unknown'"
+    ]
+  },
+  {
+    "test_name": "Generic Warning Only",
+    "log_content": "LogTemp: Warning: This is just a warning message",
+    "expected_error_type": null,
+    "description": "Non-error log message",
+    "success": false,
+    "error_classification": {
+      "error_type": "unknown",
+      "confidence": 0.3,
+      "severity": "medium",
+      "indicators_found": [],
+      "key_log_lines": [
+        "LogTemp: Warning: This is just a warning message"
+      ],
+      "solutions": [],
+      "analysis_method": "improved_keyword_analysis",
+      "recommendation": "Pattern-based analysis with improved keyword matching"
+    },
+    "retrieved_documents": [],
+    "retrieval_success": false,
+    "notes": [
+      "Error classification failed or returned 'unknown'"
+    ]
+  },
+  {
+    "test_name": "Unknown Error Pattern",
+    "log_content": "SomeCustomSystem: CriticalFailure: Quantum flux capacitor overload detected in subsystem 7",
+    "expected_error_type": null,
+    "description": "Completely unknown error pattern",
+    "success": false,
+    "error_classification": {
+      "error_type": "unknown",
+      "confidence": 0.3,
+      "severity": "medium",
+      "indicators_found": [],
+      "key_log_lines": [],
+      "solutions": [],
+      "analysis_method": "improved_keyword_analysis",
+      "recommendation": "Pattern-based analysis with improved keyword matching"
+    },
+    "retrieved_documents": [],
+    "retrieval_success": false,
+    "notes": [
+      "Error classification failed or returned 'unknown'"
+    ]
+  },
+  {
+    "test_name": "Quest Link Connection",
+    "log_content": "LogOculusXRHMD: Error: Failed to initialize Oculus Link connection: USB_DEVICE_NOT_FOUND",
+    "expected_error_type": null,
+    "description": "Quest Link USB connection failure",
+    "success": true,
+    "error_classification": {
+      "error_type": "vr",
+      "confidence": 0.9,
+      "severity": "high",
+      "description": "Vr detected with 3 indicators",
+      "indicators_found": [
+        "Oculus Link",
+        "connection",
+        "failed"
+      ],
+      "solutions": [],
+      "context": {
+        "error_lines": [
+          {
+            "line_num": 1,
+            "content": "LogOculusXRHMD: Error: Failed to initialize Oculus Link connection: USB_DEVICE_NOT_FOUND"
+          }
+        ],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "LogOculusXRHMD: Error: Failed to initialize Oculus Link connection: USB_DEVICE_NOT_FOUND"
+          }
+        ],
+        "total_errors": 1,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 100.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 88,
+        "analysis_timestamp": "2025-06-24T01:52:53.565138",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_9",
+        "document": " () (at Library/PackageCache/com.unity.xr.oculus@1.9.0/Runtime/OculusLoader.cs:182)\nUnityEngine.XR.Management.XRGeneralSettings:AttemptStartXRSDKOnBeforeSplashScreen () (at Library/PackageCache/com.unity.xr.management@4.0.1/Runtime/XRGeneralSettings.cs:158)\n\nUnity v2021.1.5f1, Oculus Utilities v1.51.0, OVRPlugin v1.51.1, SDK v1.60.0.\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1161)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nSystemHeadset Oculus_Link_Quest\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1166)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nTcpListener started. Local endpoint: 0.0.0.0:32419\nUnityEngine.Debug:LogFo",
+        "metadata": {
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "chunk_type": "content",
+          "chunk_index": 9,
+          "forum": "meta",
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "error_type": "black_screen",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "has_solution": false,
+          "post_date": "\u200e05-16-202101:27 AM"
+        },
+        "distance": 0.50390625
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_5",
+        "document": "ement.XRGeneralSettings:AttemptStartXRSDKOnBeforeSplashScreen () (at Library/PackageCache/com.unity.xr.management@4.0.1/Runtime/XRGeneralSettings.cs:158)\n\nUnity v2021.1.5f1, Oculus Utilities v1.51.0, OVRPlugin v1.51.1, SDK v1.60.0.\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1161)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nSystemHeadset Oculus_Link_Quest\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1166)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nTcpListener started. Local endpoint: 0.0.0.0:32419\nUnityEngine.Debug:LogFormat (string,object[])\nOVRNetwork/OVRNetworkTcpServer:StartListening (int) (at Assets/Oculus/VR/Scripts/",
+        "metadata": {
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "chunk_type": "content",
+          "forum": "meta",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "post_date": "\u200e05-16-202101:27 AM",
+          "has_solution": false,
+          "chunk_index": 5,
+          "error_type": "black_screen"
+        },
+        "distance": 0.5082182884216309
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_1",
+        "document": " and I am having a much harder time getting past this issue. Sometimes I will try for 30 minutes and not be able to get past this.\nI'm currently using Unity 2021.1.5f1, though I have been encountering this issue with the last several versions of Unity, going back probably about a year. Initially, I was using a Quest 1. I just purchased a Quest 2 which came with a different link cable. However, the problem happens with my Quest 1 and Quest 2, using the original cable or the new cable. Also, I have the same problem when using Air Link with my new Quest 2.\nOn my PC, I'm currently running the Oculus App version 28.0.0.222.469 though I'm sure it has happened on previous versions as well, as this app is set to auto-update.\nWhen I use the Oculus Link cable, I hear the USB connect and disconnect s",
+        "metadata": {
+          "post_date": "\u200e05-16-202101:27 AM",
+          "chunk_index": 1,
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "has_solution": false,
+          "forum": "meta",
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "chunk_type": "content",
+          "error_type": "black_screen",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206"
+        },
+        "distance": 0.5505256652832031
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_11",
+        "document": "orkTcpServer] Start Listening on port 32419\nUnityEngine.Debug:LogFormat (string,object[])\nOVRNetwork/OVRNetworkTcpServer:StartListening (int) (at Assets/Oculus/VR/Scripts/Util/OVRNetwork.cs:111)\nOVRSystemPerfMetrics/OVRSystemPerfMetricsTcpServer:OnEnable () (at Assets/Oculus/VR/Scripts/Util/OVRSystemPerfMetrics.cs:190)\nUnityEngine.GameObject:AddComponent<OVRSystemPerfMetrics/OVRSystemPerfMetricsTcpServer> ()\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1279)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\n[OVRManager] OnApplicationPause(false)\n\n[OVRManager] OnApplicationFocus(true)\n\nOVRControllerHelp: Active controller type: QuestAndRiftS for product Quest\n\nOVRControllerHelp: Active controller type: QuestAndRiftS for product Quest\n\nThe curre",
+        "metadata": {
+          "has_solution": false,
+          "chunk_index": 11,
+          "chunk_type": "content",
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "error_type": "black_screen",
+          "post_date": "\u200e05-16-202101:27 AM",
+          "forum": "meta",
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206"
+        },
+        "distance": 0.5987212657928467
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_2",
+        "document": "as happened on previous versions as well, as this app is set to auto-update.\nWhen I use the Oculus Link cable, I hear the USB connect and disconnect sound happen several times when I try to run in the editor. These are the same sounds I hear when I plugin or unplug the link cable. When I run with Air Link, I don't hear these USB connection and disconnection sounds.\nAny ideas on how I can fix this issue?\nI have included the log files for a successful and unsuccessful run. I have also included a video for a successful and unsuccessful run. (My level is all blue and contains nothing. I have to click on the Oculus button to bring up a dialog box that allows me to select options before I generate the world.)\nI have also encountered this issue when loading other scenes, not just my game. I'm inc",
+        "metadata": {
+          "forum": "meta",
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "error_type": "black_screen",
+          "post_date": "\u200e05-16-202101:27 AM",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "chunk_type": "content",
+          "chunk_index": 2,
+          "has_solution": false
+        },
+        "distance": 0.6158992052078247
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "Hand Tracking Error",
+    "log_content": "LogOculusInput: Error: Hand tracking initialization failed: OVRP_FAILURE_INVALID_PARAMETER",
+    "expected_error_type": null,
+    "description": "Quest hand tracking initialization failure",
+    "success": true,
+    "error_classification": {
+      "error_type": "vr",
+      "confidence": 0.7999999999999999,
+      "severity": "medium",
+      "description": "Vr detected with 3 indicators",
+      "indicators_found": [
+        "Hand tracking",
+        "initialization",
+        "failed"
+      ],
+      "solutions": [],
+      "context": {
+        "error_lines": [
+          {
+            "line_num": 1,
+            "content": "LogOculusInput: Error: Hand tracking initialization failed: OVRP_FAILURE_INVALID_PARAMETER"
+          }
+        ],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "LogOculusInput: Error: Hand tracking initialization failed: OVRP_FAILURE_INVALID_PARAMETER"
+          }
+        ],
+        "total_errors": 1,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 100.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 90,
+        "analysis_timestamp": "2025-06-24T01:52:54.276846",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "f1f43e49e848d430893a5f50366c0964_content_5",
+        "document": "n original post\n\n==========\nNext Post in Thread\n==========\n\nSome more information. I collected the quest logs through MQDH when running the same scene with the OVRPlugin set to use OpenXR (hand tracking doesn't work) and the legacy LIBVR API (hand tracking works). I have attached the screenshots here. Notice how when using OpenXR, the ClientInputSettings emits a message \"HANDTRACKING: enabled input settings, setting hand mode control settings to ControllersOnly\". I believe that this might be the underlying issue. Note that I have set my OVR integration in Unity to \"Hands Only\", so Unity has nothing to do with that message. It seems that when using the OpenXR backend, there is some call somewhere that explicitly sets the control mode to \"ControllersOnly\", which then disables hand tracking. ",
+        "metadata": {
+          "title": "Solved: Hand Tracking over Link still not working in Unity... - Meta Community Forums - 1093433",
+          "post_date": "\u200e10-16-202303:35 PM",
+          "has_solution": false,
+          "forum": "meta",
+          "chunk_type": "content",
+          "error_type": "plugin_conflict",
+          "chunk_index": 5,
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Hand-Tracking-over-Link-still-not-working-in-Unity-Editor/m-p/1093433#M7241",
+          "original_id": "f1f43e49e848d430893a5f50366c0964"
+        },
+        "distance": 0.536404013633728
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_11",
+        "document": "orkTcpServer] Start Listening on port 32419\nUnityEngine.Debug:LogFormat (string,object[])\nOVRNetwork/OVRNetworkTcpServer:StartListening (int) (at Assets/Oculus/VR/Scripts/Util/OVRNetwork.cs:111)\nOVRSystemPerfMetrics/OVRSystemPerfMetricsTcpServer:OnEnable () (at Assets/Oculus/VR/Scripts/Util/OVRSystemPerfMetrics.cs:190)\nUnityEngine.GameObject:AddComponent<OVRSystemPerfMetrics/OVRSystemPerfMetricsTcpServer> ()\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1279)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\n[OVRManager] OnApplicationPause(false)\n\n[OVRManager] OnApplicationFocus(true)\n\nOVRControllerHelp: Active controller type: QuestAndRiftS for product Quest\n\nOVRControllerHelp: Active controller type: QuestAndRiftS for product Quest\n\nThe curre",
+        "metadata": {
+          "post_date": "\u200e05-16-202101:27 AM",
+          "forum": "meta",
+          "chunk_type": "content",
+          "has_solution": false,
+          "chunk_index": 11,
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "error_type": "black_screen",
+          "original_id": "5b2dd7c764a91550664e4111c677c213"
+        },
+        "distance": 0.5695478916168213
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_5",
+        "document": "ement.XRGeneralSettings:AttemptStartXRSDKOnBeforeSplashScreen () (at Library/PackageCache/com.unity.xr.management@4.0.1/Runtime/XRGeneralSettings.cs:158)\n\nUnity v2021.1.5f1, Oculus Utilities v1.51.0, OVRPlugin v1.51.1, SDK v1.60.0.\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1161)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nSystemHeadset Oculus_Link_Quest\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1166)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nTcpListener started. Local endpoint: 0.0.0.0:32419\nUnityEngine.Debug:LogFormat (string,object[])\nOVRNetwork/OVRNetworkTcpServer:StartListening (int) (at Assets/Oculus/VR/Scripts/",
+        "metadata": {
+          "forum": "meta",
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "chunk_index": 5,
+          "has_solution": false,
+          "post_date": "\u200e05-16-202101:27 AM",
+          "error_type": "black_screen",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "chunk_type": "content"
+        },
+        "distance": 0.5778080821037292
+      },
+      {
+        "id": "f1f43e49e848d430893a5f50366c0964_content_3",
+        "document": "heir platform?\nPlease let me know if you have an answer to this dilemma, I am grateful for any pointers!\nNote: I am explicitly talking about hand tracking through the Unity Editor using Link, in the standalone Android builds it works fine and it's amazing to use!\nNote 2: This is not a new problem, it's documented across many forum posts both here and on the Unity forums. I have also found fully-fledged projects, that warn of this exact error, e.g. (\nhttps://github.com/kuff/medslr#how-to-launch-the-project).\nNote 3 - f\nurther information: The legacy backend of OVRPlugin was removed in v51, which is stated here:\nhttps://developer.oculus.com/downloads/package/unity-integration/50.0\nunder \"OVRPlugin\".\nBest,\nMax\nSolved!\nGo to Solution.\n\n==========\nNext Post in Thread\n==========\n\nI found a solut",
+        "metadata": {
+          "post_date": "\u200e10-16-202303:35 PM",
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Hand-Tracking-over-Link-still-not-working-in-Unity-Editor/m-p/1093433#M7241",
+          "has_solution": false,
+          "forum": "meta",
+          "chunk_index": 3,
+          "title": "Solved: Hand Tracking over Link still not working in Unity... - Meta Community Forums - 1093433",
+          "error_type": "plugin_conflict",
+          "chunk_type": "content",
+          "original_id": "f1f43e49e848d430893a5f50366c0964"
+        },
+        "distance": 0.5784313082695007
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_9",
+        "document": " () (at Library/PackageCache/com.unity.xr.oculus@1.9.0/Runtime/OculusLoader.cs:182)\nUnityEngine.XR.Management.XRGeneralSettings:AttemptStartXRSDKOnBeforeSplashScreen () (at Library/PackageCache/com.unity.xr.management@4.0.1/Runtime/XRGeneralSettings.cs:158)\n\nUnity v2021.1.5f1, Oculus Utilities v1.51.0, OVRPlugin v1.51.1, SDK v1.60.0.\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1161)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nSystemHeadset Oculus_Link_Quest\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1166)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nTcpListener started. Local endpoint: 0.0.0.0:32419\nUnityEngine.Debug:LogFo",
+        "metadata": {
+          "chunk_index": 9,
+          "error_type": "black_screen",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "post_date": "\u200e05-16-202101:27 AM",
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "chunk_type": "content",
+          "forum": "meta",
+          "has_solution": false,
+          "original_id": "5b2dd7c764a91550664e4111c677c213"
+        },
+        "distance": 0.5836770534515381
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  },
+  {
+    "test_name": "Guardian System Error",
+    "log_content": "LogOculusXRHMD: Error: Guardian system boundary setup failed: BOUNDARY_NOT_CONFIGURED",
+    "expected_error_type": null,
+    "description": "Quest guardian boundary configuration error",
+    "success": true,
+    "error_classification": {
+      "error_type": "vr",
+      "confidence": 0.7999999999999999,
+      "severity": "medium",
+      "description": "Vr detected with 3 indicators",
+      "indicators_found": [
+        "Guardian system",
+        "boundary",
+        "failed"
+      ],
+      "solutions": [],
+      "context": {
+        "error_lines": [
+          {
+            "line_num": 1,
+            "content": "LogOculusXRHMD: Error: Guardian system boundary setup failed: BOUNDARY_NOT_CONFIGURED"
+          }
+        ],
+        "warning_lines": [],
+        "context_lines": [
+          {
+            "line_num": 1,
+            "content": "LogOculusXRHMD: Error: Guardian system boundary setup failed: BOUNDARY_NOT_CONFIGURED"
+          }
+        ],
+        "total_errors": 1,
+        "total_warnings": 0,
+        "log_structure": {
+          "total_lines": 1,
+          "non_empty_lines": 1,
+          "error_percentage": 100.0
+        }
+      },
+      "related_issues": [],
+      "analysis_metadata": {
+        "total_errors_detected": 1,
+        "log_length": 85,
+        "analysis_timestamp": "2025-06-24T01:52:54.989334",
+        "analyzer_version": "2.0_enhanced"
+      }
+    },
+    "retrieved_documents": [
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_5",
+        "document": "ement.XRGeneralSettings:AttemptStartXRSDKOnBeforeSplashScreen () (at Library/PackageCache/com.unity.xr.management@4.0.1/Runtime/XRGeneralSettings.cs:158)\n\nUnity v2021.1.5f1, Oculus Utilities v1.51.0, OVRPlugin v1.51.1, SDK v1.60.0.\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1161)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nSystemHeadset Oculus_Link_Quest\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1166)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nTcpListener started. Local endpoint: 0.0.0.0:32419\nUnityEngine.Debug:LogFormat (string,object[])\nOVRNetwork/OVRNetworkTcpServer:StartListening (int) (at Assets/Oculus/VR/Scripts/",
+        "metadata": {
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "chunk_type": "content",
+          "chunk_index": 5,
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "post_date": "\u200e05-16-202101:27 AM",
+          "has_solution": false,
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "error_type": "black_screen",
+          "forum": "meta"
+        },
+        "distance": 0.6150133013725281
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_9",
+        "document": " () (at Library/PackageCache/com.unity.xr.oculus@1.9.0/Runtime/OculusLoader.cs:182)\nUnityEngine.XR.Management.XRGeneralSettings:AttemptStartXRSDKOnBeforeSplashScreen () (at Library/PackageCache/com.unity.xr.management@4.0.1/Runtime/XRGeneralSettings.cs:158)\n\nUnity v2021.1.5f1, Oculus Utilities v1.51.0, OVRPlugin v1.51.1, SDK v1.60.0.\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1161)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nSystemHeadset Oculus_Link_Quest\nUnityEngine.Debug:Log (object)\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1166)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\nTcpListener started. Local endpoint: 0.0.0.0:32419\nUnityEngine.Debug:LogFo",
+        "metadata": {
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "post_date": "\u200e05-16-202101:27 AM",
+          "error_type": "black_screen",
+          "chunk_index": 9,
+          "chunk_type": "content",
+          "has_solution": false,
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "forum": "meta",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206"
+        },
+        "distance": 0.6269338130950928
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_7",
+        "document": "NetworkTcpServer:StartListening (int) (at Assets/Oculus/VR/Scripts/Util/OVRNetwork.cs:111)\nOVRSystemPerfMetrics/OVRSystemPerfMetricsTcpServer:OnEnable () (at Assets/Oculus/VR/Scripts/Util/OVRSystemPerfMetrics.cs:190)\nUnityEngine.GameObject:AddComponent<OVRSystemPerfMetrics/OVRSystemPerfMetricsTcpServer> ()\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1279)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\n[OVRManager] OnApplicationPause(false)\n\n[OVRManager] OnApplicationFocus(true)\n\nOVRControllerHelp: Active controller type: QuestAndRiftS for product Quest\n\nOVRControllerHelp: Active controller type: QuestAndRiftS for product Quest\n\nThe current MSAA level is 0, but the recommended MSAA level is 4. Switching to the recommended level.\n\n[OVRManage",
+        "metadata": {
+          "chunk_index": 7,
+          "error_type": "black_screen",
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "chunk_type": "content",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "post_date": "\u200e05-16-202101:27 AM",
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "has_solution": false,
+          "forum": "meta"
+        },
+        "distance": 0.639168381690979
+      },
+      {
+        "id": "5b2dd7c764a91550664e4111c677c213_content_11",
+        "document": "orkTcpServer] Start Listening on port 32419\nUnityEngine.Debug:LogFormat (string,object[])\nOVRNetwork/OVRNetworkTcpServer:StartListening (int) (at Assets/Oculus/VR/Scripts/Util/OVRNetwork.cs:111)\nOVRSystemPerfMetrics/OVRSystemPerfMetricsTcpServer:OnEnable () (at Assets/Oculus/VR/Scripts/Util/OVRSystemPerfMetrics.cs:190)\nUnityEngine.GameObject:AddComponent<OVRSystemPerfMetrics/OVRSystemPerfMetricsTcpServer> ()\nOVRManager:InitOVRManager () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1279)\nOVRManager:Awake () (at Assets/Oculus/VR/Scripts/OVRManager.cs:1313)\n\n[OVRManager] OnApplicationPause(false)\n\n[OVRManager] OnApplicationFocus(true)\n\nOVRControllerHelp: Active controller type: QuestAndRiftS for product Quest\n\nOVRControllerHelp: Active controller type: QuestAndRiftS for product Quest\n\nThe curre",
+        "metadata": {
+          "original_id": "5b2dd7c764a91550664e4111c677c213",
+          "error_type": "black_screen",
+          "source_url": "https://communityforums.atmeta.com/t5/Unity-Development/Unity-game-frequenly-launches-to-black-screen/m-p/867206#M19440",
+          "post_date": "\u200e05-16-202101:27 AM",
+          "title": "Solved: Unity game frequenly launches to black screen - Meta Community Forums - 867206",
+          "chunk_type": "content",
+          "chunk_index": 11,
+          "forum": "meta",
+          "has_solution": false
+        },
+        "distance": 0.6562237739562988
+      },
+      {
+        "id": "d46ac826a78dadc276967287a9f32a4c_content_2",
+        "document": "Client\n.\ncpp\n:\n2625\nWarn FenceChecker FenceChecker\n:\nwait timed out after\n100\nmsec\nWarn Adreno\n-\nGSL\n<\nlog_gpu_snapshot\n:\n471\n>\n:\npanel\n.\ngpuSnapshotPath is\nnot\nset\n.\nnot\ngenerating user snapshot\nWarn Adreno\n-\nGSL\n<\nioctl_kgsl_syncobj_create\n:\n5290\n>\n:\n(\n45\n,\n33\n,\n2331\n)\nfail\n22\nInvalid argument\nWarn Vulkan_Utils Vulkan error\n:\nvulkanLoader\n.\nvkQueueSubmit\n(\nVulkanContext\n.\nqueue\n,\n0\n,\nNULL\n,\nfenceToUse\n)\n:\n'VK_ERROR_INITIALIZATION_FAILED'\n(\n-\n3\n)\nat arvr\n/\nprojects\n/\nxrruntime\n/\nmobile\n/\nVrRuntime\n/\nClient\n/\nVrRuntimeClient\n/\nVrRuntimeClient\n.\ncpp\n:\n2625\nWarn FenceChecker FenceChecker\n:\nwait timed out after\n100\nmsec\nWarn Adreno\n-\nGSL\n<\nlog_gpu_snapshot\n:\n471\n>\n:\npanel\n.\ngpuSnapshotPath is\nnot\nset\n.\nnot\ngenerating user snapshot\nWarn Adreno\n-\nGSL\n<\nioctl_kgsl_syncobj_create\n:\n5290\n>\n:\n(\n45\n",
+        "metadata": {
+          "post_date": "\u200e05-18-202310:41 AM",
+          "has_solution": false,
+          "title": "Solved: Unity + Quest: repeated VK_ERROR_INITIALIZATION_FA... - Meta Community Forums - 1050134",
+          "source_url": "https://communityforums.atmeta.com/t5/Quest-Development/Unity-Quest-repeated-VK-ERROR-INITIALIZATION-FAILED-error/m-p/1050134#M6244",
+          "original_id": "d46ac826a78dadc276967287a9f32a4c",
+          "chunk_type": "content",
+          "error_type": "other",
+          "chunk_index": 2,
+          "forum": "meta"
+        },
+        "distance": 0.6580546498298645
+      }
+    ],
+    "retrieval_success": true,
+    "notes": []
+  }
+]

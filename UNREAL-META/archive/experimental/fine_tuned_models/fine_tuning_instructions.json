@@ -1,0 +1,80 @@
+{
+  "title": "Quest Dev Copilot - Llama API Fine-Tuning Instructions",
+  "dataset_info": {
+    "path": "/Users/carlos/UNREAL-META/fine_tuned_models/comprehensive_training_data.jsonl",
+    "size_mb": 0.05739784240722656,
+    "format": "JSONL",
+    "examples": "Enhanced training data for Quest VR debugging"
+  },
+  "step_by_step_instructions": [
+    {
+      "step": 1,
+      "title": "Access Llama API Dashboard",
+      "description": "Go to https://llama.developer.meta.com/ and sign in with your API key",
+      "url": "https://llama.developer.meta.com/"
+    },
+    {
+      "step": 2,
+      "title": "Navigate to Fine-Tuning",
+      "description": "Click on the 'Fine-tuning' tab in the dashboard",
+      "action": "Navigate to Fine-tuning section"
+    },
+    {
+      "step": 3,
+      "title": "Upload Dataset",
+      "description": "Click 'Create' and upload the dataset file: /Users/carlos/UNREAL-META/fine_tuned_models/comprehensive_training_data.jsonl",
+      "file": "/Users/carlos/UNREAL-META/fine_tuned_models/comprehensive_training_data.jsonl",
+      "notes": "Ensure the file is in JSONL format with proper message structure"
+    },
+    {
+      "step": 4,
+      "title": "Configure Fine-Tuning Job",
+      "description": "Set the following parameters:",
+      "configuration": {
+        "base_model": "Llama-3.3-8B-Instruct",
+        "job_name": "quest-dev-copilot-production",
+        "epochs": 3,
+        "batch_size": 4,
+        "learning_rate_multiplier": 1.0
+      }
+    },
+    {
+      "step": 5,
+      "title": "Start Fine-Tuning",
+      "description": "Click 'Start' to begin the fine-tuning process",
+      "notes": "The process may take several hours depending on dataset size"
+    },
+    {
+      "step": 6,
+      "title": "Monitor Progress",
+      "description": "Track the job progress in the dashboard",
+      "metrics": [
+        "Training loss",
+        "Validation metrics",
+        "Completion percentage"
+      ]
+    },
+    {
+      "step": 7,
+      "title": "Download Fine-Tuned Model",
+      "description": "Once complete, download the model or use it directly via API",
+      "options": [
+        "Download for local use",
+        "Use via API with model ID"
+      ]
+    }
+  ],
+  "integration_instructions": {
+    "api_usage": "Use the fine-tuned model by specifying its ID in API calls",
+    "backend_integration": "Update backend configuration to use the fine-tuned model",
+    "testing": "Test the model with sample error logs to verify improvements"
+  },
+  "troubleshooting": {
+    "common_issues": [
+      "Dataset format errors - ensure JSONL format with proper message structure",
+      "File size too large - compress or split dataset if over 1GB",
+      "API key issues - verify API key has fine-tuning permissions",
+      "Job failures - check logs for specific error messages"
+    ]
+  }
+}

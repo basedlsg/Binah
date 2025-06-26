@@ -1,0 +1,38 @@
+{
+  "unsolved_issues": [
+    {
+      "issue_id": "unsolved_001",
+      "title": "Quest 3 Random Black Screen with Custom Shaders - No Solution Found",
+      "error_type": "plugin_conflict",
+      "description": "Quest 3 Random Black Screen with Custom Shaders - No Solution Found - Plugin Conflict",
+      "forum_source": "epic",
+      "url": "https://forums.unrealengine.com/unreal-engine/vr-ar-development/quest-3-black-screen-custom-shaders",
+      "complexity_score": 0.4,
+      "keywords": [
+        "vr",
+        "quest",
+        "error",
+        "0.8"
+      ],
+      "date_found": "2025-06-23T22:24:14.953133"
+    }
+  ],
+  "summary": {
+    "total_unsolved_issues": 1,
+    "total_posts_analyzed": 5,
+    "unsolved_percentage": 20.0,
+    "error_type_distribution": {
+      "plugin_conflict": 1
+    },
+    "forum_distribution": {
+      "epic": 1
+    },
+    "average_complexity": 0.4,
+    "high_complexity_issues": 0
+  },
+  "analysis_metadata": {
+    "total_posts_analyzed": 5,
+    "unsolved_issues_found": 1,
+    "analysis_date": "2025-06-23T22:24:14.953374"
+  }
+}

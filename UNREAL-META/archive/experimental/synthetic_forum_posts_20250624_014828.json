@@ -1,0 +1,47 @@
+[
+  {
+    "id": "synthetic_black_screen_0",
+    "forum": "synthetic",
+    "title": "Quest VR Eye Buffer Allocation Fix",
+    "url": "https://synthetic.example.com/black_screen",
+    "content": "\n                SOLUTION: Fixed Quest black screen by reducing VR pixel density.\n                \n                Error was: LogVulkanRHI: Error: Failed to allocate VR eye buffer of size 2048x2048\n                \n                Steps that worked:\n                1. Open Project Settings → Rendering\n                2. Set VR Pixel Density to 0.8 (down from 1.0)\n                3. Disable Mobile HDR in rendering settings\n                4. Set Mobile MSAA to \"No MSAA\"\n                5. Clean and rebuild project\n                \n                This reduced GPU memory usage enough for Quest 2 to allocate the eye buffers properly.\n                ",
+    "excerpt": "\n                SOLUTION: Fixed Quest black screen by reducing VR pixel density.\n                \n                Error was: LogVulkanRHI: Error: Failed to allocate VR eye buffer of size 2048x2048\n  ",
+    "error_type": "black_screen",
+    "date_scraped": "2025-06-24T01:48:28.491278",
+    "post_date": "2025-06-24T01:48:28.491288",
+    "word_count": 76,
+    "has_solution": true,
+    "solution_content": "\n                SOLUTION: Fixed Quest black screen by reducing VR pixel density.\n                \n                Error was: LogVulkanRHI: Error: Failed to allocate VR eye buffer of size 2048x2048\n                \n                Steps that worked:\n                1. Open Project Settings → Rendering\n                2. Set VR Pixel Density to 0.8 (down from 1.0)\n                3. Disable Mobile HDR in rendering settings\n                4. Set Mobile MSAA to \"No MSAA\"\n                5. Clean and rebuild project\n                \n                This reduced GPU memory usage enough for Quest 2 to allocate the eye buffers properly.\n                ",
+    "upvotes": 10
+  },
+  {
+    "id": "synthetic_shader_compile_1",
+    "forum": "synthetic",
+    "title": "Android Vulkan Shader Compilation Fix",
+    "url": "https://synthetic.example.com/shader_compile",
+    "content": "\n                SOLUTION: Fixed shader compilation errors for Quest Android build.\n                \n                Error: LogShaderCompilers: Error: Failed to compile shader for platform Android_VULKAN: Syntax error at line 45\n                \n                The issue was using desktop-only shader features in mobile shaders.\n                \n                Fix:\n                1. Check your custom materials for desktop-only nodes\n                2. Replace complex math nodes with mobile-friendly alternatives\n                3. Avoid using Texture2DArray on mobile\n                4. Use \"Mobile/Unlit\" or \"Mobile/Lit\" material templates\n                5. Test shaders in Mobile Preview mode\n                ",
+    "excerpt": "\n                SOLUTION: Fixed shader compilation errors for Quest Android build.\n                \n                Error: LogShaderCompilers: Error: Failed to compile shader for platform Android_VUL",
+    "error_type": "shader_compile",
+    "date_scraped": "2025-06-24T01:48:28.491297",
+    "post_date": "2025-06-24T01:48:28.491298",
+    "word_count": 71,
+    "has_solution": true,
+    "solution_content": "\n                SOLUTION: Fixed shader compilation errors for Quest Android build.\n                \n                Error: LogShaderCompilers: Error: Failed to compile shader for platform Android_VULKAN: Syntax error at line 45\n                \n                The issue was using desktop-only shader features in mobile shaders.\n                \n                Fix:\n                1. Check your custom materials for desktop-only nodes\n                2. Replace complex math nodes with mobile-friendly alternatives\n                3. Avoid using Texture2DArray on mobile\n                4. Use \"Mobile/Unlit\" or \"Mobile/Lit\" material templates\n                5. Test shaders in Mobile Preview mode\n                ",
+    "upvotes": 10
+  },
+  {
+    "id": "synthetic_plugin_conflict_2",
+    "forum": "synthetic",
+    "title": "MetaXR OpenXR Plugin Conflict Resolution",
+    "url": "https://synthetic.example.com/plugin_conflict",
+    "content": "\n                SOLUTION: Resolved plugin conflict between MetaXR and OpenXR.\n                \n                Error: LogPluginManager: Error: Plugin 'MetaXR' failed to load because module 'OculusXRHMD' could not be found\n                \n                For Quest development, you MUST disable OpenXR plugin:\n                1. Go to Edit → Plugins\n                2. Search for \"OpenXR\" \n                3. Uncheck/Disable OpenXR plugin\n                4. Keep MetaXR plugin enabled\n                5. Restart Unreal Engine\n                6. Clean and rebuild project\n                \n                Only MetaXR should be active for Quest development.\n                ",
+    "excerpt": "\n                SOLUTION: Resolved plugin conflict between MetaXR and OpenXR.\n                \n                Error: LogPluginManager: Error: Plugin 'MetaXR' failed to load because module 'OculusXRH",
+    "error_type": "plugin_conflict",
+    "date_scraped": "2025-06-24T01:48:28.491303",
+    "post_date": "2025-06-24T01:48:28.491304",
+    "word_count": 67,
+    "has_solution": true,
+    "solution_content": "\n                SOLUTION: Resolved plugin conflict between MetaXR and OpenXR.\n                \n                Error: LogPluginManager: Error: Plugin 'MetaXR' failed to load because module 'OculusXRHMD' could not be found\n                \n                For Quest development, you MUST disable OpenXR plugin:\n                1. Go to Edit → Plugins\n                2. Search for \"OpenXR\" \n                3. Uncheck/Disable OpenXR plugin\n                4. Keep MetaXR plugin enabled\n                5. Restart Unreal Engine\n                6. Clean and rebuild project\n                \n                Only MetaXR should be active for Quest development.\n                ",
+    "upvotes": 10
+  }
+]
