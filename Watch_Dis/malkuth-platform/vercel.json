@@ -1,0 +1,43 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "regions": ["all"],
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/maintenance/cleanup",
+      "schedule": "0 2 * * *"
+    }
+  ],
+  "env": {
+    "GOOGLE_CLOUD_PROJECT_ID": "@google-cloud-project-id",
+    "GOOGLE_CLOUD_API_KEY": "@google-cloud-api-key",
+    "GEMINI_API_KEY": "AIzaSyAqko3NqGS-GtXhzm8LeiZ3xUEyo_XIqLo",
+    "GEMINI_MODEL": "gemini-pro",
+    "NODE_ENV": "production",
+    "NEXTAUTH_URL": "https://malkuth-platform.vercel.app",
+    "NEXTAUTH_SECRET": "@nextauth-secret"
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=0"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/storage/(.*)",
+      "destination": "https://storage.googleapis.com/malkuth-platform-storage/$1"
+    }
+  ]
+}
