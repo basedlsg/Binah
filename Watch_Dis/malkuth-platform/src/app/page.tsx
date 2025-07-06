@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import IconButton from '@/components/ui/atoms/IconButton'
+import { EyeIcon, HeartIcon, ChatIcon, ShareIcon, BookmarkIcon, RobotIcon } from '@/components/ui/icons'
 
 interface Project {
   id: string
@@ -28,6 +30,8 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedFilter, setSelectedFilter] = useState('all')
+  const [likedProjects, setLikedProjects] = useState<Set<string>>(new Set())
+  const [bookmarkedProjects, setBookmarkedProjects] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     fetchProjects()
@@ -335,32 +339,122 @@ export default function HomePage() {
                             {project.description}
                           </p>
                           
-                          {/* Stats */}
-                          <div className="flex items-center justify-between text-xs text-gray-500">
-                            <div className="flex items-center space-x-4">
-                              <span className="flex items-center space-x-1">
-                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                  <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                                </svg>
-                                <span>{project.views}</span>
-                              </span>
-                              <span className="flex items-center space-x-1">
-                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                                </svg>
-                                <span>{project.likes}</span>
-                              </span>
-                              <span className="flex items-center space-x-1">
-                                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                  <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
-                                </svg>
-                                <span>{project.comments}</span>
-                              </span>
+                          {/* Interactive Stats */}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-1">
+                              <IconButton
+                                icon={<EyeIcon />}
+                                count={project.views}
+                                color="blue"
+                                size="sm"
+                                tooltip="Views"
+                                onClick={(e) => {
+                                  e?.stopPropagation()
+                                  // View action already handled by card click
+                                }}
+                              />
+                              <IconButton
+                                icon={<HeartIcon filled={likedProjects.has(project.id)} />}
+                                count={project.likes}
+                                color="red"
+                                size="sm"
+                                isActive={likedProjects.has(project.id)}
+                                tooltip={likedProjects.has(project.id) ? "Unlike" : "Like this project"}
+                                onClick={async (e) => {
+                                  e?.stopPropagation()
+                                  try {
+                                    const isLiked = likedProjects.has(project.id)
+                                    const response = await fetch(`/api/projects/${project.id}/like`, {
+                                      method: 'POST'
+                                    })
+                                    if (response.ok) {
+                                      setProjects(prev => prev.map(p => 
+                                        p.id === project.id ? { 
+                                          ...p, 
+                                          likes: isLiked ? p.likes - 1 : p.likes + 1 
+                                        } : p
+                                      ))
+                                      setLikedProjects(prev => {
+                                        const newSet = new Set(prev)
+                                        if (isLiked) {
+                                          newSet.delete(project.id)
+                                        } else {
+                                          newSet.add(project.id)
+                                        }
+                                        return newSet
+                                      })
+                                    }
+                                  } catch (error) {
+                                    console.error('Error liking project:', error)
+                                  }
+                                }}
+                              />
+                              <IconButton
+                                icon={<ChatIcon />}
+                                count={project.comments}
+                                color="purple"
+                                size="sm"
+                                tooltip="Comments"
+                                onClick={(e) => {
+                                  e?.stopPropagation()
+                                  // Could open comments modal
+                                  console.log('Open comments for:', project.id)
+                                }}
+                              />
                             </div>
-                            <span className="text-purple-400 text-xs font-medium">
-                              🤖 {project.botEngagements}
-                            </span>
+                            <div className="flex items-center space-x-1">
+                              <IconButton
+                                icon={<RobotIcon />}
+                                count={project.botEngagements}
+                                color="green"
+                                size="sm"
+                                tooltip="AI Bot Engagements"
+                                onClick={(e) => {
+                                  e?.stopPropagation()
+                                  // Could show bot engagement details
+                                }}
+                              />
+                              <IconButton
+                                icon={<BookmarkIcon filled={bookmarkedProjects.has(project.id)} />}
+                                count={bookmarkedProjects.has(project.id) ? 1 : 0}
+                                color={bookmarkedProjects.has(project.id) ? "purple" : "default"}
+                                size="sm"
+                                isActive={bookmarkedProjects.has(project.id)}
+                                tooltip={bookmarkedProjects.has(project.id) ? "Remove bookmark" : "Bookmark"}
+                                onClick={(e) => {
+                                  e?.stopPropagation()
+                                  setBookmarkedProjects(prev => {
+                                    const newSet = new Set(prev)
+                                    if (newSet.has(project.id)) {
+                                      newSet.delete(project.id)
+                                    } else {
+                                      newSet.add(project.id)
+                                    }
+                                    return newSet
+                                  })
+                                }}
+                              />
+                              <IconButton
+                                icon={<ShareIcon />}
+                                count={0}
+                                color="default"
+                                size="sm"
+                                tooltip="Share"
+                                onClick={(e) => {
+                                  e?.stopPropagation()
+                                  // Could open share modal
+                                  if (navigator.share) {
+                                    navigator.share({
+                                      title: project.title,
+                                      text: project.description,
+                                      url: window.location.href
+                                    })
+                                  } else {
+                                    navigator.clipboard.writeText(window.location.href)
+                                  }
+                                }}
+                              />
+                            </div>
                           </div>
                         </div>
                         
