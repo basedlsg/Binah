@@ -1,0 +1,123 @@
+import { Meta } from '@storybook/blocks';
+import { OwlLogo } from '@/components/ui/icons/OwlLogo';
+
+<Meta title="Introduction/Welcome" />
+
+<div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+  <OwlLogo size="landing" style={{ color: 'white', margin: '0 auto 1rem' }} />
+  <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', color: 'white', marginBottom: '0.5rem' }}>
+    Malkuth Platform
+  </h1>
+  <p style={{ fontSize: '1.25rem', color: '#a3a3a3' }}>
+    Digital Laboratory Design System
+  </p>
+</div>
+
+# Welcome to Malkuth Platform
+
+The Malkuth Platform design system provides a comprehensive set of components, layouts, and design tokens for building modern, accessible, and beautiful applications. 
+
+## Design Philosophy
+
+Our design system is built around the concept of a **digital laboratory** - a place for experimentation, discovery, and wisdom. The minimalist black and white aesthetic reinforces focus and reduces cognitive load, while the owl logo symbolizes wisdom and careful observation.
+
+### Core Principles
+
+- **Minimalism**: Clean, distraction-free interfaces that let content shine
+- **Accessibility**: WCAG 2.1 AA compliant components with keyboard navigation support
+- **Responsiveness**: Mobile-first design that works across all devices
+- **Consistency**: Unified visual language and interaction patterns
+- **Performance**: Optimized components with minimal bundle size impact
+
+## Getting Started
+
+### Installation
+
+```bash
+npm install @malkuth/ui
+```
+
+### Basic Usage
+
+```jsx
+import { Button, Card, MainLayout } from '@malkuth/ui';
+
+function App() {
+  return (
+    <MainLayout>
+      <Card>
+        <h1>Welcome to Malkuth</h1>
+        <Button variant="primary">Get Started</Button>
+      </Card>
+    </MainLayout>
+  );
+}
+```
+
+## Component Categories
+
+### Foundation
+- **Design Tokens**: Colors, typography, spacing, and other design fundamentals
+- **Icons**: The owl logo system and utility icons
+- **Utilities**: Responsive helpers and accessibility tools
+
+### Components
+- **Buttons**: Various button styles and states
+- **Forms**: Input fields, selects, textareas with validation
+- **Feedback**: Alerts, toasts, modals, and loading states
+- **Data Display**: Cards, badges, tables, and metrics
+- **Navigation**: Headers, sidebars, breadcrumbs
+
+### Layouts
+- **MainLayout**: Standard application layout with header and sidebar
+- **DashboardLayout**: Specialized layout for dashboard interfaces
+- **AuthLayout**: Authentication page layouts (center and split variants)
+- **ContentLayout**: Focused layouts for content consumption
+
+## Design Tokens
+
+Our design system uses a comprehensive token system for consistent styling:
+
+### Colors
+- **Primary**: Grayscale palette from pure black to white
+- **Semantic**: Success, warning, error, and info states
+- **Background**: Multiple levels for proper hierarchy
+- **Text**: Primary, secondary, and muted text colors
+
+### Typography
+- **Font Family**: Inter for UI text, JetBrains Mono for code
+- **Scale**: 9 size steps from xs (12px) to 9xl (128px)
+- **Weights**: From thin (100) to black (900)
+
+### Spacing
+- **System**: rem-based spacing scale from 0.125rem to 24rem
+- **Breakpoints**: Mobile-first responsive breakpoints
+- **Safe Areas**: Mobile device safe area support
+
+## Accessibility Features
+
+All components are designed with accessibility in mind:
+
+- **Keyboard Navigation**: Full keyboard support for all interactive elements
+- **Screen Readers**: Proper ARIA labels and semantic markup
+- **Focus Management**: Visible focus indicators and focus trapping
+- **Color Contrast**: WCAG AA compliant color combinations
+- **Reduced Motion**: Respects user motion preferences
+
+## Browser Support
+
+- Chrome 91+
+- Firefox 90+
+- Safari 14+
+- Edge 91+
+
+## Contributing
+
+We welcome contributions to the Malkuth Platform design system. Please check our [contribution guidelines](https://github.com/malkuth-platform/ui) for more information.
+
+## Resources
+
+- [GitHub Repository](https://github.com/malkuth-platform/ui)
+- [Documentation](https://docs.malkuth-platform.com)
+- [Design Guidelines](https://design.malkuth-platform.com)
+- [Accessibility Guide](https://accessibility.malkuth-platform.com)
