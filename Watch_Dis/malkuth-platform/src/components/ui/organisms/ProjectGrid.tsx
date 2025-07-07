@@ -2,6 +2,7 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import ProjectCard from '../molecules/ProjectCard'
 import Typography from '../atoms/Typography'
+import Masonry, { ResponsiveMasonry } from 'react-responsive-masonry'
 
 interface Project {
   id: string
@@ -122,46 +123,32 @@ const ProjectGrid = React.forwardRef<HTMLDivElement, ProjectGridProps>(
 
     // Projects grid
     return (
-      <div 
-        ref={ref}
-        className={cn(
-          // Responsive grid with proper spacing
-          'grid gap-6',
-          // Mobile: 1 column
-          'grid-cols-1',
-          // Small screens: 2 columns  
-          'sm:grid-cols-2',
-          // Medium screens: 3 columns
-          'md:grid-cols-2 lg:grid-cols-3',
-          // Large screens: 4 columns
-          'xl:grid-cols-4',
-          // Extra large: 5 columns
-          '2xl:grid-cols-5',
-          className
-        )}
-        {...props}
-      >
-        {projects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            id={project.id}
-            title={project.title}
-            subtitle={project.subtitle}
-            description={project.description}
-            thumbnail={project.thumbnail}
-            type={project.type}
-            duration={project.duration}
-            creator={project.creator}
-            uploadTime={project.uploadTime}
-            views={project.views}
-            likes={project.likes}
-            comments={project.comments}
-            published={showAdminActions ? project.published : undefined}
-            onEdit={showAdminActions && onProjectEdit ? () => onProjectEdit(project) : undefined}
-            onDelete={showAdminActions && onProjectDelete ? () => onProjectDelete(project.id) : undefined}
-            onPublish={showAdminActions && onProjectPublish && !project.published ? () => onProjectPublish(project.id) : undefined}
-          />
-        ))}
+      <div ref={ref} className={cn('w-full', className)} {...props}>
+        <ResponsiveMasonry columnsCountBreakPoints={{ 350: 1, 750: 2, 900: 3, 1200: 4, 1600: 5 }}>
+          <Masonry gutter="2rem">
+            {projects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                id={project.id}
+                title={project.title}
+                subtitle={project.subtitle}
+                description={project.description}
+                thumbnail={project.thumbnail}
+                type={project.type}
+                duration={project.duration}
+                creator={project.creator}
+                uploadTime={project.uploadTime}
+                views={project.views}
+                likes={project.likes}
+                comments={project.comments}
+                published={showAdminActions ? project.published : undefined}
+                onEdit={showAdminActions && onProjectEdit ? () => onProjectEdit(project) : undefined}
+                onDelete={showAdminActions && onProjectDelete ? () => onProjectDelete(project.id) : undefined}
+                onPublish={showAdminActions && onProjectPublish && !project.published ? () => onProjectPublish(project.id) : undefined}
+              />
+            ))}
+          </Masonry>
+        </ResponsiveMasonry>
       </div>
     )
   }
