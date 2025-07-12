@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package quantum_visualization;
+
+message Vector {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+message Trajectory {
+  string id = 1;
+  repeated Vector points = 2;
+  repeated double full_params = 3;
+  double loss_value = 4;
+}
+
+message Landscape {
+  repeated double x_coords = 1;
+  repeated double y_coords = 2;
+  repeated double values = 3;
+}
+
+message UIEvent {
+  string control_id = 1;
+  oneof value {
+    double float_value = 2;
+    int32 int_value = 3;
+    string string_value = 4;
+    bool bool_value = 5;
+  }
+}
+
+message SaveConfirmation {
+  string filepath = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message ResetConfirmation {
+  bool success = 1;
+}
+
+message RealtimeUpdate {
+  oneof update_type {
+    Landscape landscape = 1;
+    Trajectory trajectory = 2;
+    SaveConfirmation save_confirmation = 3;
+    ResetConfirmation reset_confirmation = 4;
+  }
+} 

@@ -1,0 +1,31 @@
+{
+  "rules": {
+    "project-structure": {
+      "prompt": "All project structure must follow the established layout. Data-related scripts belong in `data/`, experiment definitions in `experiments/expE#/`, core rendering and backend logic in `src/`, and CI/automation scripts in `scripts/`. Adhere to the `run.py`, `spec.yaml`, `expected.png`, `README.md` structure for each experiment.",
+      "enabled": true
+    },
+    "python-style": {
+      "prompt": "All Python code must be formatted with Black. It must include type hints for all function signatures. Docstrings must follow the NumPy style. Use `polars` for all DataFrame operations, not `pandas`.",
+      "enabled": true
+    },
+    "ci-cd": {
+      "prompt": "All new features must be accompanied by corresponding tests. `pytest-mpl` must be used for all visualization tests to compare against golden images. GitHub Actions is our CI provider, and workflows should be defined in `.github/workflows/`. All jobs must have explicit `timeout-minutes` settings.",
+      "enabled": true
+    },
+    "api-usage": {
+      "prompt": "When generating code that interacts with external APIs, be mindful of the cost and rate-limit constraints defined in DEVELOPMENT_GUIDE.md. Prioritize batch operations and use caching where possible. For LLM calls, use Groq for latency-sensitive tasks and Gemini/Llama for complex reasoning or multimodal tasks.",
+      "enabled": true
+    },
+    "commit-messages": {
+      "prompt": "Commit messages must follow the Conventional Commits specification. For example: `feat(viz): add support for 3D scatter plots` or `fix(data): correct off-by-one error in CSV parser`.",
+      "enabled": true
+    },
+    "documentation": {
+      "prompt": "All new modules or complex functions must have accompanying documentation in Markdown format, explaining their purpose, inputs, outputs, and an example of usage. This is separate from code docstrings.",
+      "enabled": true
+    }
+  },
+  "response": {
+    "mode": "concise"
+  }
+} 
