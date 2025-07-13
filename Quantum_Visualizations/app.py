@@ -220,3 +220,142 @@ def update_controls(learning_rate, update_rate, backend, problem):
 if __name__ == "__main__":
     logger.info("Starting Dash application...")
     app.run(debug=True, port=8050)
+                if len(full_params) == 10:  # Ensure we have the full 10D vector
+                    existing_data["full_params"].append(full_params)
+                    existing_data["points"].append({
+                        "loss": loss_value,
+                        "timestamp": n
+                    })
+                    
+                    points_received += 1
+                    
+                    # Keep only last 200 points for performance
+                    if len(existing_data["points"]) > 200:
+                        existing_data["points"].pop(0)
+                        existing_data["full_params"].pop(0)
+
+        except zmq.Again:
+            break
+
+    # Create the visualization
+    fig = go.Figure()
+    
+    if len(existing_data["points"]) > 5:  # Need at least a few points for PCA
+        try:
+            # Perform PCA on the collected parameter vectors
+            params_array = np.array(existing_data["full_params"])
+            if params_array.shape[0] > 2:
+                pca = PCA(n_components=2)
+                projected_points = pca.fit_transform(params_array)
+                
+                # Get loss values
+                loss_values = [p["loss"] for p in existing_data["points"]]
+                
+                # Create 2D trajectory plot
+                fig.add_trace(go.Scatter(
+                    x=projected_points[:, 0],
+                    y=projected_points[:, 1],
+                    mode='lines+markers',
+                    marker=dict(
+                        size=8,
+                        color=loss_values,
+                        colorscale='Viridis',
+                        showscale=True,
+                        colorbar=dict(title="Loss Value"),
+                        line=dict(width=1, color='white')
+                    ),
+                    line=dict(width=3, color='rgba(100,100,100,0.8)'),
+                    name='Optimization Path'
+                ))
+                
+                # Highlight the current position
+                if len(projected_points) > 0:
+                    fig.add_trace(go.Scatter(
+                        x=[projected_points[-1, 0]],
+                        y=[projected_points[-1, 1]],
+                        mode='markers',
+                        marker=dict(size=15, color='red', symbol='star'),
+                        name='Current Position'
+                    ))
+                
+                status_msg = f"Active: {len(existing_data['points'])} points, Loss: {loss_values[-1]:.4f}"
+            else:
+                status_msg = "Collecting initial data..."
+        except Exception as e:
+            status_msg = f"Processing error: {str(e)}"
+    else:
+        status_msg = f"Collecting data... ({len(existing_data['points'])} points)"
+
+    # Update layout
+    fig.update_layout(
+        title="Live Optimization Trajectory (PCA Projection)",
+        xaxis_title="Principal Component 1",
+        yaxis_title="Principal Component 2",
+        showlegend=True,
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        margin=dict(l=50, r=50, t=50, b=50),
+        hovermode='closest'
+    )
+    
+    # Add grid
+    fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
+    fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
+
+    if points_received > 0:
+        status_msg += f" (+{points_received} new)"
+
+    return fig, existing_data, status_msg
+
+
+@app.callback(
+    [Output("live-update-text", "children"),
+     Output("quantum-status", "children")],
+    [Input("learning-rate-slider", "value"),
+     Input("update-rate-slider", "value"),
+     Input("quantum-backend-dropdown", "value")],
+)
+def update_controls(learning_rate, update_rate, quantum_backend):
+    # Send learning rate update
+    event = messages_pb2.UIEvent()
+    event.control_id = "learning_rate"
+    event.float_value = learning_rate
+    control_socket.send(event.SerializeToString())
+    
+    # Send update rate update
+    event = messages_pb2.UIEvent()
+    event.control_id = "update_rate"
+    event.float_value = update_rate
+    control_socket.send(event.SerializeToString())
+    
+    # Send quantum backend selection
+    event = messages_pb2.UIEvent()
+    event.control_id = "quantum_backend"
+    event.string_value = quantum_backend
+    control_socket.send(event.SerializeToString())
+    
+    logger.info(f"Controls updated - LR: {learning_rate}, Update Rate: {update_rate}ms, Backend: {quantum_backend}")
+    
+    # Create status messages
+    control_status = f"Learning Rate: {learning_rate:.3f} | Update Rate: {update_rate}ms"
+    
+    quantum_status_msg = f"🔬 Quantum Backend: {quantum_backend}"
+    if quantum_backend == "classical":
+        quantum_status_msg += " (Classical simulation - fast, local)"
+    elif "braket_local" in quantum_backend:
+        quantum_status_msg += " (AWS Braket local simulator)"
+    elif "qiskit_aer" in quantum_backend:
+        quantum_status_msg += " (IBM Qiskit Aer simulator)"
+    elif "ionq" in quantum_backend:
+        quantum_status_msg += " (IonQ trapped-ion quantum computer - real quantum hardware!)"
+    elif "rigetti" in quantum_backend:
+        quantum_status_msg += " (Rigetti superconducting quantum computer)"
+    elif "iqm" in quantum_backend:
+        quantum_status_msg += " (IQM superconducting quantum computer)"
+    
+    return control_status, quantum_status_msg
+
+
+if __name__ == "__main__":
+    logger.info("Starting Dash application...")
+    app.run(debug=True, port=8050) 
