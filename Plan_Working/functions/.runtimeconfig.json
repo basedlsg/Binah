@@ -1,0 +1,7 @@
+{
+  "planner": {
+    "google_places_api_key": "AIzaSyAqko3NqGS-GtXhzm8LeiZ3xUEyo_XIqLo",
+    "cors_origin": "https://plan-94cee.web.app,https://plan-94cee.firebaseapp.com",
+    "gemini_api_key": "AIzaSyAqko3NqGS-GtXhzm8LeiZ3xUEyo_XIqLo"
+  }
+}
