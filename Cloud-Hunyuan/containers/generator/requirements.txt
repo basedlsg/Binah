@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+pydantic
+google-cloud-storage
+# Add HunyuanWorld dependencies here
+# e.g., torch, torchvision, etc.

@@ -1,0 +1,37 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '-t'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/render/render-multiview:latest'
+  - '-f'
+  - 'Dockerfile'
+  - '.'
+
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/render/render-multiview:latest'
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args:
+  - 'run'
+  - 'deploy'
+  - 'render-multiview'
+  - '--image'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/render/render-multiview:latest'
+  - '--region'
+  - 'us-central1'
+
+  - '--cpu=4'
+  - '--memory=16Gi'
+  - '--service-account=gpu-services-sa@$PROJECT_ID.iam.gserviceaccount.com'
+  - '--timeout=1800'
+  - '--max-instances=10'
+  - '--ingress=all'
+  - '--platform=managed'
+  - '--allow-unauthenticated'
+
+images:
+- 'us-central1-docker.pkg.dev/$PROJECT_ID/render/render-multiview:latest'

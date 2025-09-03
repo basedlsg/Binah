@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pydantic
+google-cloud-storage
+# Add trimesh or Open3D dependencies here for labeling
+trimesh
+open3d
+# Add Z3 or Scallop dependencies here for checking
+z3-solver

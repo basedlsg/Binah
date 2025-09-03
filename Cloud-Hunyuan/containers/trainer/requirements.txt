@@ -1,0 +1,12 @@
+# LLaVA-style dependencies
+transformers
+bitsandbytes
+peft
+trl
+accelerate
+
+# For Gemma/PaliGemma
+# Add specific dependencies as needed
+
+# For Vertex AI integration
+google-cloud-aiplatform

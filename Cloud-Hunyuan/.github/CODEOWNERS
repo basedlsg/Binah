@@ -1,0 +1,14 @@
+# This file designates default owners for different parts of the codebase.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# By default, all files are owned by the repository's administrators.
+* @-
+
+# Infrastructure changes require review from the infra team
+/infra/terraform/ @-
+
+# Pipeline changes require review from the MLOps team
+/pipelines/ @-
+
+# Service changes require review from the application team
+/services/ @-

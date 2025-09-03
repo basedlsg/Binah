@@ -1,0 +1,130 @@
+# Terraform
+**/*.tfvars
+**/*.tfstate
+**/*.tfstate.*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Linux
+*~
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Docker
+.dockerignore
+
+# Google Cloud
+terraform-key.json
+*.pem
+
+# Downloads and temporary files
+Downloads/
+*.tmp
+*.temp
+.cache/
+
+# Logs
+logs/
+*.log
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Test files
+test_*.py
+*_test.py
+tests/
+
+# Documentation artifacts
+generated_papers/
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+
+# Model files and checkpoints
+checkpoints/
+models/
+*.pth
+*.h5
+*.pb
+*.pkl
+
+# Data files
+data/
+*.csv
+*.jsonl
+*.parquet
+
+# Cloud storage artifacts
+gs://*
+*.gcs

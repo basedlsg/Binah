@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Training Sample Schema",
+  "description": "Defines the structure of a single training sample in JSONL format.",
+  "type": "object",
+  "properties": {
+    "world_id": {
+      "type": "string"
+    },
+    "question": {
+      "type": "string"
+    },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "cameras": {
+      "type": "string",
+      "format": "uri"
+    },
+    "program": {
+      "type": "string"
+    },
+    "target_answer": {
+      "type": "string"
+    },
+    "constraints": {
+      "type": "string",
+      "format": "uri"
+    },
+    "scene_graph": {
+      "type": "string",
+      "format": "uri"
+    }
+  },
+  "required": [
+    "world_id",
+    "question",
+    "images",
+    "cameras",
+    "program",
+    "target_answer",
+    "constraints",
+    "scene_graph"
+  ]
+}

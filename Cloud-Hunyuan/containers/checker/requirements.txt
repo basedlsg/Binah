@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+pydantic
+# Add Z3 or Scallop dependencies here
+z3-solver

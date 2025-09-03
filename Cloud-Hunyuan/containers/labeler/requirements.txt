@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+pydantic
+# Add trimesh or Open3D dependencies here
+trimesh
+open3d

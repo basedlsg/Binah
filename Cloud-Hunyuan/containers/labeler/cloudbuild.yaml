@@ -1,0 +1,35 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '-t'
+  - 'us-docker.pkg.dev/$PROJECT_ID/label/labeler:latest'
+  - '-f'
+  - 'containers/labeler/Dockerfile'
+  - '.'
+
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'push'
+  - 'us-docker.pkg.dev/$PROJECT_ID/label/labeler:latest'
+
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: 'gcloud'
+  args:
+  - 'run'
+  - 'deploy'
+  - 'labeler'
+  - '--image'
+  - 'us-docker.pkg.dev/$PROJECT_ID/label/labeler:latest'
+  - '--region'
+  - 'us-central1'
+  - '--cpu=2'
+  - '--memory=4Gi'
+  - '--service-account=sa-run-cpu@$PROJECT_ID.iam.gserviceaccount.com'
+  - '--timeout=600'
+  - '--max-instances=10'
+  - '--ingress=all'
+  - '--platform=managed'
+
+images:
+- 'us-docker.pkg.dev/$PROJECT_ID/label/labeler:latest'

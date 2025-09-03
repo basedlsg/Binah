@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+pydantic
+google-cloud-storage
+# Add PyTorch3D or Kaolin dependencies here
+# e.g., torch, torchvision, pytorch3d

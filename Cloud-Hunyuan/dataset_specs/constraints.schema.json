@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Symbolic Constraints Schema",
+  "description": "Defines the structure for symbolic constraints derived from the scene graph, usable by an SMT solver like Z3.",
+  "type": "object",
+  "properties": {
+    "world_id": {
+      "description": "Unique identifier for the world these constraints apply to.",
+      "type": "string"
+    },
+    "format": {
+      "description": "The format of the constraints.",
+      "type": "string",
+      "enum": ["smt-lib", "json-cnf"]
+    },
+    "constraints": {
+      "description": "A list of symbolic constraints.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "statement": {
+            "type": "string"
+          }
+        },
+        "required": ["statement"]
+      }
+    }
+  },
+  "required": ["world_id", "format", "constraints"]
+}

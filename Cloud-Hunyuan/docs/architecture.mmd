@@ -1,0 +1,49 @@
+flowchart LR
+  subgraph Control[Google Cloud Control Plane]
+    CB[Cloud Build] --> AR[Artifact Registry]
+    GH[GitHub] --> CB
+    SCH[Cloud Scheduler] --> EV[Eventarc]
+    EV --> VP[Vertex AI Pipelines]
+    VP --> VMReg[Vertex Model Registry]
+    VP --> VExp[Vertex Experiments/MLMD]
+  end
+
+  subgraph Data[Services & Storage]
+    subgraph Run[Cloud Run Services]
+      GEN[World Generator (GPU L4)]
+      RND[Renderer (GPU L4)]
+      LAB[Labeler (CPU)]
+      CHK[Symbolic Checker (CPU)]
+    end
+    GRAW[(GCS: 7l-raw-worlds)]
+    GREN[(GCS: 7l-renders)]
+    GJSN[(GCS: 7l-jsonl)]
+    GMOD[(GCS: 7l-models)]
+    BQ[(BigQuery: sevenl.meta)]
+  end
+
+  VP -->|orchestrates| GEN
+  VP --> RND
+  VP --> LAB
+  VP --> CHK
+
+  GEN -->|meshes/panos| GRAW
+  RND -->|images/cameras| GREN
+  LAB -->|scene_graph/constraints| GRAW
+  VP -->|write samples| GJSN
+  VP -->|index| BQ
+
+  subgraph Train[Vertex AI Training/Serving]
+    TRN[Custom Training Job]
+    END[Vertex Endpoint (or Run GPU)]
+  end
+  VP --> TRN
+  TRN -->|adapters| GMOD
+  VP --> VMReg
+  VMReg --> END
+
+  TRN -->|logs| VExp
+  GEN -.->|read/write| GRAW
+  RND -.->|read/write| GREN
+  LAB -.->|read/write| GRAW
+  CHK -.->|read scene_graph| GRAW
